@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "67UpJzjD5j8=",
+  "dgSpecHash": "VS8PwFgzDjPH8gNO7qrISTr5U+jbxXhXF2WrUuVius6I1Ky/i19W5SeC47zX1SJkReUTncjwrL8yGYMUV2lV7w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\BergC\\OneDrive\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev.csproj",
+  "projectFilePath": "C:\\Computer Programming\\Semester 4\\2902 (Capstone)\\Project\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\BergC\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\BergC\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
