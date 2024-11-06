@@ -4,8 +4,9 @@ namespace Research_Software_Dev.Models.Participants
 {
     public class ParticipantStudy
     {
-        public ParticipantStudy()
+        public ParticipantStudy(Participant participant, Study study)
         {
+            ParticipantId = participant.ParticipantId;
             ParticipantStudyId = int.Parse($"{ParticipantId}{StudyId}");
         }
         public int ParticipantStudyId { get; }

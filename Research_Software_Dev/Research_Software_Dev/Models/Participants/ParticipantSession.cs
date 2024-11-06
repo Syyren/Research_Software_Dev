@@ -4,18 +4,18 @@ namespace Research_Software_Dev.Models.Participants
 {
     public class ParticipantSession
     {
-        public ParticipantSession()
+        public ParticipantSession(Participant participant, Session session)
         {
-            ParticipantSessionId = int.Parse($"{ParticipantId}{SessionId}");
+            ParticipantId = participant.ParticipantId;
+            SessionId = session.SessionId;
+            ParticipantSessionId = int.Parse($"{this.ParticipantId}{this.SessionId}");
         }
         public int ParticipantSessionId { get; }
 
         //Participant FK
         public int ParticipantId { get; set; }
-        public Participant Participant { get; set; }
 
         //Session FK
         public int SessionId { get; set; }
-        public Session Session { get; set; }
     }
 }
