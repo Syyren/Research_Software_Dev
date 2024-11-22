@@ -1,22 +1,14 @@
-﻿using Research_Software_Dev.Models.Researchers;
-using Research_Software_Dev.Models.Studies;
-
-namespace Research_Software_Dev.Models.Researchers
+﻿namespace Research_Software_Dev.Models.Researchers
 {
-    public class ResearcherStudy
+    public class ResearcherStudy(int r_id, int s_id, string studyName)
     {
-        public ResearcherStudy(int r_id, int s_id)
-        {
-            ResearcherId = r_id;
-            StudyId = s_id;
-            ResearcherStudyId = int.Parse($"{ResearcherId}{StudyId}");
-        }
-        public int ResearcherStudyId { get; }
+        public int ResearcherStudyId { get; } = int.Parse($"{r_id}{s_id}");
 
         //Researcher FK
-        public int ResearcherId { get; set; }
+        public int ResearcherId { get; set; } = r_id;
 
         //Study FK
-        public int StudyId { get; set; }
+        public int StudyId { get; set; } = s_id;
+        public string StudyName { get; set; } = studyName;
     }
 }
