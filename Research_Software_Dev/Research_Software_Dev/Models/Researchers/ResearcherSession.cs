@@ -1,21 +1,26 @@
 ﻿using Research_Software_Dev.Models.Sessions;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Research_Software_Dev.Models.Researchers
 {
     public class ResearcherSession
     {
-        public ResearcherSession()
-        {
-            ResearcherSessionId = int.Parse($"{ResearcherId}{SessionId}");
-        }
-        public int ResearcherSessionId { get; }
+        //Composite key auto generated in context
 
-        //Researcher FK
+        [Required]
+        [ForeignKey("Researcher")]
         public int ResearcherId { get; set; }
+
+        [Required]
         public Researcher Researcher { get; set; }
 
-        //Session FK
+
+        [Required]
+        [ForeignKey("Session")]
         public int SessionId { get; set; }
+
+        [Required]
         public Session Session { get; set; }
     }
 }
