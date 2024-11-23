@@ -1,10 +1,48 @@
 ﻿@page
 @model IndexModel
+@using Research_Software_Dev.Data.TempData
+@using Research_Software_Dev.Models.Researchers
+@using Research_Software_Dev.Models.Studies
 @{
-    ViewData["Title"] = "Home page";
-}
+    ViewData["Title"] = "MHRA - Home";
+    TempResearcher temp_researcher = new();
+    Researcher researcher = temp_researcher.researcher1;
+    TempStudies temp_studies = new();
+    TempResearcherStudies tempResearcherStudies = new(temp_researcher, temp_studies);
+    List<ResearcherStudy> studies = [tempResearcherStudies.researcher_study1, 
+        tempResearcherStudies.researcher_study2, 
+        tempResearcherStudies.researcher_study3,
+        tempResearcherStudies.researcher_study4];
+    bool flag = false;}
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome @researcher.ResearcherFirstName</h1>
+    <p>Studies:</p>
+        @{
+            if (studies == null || !studies.Any())
+            {
+                <p>No studies available.</p>
+            }
+            else if (studies.Count > 3)
+            {
+                studies = studies.GetRange(0, 3);
+                flag = true;
+            }
+            if (studies != null)
+            {
+                <ul>
+                    @{
+                        foreach (ResearcherStudy study in studies)
+                        {
+                            <li>@study.StudyName</li>
+                        }
+
+                        if (flag)
+                        {
+                            <li>...</li>
+                        }
+                    }
+                </ul>
+            }
+        }
 </div>

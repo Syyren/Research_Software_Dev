@@ -1,32 +1,30 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Research_Software_Dev.Models.Participants
 {
     public class Participant
     {
         [Key]
-        public int ParticipantId { get; set; }
+        public required int ParticipantId { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string ParticipantFirstName { get; set; }
+        public required string ParticipantFirstName { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string ParticipantLastName { get; set; }
+        public required string ParticipantLastName { get; set; }
 
-        [Required]
         [StringLength(255)]
-        public string ParticipantAddress { get; set; }
+        public string? ParticipantAddress { get; set; }
 
-        [Required]
         [StringLength(50)]
         [EmailAddress]
-        public string ParticipantEmail { get; set; }
+        public string? ParticipantEmail { get; set; }
 
-        [Required]
-        [StringLength(50)]
         [Phone]
-        public string ParticipantPhoneNumber { get; set; }
+        public string? ParticipantPhoneNumber { get; set; }
     }
 }

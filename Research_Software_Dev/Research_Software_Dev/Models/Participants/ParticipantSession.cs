@@ -8,6 +8,7 @@ namespace Research_Software_Dev.Models.Participants
     {
         //Composite key auto generated in context
 
+        //Participant FK
         [Required]
         [ForeignKey("Participant")]
         public int ParticipantId { get; set; }
@@ -15,7 +16,7 @@ namespace Research_Software_Dev.Models.Participants
         [Required]
         public Participant Participant { get; set; }
 
-
+        //Session FK
         [Required]
         [ForeignKey("Session")]
         public int SessionId { get; set; }
