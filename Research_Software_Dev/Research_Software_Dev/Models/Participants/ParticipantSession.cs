@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Research_Software_Dev.Models.Participants
 {
-    public class ParticipantSession
+    public class ParticipantSession(int participantId, int sessionId)
     {
         //Composite key auto generated in context
 
