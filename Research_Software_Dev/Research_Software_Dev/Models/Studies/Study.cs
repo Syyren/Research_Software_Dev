@@ -1,10 +1,25 @@
-﻿namespace Research_Software_Dev.Models.Studies
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Research_Software_Dev.Models.Studies
 {
-    public class Study(int id, string name, string description)
+    public class Study
     {
-        public int StudyId { get; set; } = id;
-        public string StudyName { get; set; } = name;
-        public string StudyDescription { get; set; } = description;
+        public int StudyId { get; set; }
+
+        [Required]
+        public string? StudyName { get; set; }
+
+        [Required]
+        public string? StudyDescription { get; set; }
+
+        public Study() { }
+
+        public Study(int id, string name, string desc)
+        {
+            StudyId = id;
+            StudyName = name;
+            StudyDescription = desc;
+        }
     }
 
 }

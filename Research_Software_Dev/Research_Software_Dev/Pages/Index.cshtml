@@ -9,40 +9,48 @@
     Researcher researcher = temp_researcher.researcher1;
     TempStudies temp_studies = new();
     TempResearcherStudies tempResearcherStudies = new(temp_researcher, temp_studies);
-    List<ResearcherStudy> studies = [tempResearcherStudies.researcher_study1, 
+    List<ResearcherStudy> studies = [
+        tempResearcherStudies.researcher_study1, 
         tempResearcherStudies.researcher_study2, 
         tempResearcherStudies.researcher_study3,
-        tempResearcherStudies.researcher_study4];
+        tempResearcherStudies.researcher_study4
+    ];
     bool flag = false;}
 
 <div class="text-center">
-    <h1 class="display-4">Welcome @researcher.ResearcherFirstName</h1>
-    <p>Studies:</p>
-        @{
+    @{
+        if (researcher != null)
+        {
+            <h1 class="display-4">Welcome @researcher.ResearcherFirstName</h1>
+            <p>Studies:</p>
             if (studies == null || !studies.Any())
             {
                 <p>No studies available.</p>
             }
-            else if (studies.Count > 3)
-            {
-                studies = studies.GetRange(0, 3);
-                flag = true;
-            }
             if (studies != null)
             {
+                if (studies.Count > 3)
+                {
+                    studies = studies.GetRange(0, 3);
+                    flag = true;
+                }
                 <ul>
-                    @{
-                        foreach (ResearcherStudy study in studies)
-                        {
-                            <li>@study.StudyName</li>
-                        }
-
-                        if (flag)
-                        {
-                            <li>...</li>
-                        }
+                @{
+                    foreach (ResearcherStudy study in studies)
+                    {
+                        <li>@study.StudyName</li>
                     }
+                    if (flag)
+                    {
+                        <li>...</li>
+                    }
+                }
                 </ul>
             }
         }
+        else
+        {
+            <p>Please Sign In.</p>
+        }
+    }
 </div>
