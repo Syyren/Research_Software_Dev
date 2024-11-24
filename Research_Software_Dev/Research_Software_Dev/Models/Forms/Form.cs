@@ -5,13 +5,13 @@ namespace Research_Software_Dev.Models.Forms
     public class Form
     {
         [Key]
-        public int FormId { get; set; }
+        public string FormId { get; set; }
         [Required]
         public string FormName { get; set; }
 
         //Constructors
         public Form() { }
-        public Form(int formId, string formName)
+        public Form(string formId, string formName)
         {
             FormId = formId;
             FormName = formName;

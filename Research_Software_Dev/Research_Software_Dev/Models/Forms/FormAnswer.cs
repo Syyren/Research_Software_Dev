@@ -8,7 +8,7 @@ namespace Research_Software_Dev.Models.Forms
     public class FormAnswer
     {
         [Key]
-        public int AnswerId { get; set; }
+        public string AnswerId { get; set; }
         [Required]
         public string Answer { get; set; }
         [Required]
@@ -17,22 +17,23 @@ namespace Research_Software_Dev.Models.Forms
 
         //ParticipantSession composite FK
         [Required]
-        public int ParticipantId { get; set; }
+        public string ParticipantId { get; set; }
         [Required]
-        public int SessionId { get; set; }
+        public string SessionId { get; set; }
 
         [ForeignKey("ParticipantId, SessionId")]
         public ParticipantSession ParticipantSession { get; set; }
 
         //FormQuestion FK
         [Required]
-        public int QuestionId { get; set; }
+        public string QuestionId { get; set; }
         [ForeignKey("FormQuestionId")]
         public FormQuestion FormQuestion { get; set; }
 
         //Constructors
         public FormAnswer() { }
-        public FormAnswer(int answerId, string answer, DateTime timeStamp, int participantId, int sessionId, int questionId)
+        public FormAnswer(string answerId, string answer, DateTime timeStamp, string participantId, 
+            string sessionId, string questionId)
         {
             AnswerId = answerId;
             Answer = answer;

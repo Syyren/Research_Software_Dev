@@ -10,21 +10,21 @@ namespace Research_Software_Dev.Models.Participants
 
         //Participant FK
         [Required]
-        public int ParticipantId { get; set; }
+        public string ParticipantId { get; set; }
 
         [ForeignKey("ParticipantId")]
         public Participant Participant { get; set; }
 
         //Session FK
         [Required]
-        public int SessionId { get; set; }
+        public string SessionId { get; set; }
 
         [ForeignKey("SessionId")]
         public Session Session { get; set; }
 
         //Constructors
         public ParticipantSession() { }
-        public ParticipantSession(int participantId, int sessionId)
+        public ParticipantSession(string participantId, string sessionId)
         {
             ParticipantId = participantId;
             SessionId = sessionId;

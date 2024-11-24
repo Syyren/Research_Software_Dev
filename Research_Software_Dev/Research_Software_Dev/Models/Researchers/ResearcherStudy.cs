@@ -10,13 +10,13 @@ namespace Research_Software_Dev.Models.Researchers
 
         //Researcher FK
         [Required]
-        public int ResearcherId { get; set; }
-        [ForeignKey("ResearcherId")]
+        public string ResearcherId { get; set; }
+        [ForeignKey("Id")]
         public Researcher Researcher { get; set; }
 
         //Study FK
         [Required]
-        public int StudyId { get; set; }
+        public string StudyId { get; set; }
         [Required]
         public string StudyName { get; set; }
         [ForeignKey("StudyId")]
@@ -24,7 +24,7 @@ namespace Research_Software_Dev.Models.Researchers
 
         //Constructors
         public ResearcherStudy() { }
-        public ResearcherStudy(int researcherId, int studyId, string studyName)
+        public ResearcherStudy(string researcherId, string studyId, string studyName)
         {
             ResearcherId = researcherId;
             StudyId = studyId;

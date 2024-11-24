@@ -6,7 +6,7 @@ namespace Research_Software_Dev.Models.Participants
     public class Participant
     {
         [Key]
-        public required int ParticipantId { get; set; }
+        public required string ParticipantId { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -28,7 +28,8 @@ namespace Research_Software_Dev.Models.Participants
 
         //Constructors
         public Participant() { }
-        public Participant(int participantId, string participantFirstName, string participantLastName, string? participantAddress, string? participantEmail, string? participantPhoneNumber)
+        public Participant(string participantId, string participantFirstName, string participantLastName, 
+            string? participantAddress, string? participantEmail, string? participantPhoneNumber)
         {
             ParticipantId = participantId;
             ParticipantFirstName = participantFirstName;

@@ -9,21 +9,21 @@ namespace Research_Software_Dev.Models.Participants
         //Composite key auto generated in context
 
         [Required]
-        public int ParticipantId { get; set; }
+        public string ParticipantId { get; set; }
 
         [ForeignKey("ParticipantId")]
         public Participant Participant { get; set; }
 
 
         [Required]
-        public int StudyId { get; set; }
+        public string StudyId { get; set; }
 
         [ForeignKey("StudyId")]
         public Study Study { get; set; }
 
         //Constructors
         public ParticipantStudy() { }
-        public ParticipantStudy(int participantId, int studyId)
+        public ParticipantStudy(string participantId, string studyId)
         {
             ParticipantId = participantId;
             StudyId = studyId;

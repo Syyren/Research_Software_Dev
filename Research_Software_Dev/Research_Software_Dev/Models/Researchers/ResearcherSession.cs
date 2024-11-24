@@ -9,21 +9,21 @@ namespace Research_Software_Dev.Models.Researchers
         //Composite key auto generated in context
 
         [Required]
-        public int ResearcherId { get; set; }
+        public string ResearcherId { get; set; }
 
-        [ForeignKey("ResearcherId")]
+        [ForeignKey("Id")]
         public Researcher Researcher { get; set; }
 
 
         [Required]
-        public int SessionId { get; set; }
+        public string SessionId { get; set; }
 
         [ForeignKey("SessionId")]
         public Session Session { get; set; }
 
         //Constructors
         public ResearcherSession() { }
-        public ResearcherSession(int researcherId, int sessionId)
+        public ResearcherSession(string researcherId, string sessionId)
         {
             ResearcherId = researcherId;
             SessionId = sessionId;

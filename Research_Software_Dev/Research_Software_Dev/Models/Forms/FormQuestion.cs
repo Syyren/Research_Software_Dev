@@ -6,26 +6,26 @@ namespace Research_Software_Dev.Models.Forms
     public class FormQuestion
     {
         [Key]
-        public int QuestionId { get; set; }
+        public string FormQuestionId { get; set; }
         [Required]
         [StringLength(10)]
-        public string QuestionNumber { get; set; }
+        public string FormQuestionNumber { get; set; }
         [Required]
-        public string QuestionDescription { get; set; }
+        public string FormQuestionDescription { get; set; }
 
         //Form FK
         [Required]
-        public int FormId { get; set; }
+        public string FormId { get; set; }
         [ForeignKey("FormId")]
         public Form Form { get; set; }
 
         //Constructors
         public FormQuestion() { }
-        public FormQuestion(int questionId, string questionNumber, string questionDescription, int formId)
+        public FormQuestion(string questionId, string questionNumber, string questionDescription, string formId)
         {
-            QuestionId = questionId;
-            QuestionNumber = questionNumber;
-            QuestionDescription = questionDescription;
+            FormQuestionId = questionId;
+            FormQuestionNumber = questionNumber;
+            FormQuestionDescription = questionDescription;
             FormId = formId;
         }
     }

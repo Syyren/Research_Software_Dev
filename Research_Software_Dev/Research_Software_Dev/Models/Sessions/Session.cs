@@ -7,7 +7,7 @@ namespace Research_Software_Dev.Models.Sessions
     public class Session
     {
         [Key]
-        public int SessionId { get; set; }
+        public string SessionId { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
@@ -23,13 +23,13 @@ namespace Research_Software_Dev.Models.Sessions
 
         //Study Fk
         [Required]
-        public int StudyId { get; set; }
+        public string StudyId { get; set; }
         [ForeignKey("StudyId")]
         public Study Study { get; set; }
 
         //Constructors
         public Session(){ }
-        public Session(int id, DateOnly date, TimeOnly timeStart, TimeOnly timeEnd, int studyId)
+        public Session(string id, DateOnly date, TimeOnly timeStart, TimeOnly timeEnd, string studyId)
         {
             SessionId = id;
             Date = date;
