@@ -3,21 +3,31 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Research_Software_Dev.Models.Forms
 {
-    public class FormQuestion(int id, string questionNumber, string questionDescription, int formId)
+    public class FormQuestion
     {
         [Key]
-        public int QuestionId { get; set; } = id;
+        public int QuestionId { get; set; }
         [Required]
         [StringLength(10)]
-        public string QuestionNumber { get; set; } = questionNumber;
+        public string QuestionNumber { get; set; }
         [Required]
-        public string QuestionDescription { get; set; } = questionDescription;
+        public string QuestionDescription { get; set; }
 
         //Form FK
         [Required]
-        [ForeignKey("Form")]
-        public int FormId { get; set; } = formId;
-        [Required]
+        public int FormId { get; set; }
+        [ForeignKey("FormId")]
         public Form Form { get; set; }
+
+        //Constructors
+        public FormQuestion() { }
+        public FormQuestion(int questionId, string questionNumber, string questionDescription, int formId, Form form)
+        {
+            QuestionId = questionId;
+            QuestionNumber = questionNumber;
+            QuestionDescription = questionDescription;
+            FormId = formId;
+            Form = form;
+        }
     }
 }

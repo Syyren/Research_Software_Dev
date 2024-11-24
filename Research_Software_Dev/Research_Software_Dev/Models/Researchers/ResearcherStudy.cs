@@ -4,25 +4,33 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Research_Software_Dev.Models.Researchers
 {
-    public class ResearcherStudy(int r_id, int s_id, string studyName)
+    public class ResearcherStudy
     {
         //Composite key auto generated in context
 
         //Researcher FK
         [Required]
-        [ForeignKey("Researcher")]
-        public int ResearcherId { get; set; } = r_id;
-
-        [Required]
+        public int ResearcherId { get; set; }
+        [ForeignKey("ResearcherId")]
         public Researcher Researcher { get; set; }
 
         //Study FK
         [Required]
-        [ForeignKey("Study")]
-        public int StudyId { get; set; } = s_id;
+        public int StudyId { get; set; }
         [Required]
-        public string StudyName { get; set; } = studyName;
-        [Required]
+        public string StudyName { get; set; }
+        [ForeignKey("StudyId")]
         public Study Study { get; set; }
+
+        //Constructors
+        public ResearcherStudy() { }
+        public ResearcherStudy(int researcherId, Researcher researcher, int studyId, string studyName, Study study)
+        {
+            ResearcherId = researcherId;
+            Researcher = researcher;
+            StudyId = studyId;
+            StudyName = studyName;
+            Study = study;
+        }
     }
 }

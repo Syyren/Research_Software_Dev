@@ -2,11 +2,19 @@
 
 namespace Research_Software_Dev.Models.Forms
 {
-    public class Form(int id, string formName)
+    public class Form
     {
         [Key]
-        public int FormId { get; set; } = id;
+        public int FormId { get; set; }
         [Required]
-        public string FormName { get; set; } = formName;
+        public string FormName { get; set; }
+
+        //Constructors
+        public Form() { }
+        public Form(int formId, string formName)
+        {
+            FormId = formId;
+            FormName = formName;
+        }
     }
 }

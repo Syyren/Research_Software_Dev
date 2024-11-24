@@ -4,28 +4,40 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Research_Software_Dev.Models.Forms
 {
-    public class FormAnswer(int id, string answer, DateTime timeStamp, int participantSessionId, int questionId)
+    public class FormAnswer
     {
         [Key]
-        public int AnswerId { get; set; } = id;
+        public int AnswerId { get; set; }
         [Required]
-        public string Answer { get; set; } = answer;
+        public string Answer { get; set; }
         [Required]
         [DataType(DataType.DateTime)]
-        public DateTime TimeStamp { get; set; } = timeStamp;
+        public DateTime TimeStamp { get; set; }
 
         //ParticipantSession FK
         [Required]
-        [ForeignKey("ParticipantSession")]
-        public int ParticipantSessionId { get; set; } = participantSessionId;
-        [Required]
+        public int ParticipantSessionId { get; set; }
+
+        [ForeignKey("ParticipantSessionId")]
         public ParticipantSession ParticipantSession { get; set; }
 
-        //Question FK
+        //FormQuestion FK
         [Required]
-        [ForeignKey("FormQuestion")]
-        public int QuestionId { get; set; } = questionId;
-        [Required]
-        public FormQuestion Question { get; set; }
+        public int QuestionId { get; set; }
+        [ForeignKey("FormQuestionId")]
+        public FormQuestion FormQuestion { get; set; }
+
+        //Constructors
+        public FormAnswer() { }
+        public FormAnswer(int answerId, string answer, DateTime timeStamp, int participantSessionId, ParticipantSession participantSession, int questionId, FormQuestion formQuestion)
+        {
+            AnswerId = answerId;
+            Answer = answer;
+            TimeStamp = timeStamp;
+            ParticipantSessionId = participantSessionId;
+            ParticipantSession = participantSession;
+            QuestionId = questionId;
+            FormQuestion = formQuestion;
+        }
     }
 }

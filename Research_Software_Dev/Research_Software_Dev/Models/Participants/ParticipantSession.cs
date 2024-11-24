@@ -4,24 +4,32 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Research_Software_Dev.Models.Participants
 {
-    public class ParticipantSession(int participantId, int sessionId)
+    public class ParticipantSession
     {
         //Composite key auto generated in context
 
         //Participant FK
         [Required]
-        [ForeignKey("Participant")]
         public int ParticipantId { get; set; }
 
-        [Required]
+        [ForeignKey("ParticipantId")]
         public Participant Participant { get; set; }
 
         //Session FK
         [Required]
-        [ForeignKey("Session")]
         public int SessionId { get; set; }
 
-        [Required]
+        [ForeignKey("SessionId")]
         public Session Session { get; set; }
+
+        //Constructors
+        public ParticipantSession() { }
+        public ParticipantSession(int participantId, Participant participant, int sessionId, Session session)
+        {
+            ParticipantId = participantId;
+            Participant = participant;
+            SessionId = sessionId;
+            Session = session;
+        }
     }
 }

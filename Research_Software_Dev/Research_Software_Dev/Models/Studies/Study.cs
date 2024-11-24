@@ -2,15 +2,24 @@
 
 namespace Research_Software_Dev.Models.Studies
 {
-    public class Study(int id, string name, string description)
+    public class Study
     {
-        [Key]
-        public int StudyId { get; set; } = id;
-        [Required]
-        [StringLength(50)]
-        public string StudyName { get; set; } = name;
-        [Required]
-        public string StudyDescription { get; set; } = description;
-    }
+        public int StudyId { get; set; }
 
+        [Required]
+        public string? StudyName { get; set; }
+
+        [Required]
+        public string? StudyDescription { get; set; }
+        
+        //Constructors
+        public Study() { }
+
+        public Study(int id, string name, string desc)
+        {
+            StudyId = id;
+            StudyName = name;
+            StudyDescription = desc;
+        }
+    }
 }
