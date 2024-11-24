@@ -1,0 +1,23 @@
+﻿@page "{participantSessionId:int}"
+@model Research_Software_Dev.Pages.Forms.SelectFormModel
+@{
+    ViewData["Title"] = "Select Form";
+}
+
+<h1>Select a Form</h1>
+
+<form method="post">
+    <input type="hidden" asp-for="ParticipantSessionId" />
+
+    <div class="form-group">
+        <label for="FormId">Available Forms</label>
+        <select asp-for="FormId" class="form-control">
+            @foreach (var form in Model.Forms)
+            {
+                <option value="@form.FormId">@form.FormName</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Next</button>
+</form>

@@ -1,0 +1,18 @@
+﻿@page "{formId:int}/{participantSessionId:int}"
+@model Research_Software_Dev.Pages.Forms.ViewAnswersModel
+@{
+    ViewData["Title"] = "View Answers";
+}
+
+<h1>Answers for Form</h1>
+
+<ul>
+    @foreach (var answer in Model.Answers)
+    {
+        <li>
+            <strong>Question:</strong> @answer.Question.QuestionDescription <br />
+            <strong>Answer:</strong> @answer.Answer <br />
+            <strong>Timestamp:</strong> @answer.TimeStamp
+        </li>
+    }
+</ul>

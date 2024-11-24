@@ -1,0 +1,23 @@
+﻿@page "{formId:int}"
+@model Research_Software_Dev.Pages.Forms.SelectParticipantModel
+@{
+    ViewData["Title"] = "Select Participant Session";
+}
+
+<h1>Select Participant Session</h1>
+
+<form method="post">
+    <input type="hidden" asp-for="FormId" />
+
+    <div class="form-group">
+        <label for="ParticipantSessionId">Participant Session</label>
+        <select asp-for="ParticipantSessionId" class="form-control">
+            @foreach (var session in Model.ParticipantSessions)
+            {
+                <option value="@session.Key">@session.Value</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Next</button>
+</form>

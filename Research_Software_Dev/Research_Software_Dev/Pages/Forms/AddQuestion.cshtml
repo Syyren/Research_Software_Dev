@@ -1,0 +1,26 @@
+﻿@page "{formId:int}"
+@model Research_Software_Dev.Pages.Forms.AddQuestionModel
+@{
+    ViewData["Title"] = "Add Question";
+}
+
+<h1>Add Question</h1>
+
+<form method="post">
+    <input type="hidden" asp-for="FormId" />
+
+    <div class="form-group">
+        <label asp-for="Question.QuestionDescription" class="form-label"></label>
+        <input asp-for="Question.QuestionDescription" class="form-control" />
+        <span asp-validation-for="Question.QuestionDescription" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Question.QuestionNumber" class="form-label"></label>
+        <input asp-for="Question.QuestionNumber" type="number" class="form-control" />
+        <span asp-validation-for="Question.QuestionNumber" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Question</button>
+    <a asp-page="./Edit" asp-route-id="@Model.FormId" class="btn btn-secondary">Cancel</a>
+</form>

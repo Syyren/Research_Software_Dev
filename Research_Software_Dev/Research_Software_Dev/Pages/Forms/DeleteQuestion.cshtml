@@ -1,0 +1,21 @@
+﻿@page "{formId:int}/{questionId}"
+@model Research_Software_Dev.Pages.Forms.DeleteQuestionModel
+@{
+    ViewData["Title"] = "Delete Question";
+}
+
+<h1>Delete Question</h1>
+
+<p>Are you sure you want to delete this question?</p>
+
+<div class="form-group">
+    <label>Question:</label>
+    <p>@Model.QuestionDescription</p>
+</div>
+
+<form method="post">
+    <input type="hidden" name="formId" value="@Model.FormId" />
+    <input type="hidden" name="questionId" value="@Model.QuestionId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-page="./Edit" asp-route-id="@Model.FormId" class="btn btn-secondary">Cancel</a>
+</form>

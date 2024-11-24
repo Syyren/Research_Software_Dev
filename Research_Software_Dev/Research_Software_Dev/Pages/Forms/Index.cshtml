@@ -1,0 +1,33 @@
+﻿@page
+@model Research_Software_Dev.Pages.Forms.IndexModel
+@{
+    ViewData["Title"] = "Forms";
+}
+
+<h1>Forms</h1>
+
+<p>
+    <a asp-page="./Create" class="btn btn-primary">Create New Form</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Form Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var form in Model.Forms)
+        {
+            <tr>
+                <td>@form.FormName</td>
+                <td>
+                    <a asp-page="./Details" asp-route-id="@form.FormId" class="btn btn-info">Details</a>
+                    <a asp-page="./Edit" asp-route-id="@form.FormId" class="btn btn-warning">Edit</a>
+                    <a asp-page="./Delete" asp-route-id="@form.FormId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

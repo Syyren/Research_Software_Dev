@@ -245,6 +245,14 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
+      "Id": "C:\\Computer Programming\\Semester 4\\2902 (Capstone)\\Project\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\wwwroot\\uploads\\CPRO2902 Capstone II - Project Proposal.pdf",
+      "PackagePath": "staticwebassets\\uploads\\CPRO2902 Capstone II - Project Proposal.pdf"
+    },
+    {
+      "Id": "C:\\Computer Programming\\Semester 4\\2902 (Capstone)\\Project\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\wwwroot\\uploads\\DASS-21.pdf",
+      "PackagePath": "staticwebassets\\uploads\\DASS-21.pdf"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Research_Software_Dev.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },
