@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Parsed PDF Results";
+    var form = ViewBag.Form as Research_Software_Dev.Models.Forms.Form;
+    var questions = ViewBag.Questions as List<Research_Software_Dev.Models.Forms.FormQuestion>;
+}
+
+<h1>Parsed PDF Results</h1>
+
+@if (form != null)
+{
+    <h2>Form: @form.FormName</h2>
+}
+else
+{
+    <h2>Form information could not be extracted.</h2>
+}
+
+<h3>Questions:</h3>
+@if (questions != null && questions.Count > 0)
+{
+    <ol>
+        @foreach (var question in questions)
+        {
+            <li>@question.QuestionDescription</li>
+        }
+    </ol>
+}
+else
+{
+    <p>No questions found in the uploaded PDF.</p>
+}

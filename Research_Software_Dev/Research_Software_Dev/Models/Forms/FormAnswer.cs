@@ -14,6 +14,6 @@ namespace Research_Software_Dev.Models.Forms
 
         //Question FK
         public string QuestionId { get; set; }
-        public string Question { get; set; }
+        public FormQuestion Question { get; set; }
     }
 }
