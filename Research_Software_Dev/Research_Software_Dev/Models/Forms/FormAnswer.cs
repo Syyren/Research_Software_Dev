@@ -1,4 +1,5 @@
 ﻿using Research_Software_Dev.Models.Participants;
+using Research_Software_Dev.Models.Sessions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,11 +15,13 @@ namespace Research_Software_Dev.Models.Forms
         [DataType(DataType.DateTime)]
         public DateTime TimeStamp { get; set; }
 
-        //ParticipantSession FK
+        //ParticipantSession composite FK
         [Required]
-        public int ParticipantSessionId { get; set; }
+        public int ParticipantId { get; set; }
+        [Required]
+        public int SessionId { get; set; }
 
-        [ForeignKey("ParticipantSessionId")]
+        [ForeignKey("ParticipantId, SessionId")]
         public ParticipantSession ParticipantSession { get; set; }
 
         //FormQuestion FK
@@ -29,12 +32,13 @@ namespace Research_Software_Dev.Models.Forms
 
         //Constructors
         public FormAnswer() { }
-        public FormAnswer(int answerId, string answer, DateTime timeStamp, int participantSessionId, int questionId)
+        public FormAnswer(int answerId, string answer, DateTime timeStamp, int participantId, int sessionId, int questionId)
         {
             AnswerId = answerId;
             Answer = answer;
             TimeStamp = timeStamp;
-            ParticipantSessionId = participantSessionId;
+            ParticipantId = participantId;
+            SessionId = sessionId;
             QuestionId = questionId;
         }
     }
