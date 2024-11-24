@@ -24,12 +24,10 @@ namespace Research_Software_Dev.Models.Participants
 
         //Constructors
         public ParticipantSession() { }
-        public ParticipantSession(int participantId, Participant participant, int sessionId, Session session)
+        public ParticipantSession(int participantId, int sessionId)
         {
             ParticipantId = participantId;
-            Participant = participant;
             SessionId = sessionId;
-            Session = session;
         }
     }
 }

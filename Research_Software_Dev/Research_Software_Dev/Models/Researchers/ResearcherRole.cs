@@ -21,12 +21,10 @@ namespace Research_Software_Dev.Models.Researchers
 
         //Constructors
         public ResearcherRole() { }
-        public ResearcherRole(int researcherId, Researcher researcher, int roleId, Role role)
+        public ResearcherRole(int researcherId, int roleId)
         {
             ResearcherId = researcherId;
-            Researcher = researcher;
             RoleId = roleId;
-            Role = role;
         }
     }
 }

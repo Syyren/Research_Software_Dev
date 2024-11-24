@@ -24,13 +24,11 @@ namespace Research_Software_Dev.Models.Researchers
 
         //Constructors
         public ResearcherStudy() { }
-        public ResearcherStudy(int researcherId, Researcher researcher, int studyId, string studyName, Study study)
+        public ResearcherStudy(int researcherId, int studyId, string studyName)
         {
             ResearcherId = researcherId;
-            Researcher = researcher;
             StudyId = studyId;
             StudyName = studyName;
-            Study = study;
         }
     }
 }

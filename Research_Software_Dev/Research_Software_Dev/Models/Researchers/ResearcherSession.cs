@@ -23,12 +23,10 @@ namespace Research_Software_Dev.Models.Researchers
 
         //Constructors
         public ResearcherSession() { }
-        public ResearcherSession(int researcherId, Researcher researcher, int sessionId, Session session)
+        public ResearcherSession(int researcherId, int sessionId)
         {
             ResearcherId = researcherId;
-            Researcher = researcher;
             SessionId = sessionId;
-            Session = session;
         }
     }
 }

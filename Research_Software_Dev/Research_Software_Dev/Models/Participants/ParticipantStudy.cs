@@ -23,12 +23,10 @@ namespace Research_Software_Dev.Models.Participants
 
         //Constructors
         public ParticipantStudy() { }
-        public ParticipantStudy(int participantId, Participant participant, int studyId, Study study)
+        public ParticipantStudy(int participantId, int studyId)
         {
             ParticipantId = participantId;
-            Participant = participant;
             StudyId = studyId;
-            Study = study;
         }
     }
 }

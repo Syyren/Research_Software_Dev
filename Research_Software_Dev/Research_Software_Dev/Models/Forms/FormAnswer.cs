@@ -29,15 +29,13 @@ namespace Research_Software_Dev.Models.Forms
 
         //Constructors
         public FormAnswer() { }
-        public FormAnswer(int answerId, string answer, DateTime timeStamp, int participantSessionId, ParticipantSession participantSession, int questionId, FormQuestion formQuestion)
+        public FormAnswer(int answerId, string answer, DateTime timeStamp, int participantSessionId, int questionId)
         {
             AnswerId = answerId;
             Answer = answer;
             TimeStamp = timeStamp;
             ParticipantSessionId = participantSessionId;
-            ParticipantSession = participantSession;
             QuestionId = questionId;
-            FormQuestion = formQuestion;
         }
     }
 }

@@ -21,13 +21,12 @@ namespace Research_Software_Dev.Models.Forms
 
         //Constructors
         public FormQuestion() { }
-        public FormQuestion(int questionId, string questionNumber, string questionDescription, int formId, Form form)
+        public FormQuestion(int questionId, string questionNumber, string questionDescription, int formId)
         {
             QuestionId = questionId;
             QuestionNumber = questionNumber;
             QuestionDescription = questionDescription;
             FormId = formId;
-            Form = form;
         }
     }
 }
