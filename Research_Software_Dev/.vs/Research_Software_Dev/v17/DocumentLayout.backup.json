@@ -3,8 +3,64 @@
   "WorkspaceRootPath": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|c:\\users\\syyre\\documents\\github\\research_software_dev\\research_software_dev\\research_software_dev\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|solutionrelative:research_software_dev\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|c:\\users\\syyre\\documents\\github\\research_software_dev\\research_software_dev\\research_software_dev\\pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|solutionrelative:research_software_dev\\pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|c:\\users\\syyre\\documents\\github\\research_software_dev\\research_software_dev\\research_software_dev\\pages\\studies\\create.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|solutionrelative:research_software_dev\\pages\\studies\\create.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|c:\\users\\syyre\\documents\\github\\research_software_dev\\research_software_dev\\research_software_dev\\pages\\studies\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|solutionrelative:research_software_dev\\pages\\studies\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|c:\\users\\syyre\\documents\\github\\research_software_dev\\research_software_dev\\research_software_dev\\pages\\studies\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|solutionrelative:research_software_dev\\pages\\studies\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|c:\\users\\syyre\\documents\\github\\research_software_dev\\research_software_dev\\research_software_dev\\pages\\studies\\edit.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|solutionrelative:research_software_dev\\pages\\studies\\edit.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|c:\\users\\syyre\\documents\\github\\research_software_dev\\research_software_dev\\research_software_dev\\pages\\studies\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|solutionrelative:research_software_dev\\pages\\studies\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|c:\\users\\syyre\\documents\\github\\research_software_dev\\research_software_dev\\research_software_dev\\pages\\studies\\delete.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|solutionrelative:research_software_dev\\pages\\studies\\delete.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|c:\\users\\syyre\\documents\\github\\research_software_dev\\research_software_dev\\research_software_dev\\research_software_dev.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|solutionrelative:research_software_dev\\research_software_dev.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|c:\\users\\syyre\\documents\\github\\research_software_dev\\research_software_dev\\research_software_dev\\models\\studies\\study.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|solutionrelative:research_software_dev\\models\\studies\\study.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|c:\\users\\syyre\\documents\\github\\research_software_dev\\research_software_dev\\research_software_dev\\pages\\studies\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|solutionrelative:research_software_dev\\pages\\studies\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|c:\\users\\syyre\\documents\\github\\research_software_dev\\research_software_dev\\research_software_dev\\pages\\studies\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|solutionrelative:research_software_dev\\pages\\studies\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|c:\\users\\syyre\\documents\\github\\research_software_dev\\research_software_dev\\research_software_dev\\pages\\studies\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|solutionrelative:research_software_dev\\pages\\studies\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|c:\\users\\syyre\\documents\\github\\research_software_dev\\research_software_dev\\research_software_dev\\pages\\studies\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|solutionrelative:research_software_dev\\pages\\studies\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|c:\\users\\syyre\\documents\\github\\research_software_dev\\research_software_dev\\research_software_dev\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|solutionrelative:research_software_dev\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Migrations\\20241123210608_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -13,10 +69,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|c:\\users\\syyre\\documents\\github\\research_software_dev\\research_software_dev\\research_software_dev\\data\\tempdata\\tempstudies.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|solutionrelative:research_software_dev\\data\\tempdata\\tempstudies.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|c:\\users\\syyre\\documents\\github\\research_software_dev\\research_software_dev\\research_software_dev\\pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{728452AE-4EE7-4240-B630-E7C8F6CF3D05}|Research_Software_Dev\\Research_Software_Dev.csproj|solutionrelative:research_software_dev\\pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,11 +78,206 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Research_Software_Dev\\Pages\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Research_Software_Dev\\Pages\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABkAAABeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-11-24T08:21:22.526Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Index.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Index.cshtml.cs",
+              "RelativeDocumentMoniker": "Research_Software_Dev\\Pages\\Studies\\Index.cshtml.cs",
+              "ToolTip": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Index.cshtml.cs",
+              "RelativeToolTip": "Research_Software_Dev\\Pages\\Studies\\Index.cshtml.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-23T21:10:11.414Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Index.cshtml",
+              "RelativeDocumentMoniker": "Research_Software_Dev\\Pages\\Studies\\Index.cshtml",
+              "ToolTip": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Index.cshtml",
+              "RelativeToolTip": "Research_Software_Dev\\Pages\\Studies\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-11-23T21:10:11.341Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Delete.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Delete.cshtml.cs",
+              "RelativeDocumentMoniker": "Research_Software_Dev\\Pages\\Studies\\Delete.cshtml.cs",
+              "ToolTip": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Delete.cshtml.cs",
+              "RelativeToolTip": "Research_Software_Dev\\Pages\\Studies\\Delete.cshtml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-23T21:10:11.26Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Details.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Details.cshtml.cs",
+              "RelativeDocumentMoniker": "Research_Software_Dev\\Pages\\Studies\\Details.cshtml.cs",
+              "ToolTip": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Details.cshtml.cs",
+              "RelativeToolTip": "Research_Software_Dev\\Pages\\Studies\\Details.cshtml.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAzwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-23T21:10:11.1Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Edit.cshtml",
+              "RelativeDocumentMoniker": "Research_Software_Dev\\Pages\\Studies\\Edit.cshtml",
+              "ToolTip": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Edit.cshtml",
+              "RelativeToolTip": "Research_Software_Dev\\Pages\\Studies\\Edit.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-11-23T21:10:10.769Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Create.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Create.cshtml.cs",
+              "RelativeDocumentMoniker": "Research_Software_Dev\\Pages\\Studies\\Create.cshtml.cs",
+              "ToolTip": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Create.cshtml.cs",
+              "RelativeToolTip": "Research_Software_Dev\\Pages\\Studies\\Create.cshtml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAABDAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-23T21:10:10.693Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Edit.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Edit.cshtml.cs",
+              "RelativeDocumentMoniker": "Research_Software_Dev\\Pages\\Studies\\Edit.cshtml.cs",
+              "ToolTip": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Edit.cshtml.cs",
+              "RelativeToolTip": "Research_Software_Dev\\Pages\\Studies\\Edit.cshtml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-23T21:10:10.836Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Index.cshtml",
+              "RelativeDocumentMoniker": "Research_Software_Dev\\Pages\\Index.cshtml",
+              "ToolTip": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Index.cshtml",
+              "RelativeToolTip": "Research_Software_Dev\\Pages\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-11-22T22:12:37.643Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Details.cshtml",
+              "RelativeDocumentMoniker": "Research_Software_Dev\\Pages\\Studies\\Details.cshtml",
+              "ToolTip": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Details.cshtml",
+              "RelativeToolTip": "Research_Software_Dev\\Pages\\Studies\\Details.cshtml",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-11-23T21:10:10.955Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Delete.cshtml",
+              "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Delete.cshtml",
+              "RelativeDocumentMoniker": "Research_Software_Dev\\Pages\\Studies\\Delete.cshtml",
+              "ToolTip": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Delete.cshtml",
+              "RelativeToolTip": "Research_Software_Dev\\Pages\\Studies\\Delete.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-11-23T21:10:11.183Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Research_Software_Dev",
+              "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev.csproj",
+              "RelativeDocumentMoniker": "Research_Software_Dev\\Research_Software_Dev.csproj",
+              "ToolTip": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev.csproj",
+              "RelativeToolTip": "Research_Software_Dev\\Research_Software_Dev.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-11-23T21:18:38.218Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Create.cshtml",
+              "RelativeDocumentMoniker": "Research_Software_Dev\\Pages\\Studies\\Create.cshtml",
+              "ToolTip": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Studies\\Create.cshtml",
+              "RelativeToolTip": "Research_Software_Dev\\Pages\\Studies\\Create.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-11-23T21:10:10.291Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Study.cs",
+              "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Models\\Studies\\Study.cs",
+              "RelativeDocumentMoniker": "Research_Software_Dev\\Models\\Studies\\Study.cs",
+              "ToolTip": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Models\\Studies\\Study.cs",
+              "RelativeToolTip": "Research_Software_Dev\\Models\\Studies\\Study.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA4AAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-23T20:49:41.266Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Research_Software_Dev\\Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Research_Software_Dev\\Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-23T21:10:10.057Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
               "Title": "20241123210608_Initial.cs",
               "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Migrations\\20241123210608_Initial.cs",
               "RelativeDocumentMoniker": "Research_Software_Dev\\Migrations\\20241123210608_Initial.cs",
@@ -43,7 +290,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 16,
               "Title": "TempStudies.cs",
               "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Data\\TempData\\TempStudies.cs",
               "RelativeDocumentMoniker": "Research_Software_Dev\\Data\\TempData\\TempStudies.cs",
@@ -53,31 +300,6 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-23T21:03:56.116Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Study.cs",
-              "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Models\\Studies\\Study.cs",
-              "RelativeDocumentMoniker": "Research_Software_Dev\\Models\\Studies\\Study.cs",
-              "ToolTip": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Models\\Studies\\Study.cs",
-              "RelativeToolTip": "Research_Software_Dev\\Models\\Studies\\Study.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-23T20:49:41.266Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Index.cshtml",
-              "RelativeDocumentMoniker": "Research_Software_Dev\\Pages\\Index.cshtml",
-              "ToolTip": "C:\\Users\\syyre\\Documents\\GitHub\\Research_Software_Dev\\Research_Software_Dev\\Research_Software_Dev\\Pages\\Index.cshtml",
-              "RelativeToolTip": "Research_Software_Dev\\Pages\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-11-22T22:12:37.643Z"
             }
           ]
         }
