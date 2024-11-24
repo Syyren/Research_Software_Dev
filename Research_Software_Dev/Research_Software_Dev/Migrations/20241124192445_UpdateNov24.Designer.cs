@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Research_Software_Dev.Data;
 
@@ -11,9 +12,11 @@ using Research_Software_Dev.Data;
 namespace Research_Software_Dev.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241124192445_UpdateNov24")]
+    partial class UpdateNov24
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -405,7 +408,17 @@ namespace Research_Software_Dev.Migrations
                     b.Property<string>("StudyId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("StudyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("ResearcherId", "StudyId");
+
+                    b.HasIndex("Id");
 
                     b.HasIndex("StudyId");
 
@@ -597,7 +610,7 @@ namespace Research_Software_Dev.Migrations
                 {
                     b.HasOne("Research_Software_Dev.Models.Researchers.Researcher", "Researcher")
                         .WithMany()
-                        .HasForeignKey("ResearcherId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

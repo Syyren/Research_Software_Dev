@@ -17,6 +17,10 @@ builder.Services.AddDefaultIdentity<Researcher>(options => options.SignIn.Requir
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("ApiClient", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7018");
+});
 
 var app = builder.Build();
 
