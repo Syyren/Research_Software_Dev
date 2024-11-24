@@ -73,7 +73,7 @@ namespace Research_Software_Dev.Data
             modelBuilder.Entity<FormAnswer>()
                 .HasOne(fa => fa.ParticipantSession)
                 .WithMany()
-                .HasForeignKey(fa => fa.ParticipantSessionId)
+                .HasForeignKey(fa => new { fa.ParticipantId, fa.SessionId })
                 .OnDelete(DeleteBehavior.Cascade);
 
             //initial data for roles
