@@ -8,7 +8,7 @@ using Research_Software_Dev.Data;
 
 #nullable disable
 
-namespace Research_Software_Dev.Data.Migrations
+namespace Research_Software_Dev.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -72,71 +72,6 @@ namespace Research_Software_Dev.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -226,11 +161,8 @@ namespace Research_Software_Dev.Data.Migrations
 
             modelBuilder.Entity("Research_Software_Dev.Models.Forms.Form", b =>
                 {
-                    b.Property<int>("FormId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FormId"));
+                    b.Property<string>("FormId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FormName")
                         .IsRequired()
@@ -243,27 +175,28 @@ namespace Research_Software_Dev.Data.Migrations
 
             modelBuilder.Entity("Research_Software_Dev.Models.Forms.FormAnswer", b =>
                 {
-                    b.Property<int>("AnswerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AnswerId"));
+                    b.Property<string>("AnswerId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Answer")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FormQuestionId")
-                        .HasColumnType("int");
+                    b.Property<string>("FormQuestionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ParticipantId")
-                        .HasColumnType("int");
+                    b.Property<string>("ParticipantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
+                    b.Property<string>("QuestionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SessionId")
-                        .HasColumnType("int");
+                    b.Property<string>("SessionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime2");
@@ -279,25 +212,23 @@ namespace Research_Software_Dev.Data.Migrations
 
             modelBuilder.Entity("Research_Software_Dev.Models.Forms.FormQuestion", b =>
                 {
-                    b.Property<int>("QuestionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("FormQuestionId")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QuestionId"));
+                    b.Property<string>("FormId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("FormId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("QuestionDescription")
+                    b.Property<string>("FormQuestionDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("QuestionNumber")
+                    b.Property<string>("FormQuestionNumber")
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.HasKey("QuestionId");
+                    b.HasKey("FormQuestionId");
 
                     b.HasIndex("FormId");
 
@@ -306,11 +237,8 @@ namespace Research_Software_Dev.Data.Migrations
 
             modelBuilder.Entity("Research_Software_Dev.Models.Participants.Participant", b =>
                 {
-                    b.Property<int>("ParticipantId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ParticipantId"));
+                    b.Property<string>("ParticipantId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ParticipantAddress")
                         .HasMaxLength(255)
@@ -340,11 +268,11 @@ namespace Research_Software_Dev.Data.Migrations
 
             modelBuilder.Entity("Research_Software_Dev.Models.Participants.ParticipantSession", b =>
                 {
-                    b.Property<int>("ParticipantId")
-                        .HasColumnType("int");
+                    b.Property<string>("ParticipantId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("SessionId")
-                        .HasColumnType("int");
+                    b.Property<string>("SessionId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ParticipantId", "SessionId");
 
@@ -355,11 +283,11 @@ namespace Research_Software_Dev.Data.Migrations
 
             modelBuilder.Entity("Research_Software_Dev.Models.Participants.ParticipantStudy", b =>
                 {
-                    b.Property<int>("ParticipantId")
-                        .HasColumnType("int");
+                    b.Property<string>("ParticipantId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("StudyId")
-                        .HasColumnType("int");
+                    b.Property<string>("StudyId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ParticipantId", "StudyId");
 
@@ -370,21 +298,50 @@ namespace Research_Software_Dev.Data.Migrations
 
             modelBuilder.Entity("Research_Software_Dev.Models.Researchers.Researcher", b =>
                 {
-                    b.Property<int>("ResearcherId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResearcherId"));
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ResearcherAddress")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("ResearcherEmail")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ResearcherFirstName")
                         .IsRequired()
@@ -396,43 +353,36 @@ namespace Research_Software_Dev.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("ResearcherPassword")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ResearcherPhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
 
-                    b.HasKey("ResearcherId");
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-                    b.ToTable("Researchers");
-                });
+                    b.HasKey("Id");
 
-            modelBuilder.Entity("Research_Software_Dev.Models.Researchers.ResearcherRole", b =>
-                {
-                    b.Property<int>("ResearcherId")
-                        .HasColumnType("int");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasKey("ResearcherId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("ResearcherRoles");
+                    b.ToTable("Researchers", (string)null);
                 });
 
             modelBuilder.Entity("Research_Software_Dev.Models.Researchers.ResearcherSession", b =>
                 {
-                    b.Property<int>("ResearcherId")
-                        .HasColumnType("int");
+                    b.Property<string>("ResearcherId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("SessionId")
-                        .HasColumnType("int");
+                    b.Property<string>("SessionId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ResearcherId", "SessionId");
 
@@ -443,11 +393,11 @@ namespace Research_Software_Dev.Data.Migrations
 
             modelBuilder.Entity("Research_Software_Dev.Models.Researchers.ResearcherStudy", b =>
                 {
-                    b.Property<int>("ResearcherId")
-                        .HasColumnType("int");
+                    b.Property<string>("ResearcherId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("StudyId")
-                        .HasColumnType("int");
+                    b.Property<string>("StudyId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("StudyName")
                         .IsRequired()
@@ -460,69 +410,17 @@ namespace Research_Software_Dev.Data.Migrations
                     b.ToTable("ResearcherStudies");
                 });
 
-            modelBuilder.Entity("Research_Software_Dev.Models.Roles.Role", b =>
-                {
-                    b.Property<int>("RoleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"));
-
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("RoleId");
-
-                    b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            RoleId = 1,
-                            RoleName = "Admin"
-                        },
-                        new
-                        {
-                            RoleId = 2,
-                            RoleName = "Audit"
-                        },
-                        new
-                        {
-                            RoleId = 3,
-                            RoleName = "Level 3"
-                        },
-                        new
-                        {
-                            RoleId = 4,
-                            RoleName = "Level 2"
-                        },
-                        new
-                        {
-                            RoleId = 5,
-                            RoleName = "Level 1"
-                        },
-                        new
-                        {
-                            RoleId = 6,
-                            RoleName = "Level 0"
-                        });
-                });
-
             modelBuilder.Entity("Research_Software_Dev.Models.Sessions.Session", b =>
                 {
-                    b.Property<int>("SessionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SessionId"));
+                    b.Property<string>("SessionId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
-                    b.Property<int>("StudyId")
-                        .HasColumnType("int");
+                    b.Property<string>("StudyId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<TimeOnly>("TimeEnd")
                         .HasColumnType("time");
@@ -539,11 +437,8 @@ namespace Research_Software_Dev.Data.Migrations
 
             modelBuilder.Entity("Research_Software_Dev.Models.Studies.Study", b =>
                 {
-                    b.Property<int>("StudyId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudyId"));
+                    b.Property<string>("StudyId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("StudyDescription")
                         .IsRequired()
@@ -569,7 +464,7 @@ namespace Research_Software_Dev.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("Research_Software_Dev.Models.Researchers.Researcher", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -578,7 +473,7 @@ namespace Research_Software_Dev.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("Research_Software_Dev.Models.Researchers.Researcher", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -593,7 +488,7 @@ namespace Research_Software_Dev.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("Research_Software_Dev.Models.Researchers.Researcher", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -602,7 +497,7 @@ namespace Research_Software_Dev.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("Research_Software_Dev.Models.Researchers.Researcher", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -675,25 +570,6 @@ namespace Research_Software_Dev.Data.Migrations
                     b.Navigation("Participant");
 
                     b.Navigation("Study");
-                });
-
-            modelBuilder.Entity("Research_Software_Dev.Models.Researchers.ResearcherRole", b =>
-                {
-                    b.HasOne("Research_Software_Dev.Models.Researchers.Researcher", "Researcher")
-                        .WithMany()
-                        .HasForeignKey("ResearcherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Research_Software_Dev.Models.Roles.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Researcher");
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Research_Software_Dev.Models.Researchers.ResearcherSession", b =>
