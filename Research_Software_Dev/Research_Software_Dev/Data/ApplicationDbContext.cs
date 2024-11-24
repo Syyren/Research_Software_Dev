@@ -1,18 +1,20 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Research_Software_Dev.Models.Forms;
 using Research_Software_Dev.Models.Participants;
 using Research_Software_Dev.Models.Researchers;
-using Research_Software_Dev.Models.Roles;
 using Research_Software_Dev.Models.Sessions;
 using Research_Software_Dev.Models.Studies;
 
 namespace Research_Software_Dev.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<Researcher>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options) { }
+            : base(options) 
+        {
+        }
 
         //Forms
         public DbSet<Form> Forms { get; set; }
@@ -26,12 +28,8 @@ namespace Research_Software_Dev.Data
 
         //Researchers
         public DbSet<Researcher> Researchers { get; set; }
-        public DbSet<ResearcherRole> ResearcherRoles { get; set; }
         public DbSet<ResearcherSession> ResearcherSessions { get; set; }
         public DbSet<ResearcherStudy> ResearcherStudies { get; set; }
-
-        //Roles
-        public DbSet<Role> Roles { get; set; }
 
         //Sessions
         public DbSet<Session> Sessions { get; set; }
@@ -39,9 +37,18 @@ namespace Research_Software_Dev.Data
         //Studies
         public DbSet<Study> Studies { get; set; }
 
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddIdentity<Researcher, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            //Rename AspNetUsers Table to Researchers
+            modelBuilder.Entity<Researcher>().ToTable("Researchers");
 
             //composite keys
                 //Participants
@@ -49,9 +56,8 @@ namespace Research_Software_Dev.Data
                 .HasKey(ps => new { ps.ParticipantId, ps.SessionId });
             modelBuilder.Entity<ParticipantStudy>()
                 .HasKey(ps => new { ps.ParticipantId, ps.StudyId });
-                //Researchers
-            modelBuilder.Entity<ResearcherRole>()
-                .HasKey(rr => new { rr.ResearcherId, rr.RoleId });
+                
+            //Researchers
             modelBuilder.Entity<ResearcherSession>()
                 .HasKey(rr => new { rr.ResearcherId, rr.SessionId });
             modelBuilder.Entity<ResearcherStudy>()
@@ -75,16 +81,6 @@ namespace Research_Software_Dev.Data
                 .WithMany()
                 .HasForeignKey(fa => new { fa.ParticipantId, fa.SessionId })
                 .OnDelete(DeleteBehavior.Cascade);
-
-            //initial data for roles
-            modelBuilder.Entity<Role>().HasData(
-                new Role { RoleId = 1, RoleName = "Admin" },
-                new Role { RoleId = 2, RoleName = "Audit" },
-                new Role { RoleId = 3, RoleName = "Level 3" },
-                new Role { RoleId = 4, RoleName = "Level 2" },
-                new Role { RoleId = 5, RoleName = "Level 1" },
-                new Role { RoleId = 6, RoleName = "Level 0" }
-            );
         }
     }
 }
