@@ -34,7 +34,7 @@ namespace Research_Software_Dev.Pages.Forms
             FormId = formId;
             ParticipantSessionId = participantSessionId;
 
-            // Load questions for the form
+            // Loads questions for the form
             Questions = await _context.FormQuestions
                 .Where(q => q.FormId == formId)
                 .OrderBy(q => q.QuestionNumber)
@@ -50,7 +50,7 @@ namespace Research_Software_Dev.Pages.Forms
 
         public async Task<IActionResult> OnPostAsync()
         {
-            // Reload Questions to ensure it's initialized
+            // Reloads Questions to ensure it's initialized
             Questions = await _context.FormQuestions
                 .Where(q => q.FormId == FormId)
                 .OrderBy(q => q.QuestionNumber)
@@ -68,7 +68,7 @@ namespace Research_Software_Dev.Pages.Forms
                 return Page();
             }
 
-            // Validate and save answers
+            // Validates and save answers
             foreach (var answer in Answers)
             {
                 if (string.IsNullOrEmpty(answer.QuestionId) || string.IsNullOrEmpty(answer.Answer))
@@ -77,7 +77,7 @@ namespace Research_Software_Dev.Pages.Forms
                     return Page();
                 }
 
-                // Assign participant session ID and timestamp
+                // Assigns participant session ID and timestamp
                 answer.FormId = FormId;
                 answer.ParticipantSessionId = ParticipantSessionId;
                 answer.TimeStamp = DateTime.UtcNow;

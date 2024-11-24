@@ -44,7 +44,7 @@ namespace Research_Software_Dev.Pages.Forms
         {
             if (!ModelState.IsValid)
             {
-                // Log validation errors
+                // Logs validation errors
                 foreach (var error in ModelState)
                 {
                     Console.WriteLine($"{error.Key}: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
@@ -52,7 +52,7 @@ namespace Research_Software_Dev.Pages.Forms
                 return Page();
             }
 
-            // Load the form from the database
+            // Loads the form from the database
             var existingForm = await _context.Forms.FindAsync(Form.FormId);
 
             if (existingForm == null)
@@ -60,7 +60,7 @@ namespace Research_Software_Dev.Pages.Forms
                 return NotFound();
             }
 
-            // Update form properties
+            // Updates form properties
             existingForm.FormName = Form.FormName;
 
             var questions = existingForm.Questions
@@ -89,7 +89,7 @@ namespace Research_Software_Dev.Pages.Forms
                 }
             }
 
-            // Redirect to the Index page or another appropriate page
+            // Redirects to the Index page or another appropriate page
             return RedirectToPage("./Index");
         }
     }

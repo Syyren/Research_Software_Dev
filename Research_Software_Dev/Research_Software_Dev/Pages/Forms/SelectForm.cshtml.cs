@@ -30,7 +30,7 @@ namespace Research_Software_Dev.Pages.Forms
         {
             ParticipantSessionId = participantSessionId;
 
-            // Load available forms from the database
+            // Loads available forms from the database
             Forms = await _context.Forms.ToListAsync();
 
             if (!Forms.Any())

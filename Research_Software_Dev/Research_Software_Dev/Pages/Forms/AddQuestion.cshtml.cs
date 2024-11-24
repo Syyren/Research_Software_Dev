@@ -24,7 +24,7 @@ namespace Research_Software_Dev.Pages.Forms
 
         public async Task<IActionResult> OnGetAsync(int formId)
         {
-            // Check if the form exists
+            // Checks if the form exists
             var form = await _context.Forms.FindAsync(formId);
             if (form == null)
             {
@@ -46,14 +46,14 @@ namespace Research_Software_Dev.Pages.Forms
                 return Page();
             }
 
-            // Set the FormId for the new question
+            // Sets the FormId for the new question
             Question.FormId = FormId;
 
-            // Add the question to the database
+            // Adds the question to the database
             _context.FormQuestions.Add(Question);
             await _context.SaveChangesAsync();
 
-            // Redirect back to the Edit page for the form
+            // Redirects back to the Edit page for the form
             return RedirectToPage("./Edit", new { id = FormId });
         }
     }

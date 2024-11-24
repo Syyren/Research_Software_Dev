@@ -31,9 +31,9 @@ namespace Research_Software_Dev.Pages.Forms
             FormId = formId;
             ParticipantSessionId = participantSessionId;
 
-            // Fetch answers from the database
+            // Fetches answers from the database
             Answers = await _context.FormAnswers
-                .Include(a => a.Question) // Include question data
+                .Include(a => a.Question) // Includes question data
                 .Where(a => a.FormId == formId && a.ParticipantSessionId == participantSessionId)
                 .ToListAsync();
 

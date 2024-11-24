@@ -47,7 +47,7 @@ namespace Research_Software_Dev.Pages.Forms
                 return Page();
             }
 
-            // Fetch the existing question from the database
+            // Fetches the existing question from the database
             var existingQuestion = await _context.FormQuestions.FindAsync(Question.QuestionId);
 
             if (existingQuestion == null)
@@ -55,30 +55,30 @@ namespace Research_Software_Dev.Pages.Forms
                 return NotFound(); // Question does not exist
             }
 
-            // Update the question properties
+            // Updates the question properties
             existingQuestion.QuestionDescription = Question.QuestionDescription;
             existingQuestion.QuestionNumber = Question.QuestionNumber;
 
-            // Mark the entity as modified
+            // Marks the entity as modified
             _context.Attach(existingQuestion).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync(); // Save changes to the database
+                await _context.SaveChangesAsync(); // Saves changes to the database
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!_context.FormQuestions.Any(q => q.QuestionId == Question.QuestionId))
                 {
-                    return NotFound(); // Handle concurrency issue if the record no longer exists
+                    return NotFound(); // Handles concurrency issue if the record no longer exists
                 }
                 else
                 {
-                    throw; // Rethrow other concurrency exceptions
+                    throw; // Rethrows other concurrency exceptions
                 }
             }
 
-            // Redirect back to the form's edit page
+            // Redirects back to the form's edit page
             return RedirectToPage("./Edit", new { id = FormId });
         }
     }
