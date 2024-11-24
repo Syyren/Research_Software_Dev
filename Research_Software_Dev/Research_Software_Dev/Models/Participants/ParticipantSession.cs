@@ -1,21 +1,33 @@
 ﻿using Research_Software_Dev.Models.Sessions;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Research_Software_Dev.Models.Participants
 {
     public class ParticipantSession
     {
-        public ParticipantSession(Participant participant, Session session)
-        {
-            ParticipantId = participant.ParticipantId;
-            SessionId = session.SessionId;
-            ParticipantSessionId = int.Parse($"{this.ParticipantId}{this.SessionId}");
-        }
-        public int ParticipantSessionId { get; }
+        //Composite key auto generated in context
 
         //Participant FK
-        public int ParticipantId { get; set; }
+        [Required]
+        public string ParticipantId { get; set; }
+
+        [ForeignKey("ParticipantId")]
+        public Participant Participant { get; set; }
 
         //Session FK
-        public int SessionId { get; set; }
+        [Required]
+        public string SessionId { get; set; }
+
+        [ForeignKey("SessionId")]
+        public Session Session { get; set; }
+
+        //Constructors
+        public ParticipantSession() { }
+        public ParticipantSession(string participantId, string sessionId)
+        {
+            ParticipantId = participantId;
+            SessionId = sessionId;
+        }
     }
 }

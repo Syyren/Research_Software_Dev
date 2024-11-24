@@ -1,14 +1,34 @@
-﻿namespace Research_Software_Dev.Models.Researchers
+﻿using Research_Software_Dev.Models.Studies;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Research_Software_Dev.Models.Researchers
 {
-    public class ResearcherStudy(int r_id, int s_id, string studyName)
+    public class ResearcherStudy
     {
-        public int ResearcherStudyId { get; } = int.Parse($"{r_id}{s_id}");
+        //Composite key auto generated in context
 
         //Researcher FK
-        public int ResearcherId { get; set; } = r_id;
+        [Required]
+        public string ResearcherId { get; set; }
+        [ForeignKey("Id")]
+        public Researcher Researcher { get; set; }
 
         //Study FK
-        public int StudyId { get; set; } = s_id;
-        public string StudyName { get; set; } = studyName;
+        [Required]
+        public string StudyId { get; set; }
+        [Required]
+        public string StudyName { get; set; }
+        [ForeignKey("StudyId")]
+        public Study Study { get; set; }
+
+        //Constructors
+        public ResearcherStudy() { }
+        public ResearcherStudy(string researcherId, string studyId, string studyName)
+        {
+            ResearcherId = researcherId;
+            StudyId = studyId;
+            StudyName = studyName;
+        }
     }
 }

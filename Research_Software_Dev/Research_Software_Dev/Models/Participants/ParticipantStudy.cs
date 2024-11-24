@@ -1,22 +1,32 @@
 ﻿using Research_Software_Dev.Models.Studies;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Research_Software_Dev.Models.Participants
 {
     public class ParticipantStudy
     {
-        public ParticipantStudy(Participant participant, Study study)
-        {
-            ParticipantId = participant.ParticipantId;
-            ParticipantStudyId = int.Parse($"{ParticipantId}{StudyId}");
-        }
-        public int ParticipantStudyId { get; }
+        //Composite key auto generated in context
 
-        //Participant FK
-        public int ParticipantId { get; set; }
+        [Required]
+        public string ParticipantId { get; set; }
+
+        [ForeignKey("ParticipantId")]
         public Participant Participant { get; set; }
 
-        //Study FK
-        public int StudyId { get; set; }
+
+        [Required]
+        public string StudyId { get; set; }
+
+        [ForeignKey("StudyId")]
         public Study Study { get; set; }
+
+        //Constructors
+        public ParticipantStudy() { }
+        public ParticipantStudy(string participantId, string studyId)
+        {
+            ParticipantId = participantId;
+            StudyId = studyId;
+        }
     }
 }
