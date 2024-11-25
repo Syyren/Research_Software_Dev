@@ -2,22 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Participants;
+using Research_Software_Dev.Models.Researchers;
+using Research_Software_Dev.Models.Studies;
 
 namespace Research_Software_Dev.Pages.Participants
 {
     public class EditModel : PageModel
     {
-        private readonly Research_Software_Dev.Data.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<Researcher> _userManager;
 
-        public EditModel(Research_Software_Dev.Data.ApplicationDbContext context)
+        public EditModel(ApplicationDbContext context, UserManager<Researcher> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -27,15 +32,17 @@ namespace Research_Software_Dev.Pages.Participants
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
-            var participant =  await _context.Participants.FirstOrDefaultAsync(m => m.ParticipantId == id);
-            if (participant == null)
+            // Get the logged-in researcher's ID
+            var researcherId = _userManager.GetUserId(User);
+
+            if (string.IsNullOrEmpty(researcherId))
             {
-                return NotFound();
+                return Unauthorized();
             }
-            Participant = participant;
+
             return Page();
         }
 
@@ -48,6 +55,20 @@ namespace Research_Software_Dev.Pages.Participants
                 return Page();
             }
 
+            //gets the logged-in user's ID
+            var researcherId = _userManager.GetUserId(User);
+
+            //verifies ownership before updating
+            var participantStudy = await _context.ParticipantStudies
+                .FirstOrDefaultAsync(ps => ps.ParticipantId == Participant.ParticipantId &&
+                    _context.ResearcherStudies.Any(rs => rs.StudyId == ps.StudyId && rs.ResearcherId == researcherId));
+
+            if (participantStudy == null)
+            {
+                return RedirectToPage("/NotFound");
+            }
+
+            //attaches and modifies the study
             _context.Attach(Participant).State = EntityState.Modified;
 
             try
@@ -58,7 +79,7 @@ namespace Research_Software_Dev.Pages.Participants
             {
                 if (!ParticipantExists(Participant.ParticipantId))
                 {
-                    return NotFound();
+                    return RedirectToPage("/NotFound");
                 }
                 else
                 {
