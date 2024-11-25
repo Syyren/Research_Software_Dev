@@ -12,8 +12,8 @@ using Research_Software_Dev.Data;
 namespace Research_Software_Dev.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241125092637_Test")]
-    partial class Test
+    [Migration("20241125215427_Nov252024-Update")]
+    partial class Nov252024Update
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

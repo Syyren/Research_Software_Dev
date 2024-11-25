@@ -8,14 +8,17 @@ namespace Research_Software_Dev.Models.Researchers
     {
         [Required]
         [StringLength(50)]
+        [Display(Name = "Researcher First Name")]
         public string ResearcherFirstName { get; set; }
 
         [Required]
         [StringLength(50)]
+        [Display(Name = "Researcher Last Name")]
         public string ResearcherLastName { get; set; }
 
         [Required]
         [StringLength(255)]
+        [Display(Name = "Researcher Address")]
         public string ResearcherAddress { get; set; }
 
         //Constructors

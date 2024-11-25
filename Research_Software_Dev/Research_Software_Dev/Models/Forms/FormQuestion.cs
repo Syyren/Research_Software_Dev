@@ -11,6 +11,7 @@ namespace Research_Software_Dev.Models.Forms
         [Required]
         public int QuestionNumber { get; set; }
         [Required]
+        [Display(Name = "Question Description")]
         public string QuestionDescription { get; set; }
 
         //Form FK

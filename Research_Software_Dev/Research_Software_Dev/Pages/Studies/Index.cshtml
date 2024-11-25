@@ -2,24 +2,26 @@
 @model Research_Software_Dev.Pages.Studies.IndexModel
 
 @{
-    ViewData["Title"] = "MHRA - Studies List";
+    ViewData["Title"] = "Studies List";
 }
 
-<h1>Viewing all Studies:</h1>
+<h1>Viewing all Studies</h1>
 
 <p>
-    <a class="btn btn-outline-primary" asp-page="Create">Create New</a>
+    <a class="btn btn-outline-primary" asp-page="Create">Create a New Study</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
+            <th style="max-width: 10vw">
                 @Html.DisplayNameFor(model => model.Study[0].StudyName)
             </th>
-            <th>
+            <th style="max-width: 40vw">
                 @Html.DisplayNameFor(model => model.Study[0].StudyDescription)
             </th>
-            <th></th>
+            <th>
+                Actions
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -33,9 +35,9 @@
                 @Html.DisplayFor(modelItem => item.StudyDescription)
             </td>
             <td>
-                <a class="btn btn-outline-dark" asp-page="./Edit" asp-route-id="@item.StudyId">Edit</a> |
-                <a class="btn btn-outline-dark" asp-page="./Details" asp-route-id="@item.StudyId">Details</a> |
-                <a class="btn btn-outline-danger" asp-page="./Delete" asp-route-id="@item.StudyId">Delete</a>
+                <a class="btn btn-outline-dark" style="min-width: 90px;" asp-page="./Edit" asp-route-id="@item.StudyId">Edit</a> |
+                <a class="btn btn-outline-dark" style="min-width: 90px;" asp-page="./Details" asp-route-id="@item.StudyId">Details</a> |
+                <a class="btn btn-outline-danger" style="min-width: 90px;" asp-page="./Delete" asp-route-id="@item.StudyId">Delete</a>
             </td>
         </tr>
 }

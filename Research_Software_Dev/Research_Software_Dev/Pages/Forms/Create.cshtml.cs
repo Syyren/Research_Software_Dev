@@ -25,7 +25,7 @@ namespace Research_Software_Dev.Pages.Forms
 
         public void OnGet()
         {
-            // Pre-generate FormId
+            // Pre-generates FormId
             Form = new Form
             {
                 FormId = Guid.NewGuid().ToString()

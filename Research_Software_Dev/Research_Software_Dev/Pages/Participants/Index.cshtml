@@ -2,13 +2,13 @@
 @model Research_Software_Dev.Pages.Participants.IndexModel
 
 @{
-    ViewData["Title"] = "MHRA - View Participants";
+    ViewData["Title"] = "Participants";
 }
 
-<h1>Your Participants</h1>
+<h1>Viewing Participants</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a class="btn btn-outline-primary" asp-page="Create">Register a New Participant</a>
 </p>
 <form method="get">
     <div class="form-group">
@@ -26,23 +26,26 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
+            <th style="max-width: 10vw;">
                 @Html.DisplayNameFor(model => model.Participant[0].ParticipantFirstName)
             </th>
-            <th>
+            <th style="max-width: 10vw;">
                 @Html.DisplayNameFor(model => model.Participant[0].ParticipantLastName)
             </th>
-            <th>
+            <th style="max-width: 10vw;">
                 @Html.DisplayNameFor(model => model.Participant[0].ParticipantAddress)
             </th>
-            <th>
+            <th style="max-width: 10vw;">
                 @Html.DisplayNameFor(model => model.Participant[0].ParticipantEmail)
             </th>
-            <th>
+            <th style="max-width: 10vw;">
                 @Html.DisplayNameFor(model => model.Participant[0].ParticipantPhoneNumber)
             </th>
-            <th>
+            <th style="max-width: 10vw;">
                 @Html.DisplayNameFor(model => model.Participant[0].StudyName)
+            </th>
+            <th style="max-width: 10vw;">
+                Actions
             </th>
         </tr>
     </thead>
@@ -68,9 +71,9 @@
                 @Html.DisplayFor(modelItem => item.StudyName)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.ParticipantId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ParticipantId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ParticipantId">Delete</a>
+                <a class="btn btn-outline-dark" style="min-width: 90px;" asp-page="./Edit" asp-route-id="@item.ParticipantId">Edit</a> |
+                <a class="btn btn-outline-dark" style="min-width: 90px;" asp-page="./Details" asp-route-id="@item.ParticipantId">Details</a> |
+                <a class="btn btn-outline-danger" style="min-width: 90px;" asp-page="./Delete" asp-route-id="@item.ParticipantId">Delete</a>
             </td>
         </tr>
 }

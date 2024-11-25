@@ -49,7 +49,7 @@ namespace Research_Software_Dev.Pages.Forms
             ParticipantId = participantId;
             SessionId = sessionId;
 
-            // Fetch Form Name
+            // Fetches Form Name
             FormName = await _context.Forms
                 .Where(f => f.FormId == formId)
                 .Select(f => f.FormName)
@@ -60,7 +60,7 @@ namespace Research_Software_Dev.Pages.Forms
                 return NotFound("Form not found.");
             }
 
-            // Fetch Participant Name
+            // Fetches Participant Name
             ParticipantName = await _context.Participants
                 .Where(p => p.ParticipantId == participantId)
                 .Select(p => p.ParticipantFirstName + " " + p.ParticipantLastName)
@@ -71,7 +71,7 @@ namespace Research_Software_Dev.Pages.Forms
                 return NotFound("Participant not found.");
             }
 
-            // Fetch Questions
+            // Fetches Questions
             Questions = await _context.FormQuestions
                 .Where(q => q.FormId == formId)
                 .OrderBy(q => q.QuestionNumber)
@@ -82,7 +82,7 @@ namespace Research_Software_Dev.Pages.Forms
                 return NotFound("No questions found for this form.");
             }
 
-            // Fetch ParticipantSession
+            // Fetches ParticipantSession
             ParticipantSession = await _context.ParticipantSessions
                 .Include(ps => ps.Participant)
                 .Include(ps => ps.Session)
@@ -98,12 +98,12 @@ namespace Research_Software_Dev.Pages.Forms
 
         public async Task<IActionResult> OnPostAsync()
         {
-            // Ensure Questions are loaded
+            // Ensures Questions are loaded
             Questions = await _context.FormQuestions
                 .Where(q => q.FormId == FormId)
                 .ToListAsync();
 
-            // Validate Answers
+            // Validates Answers
             if (Answers == null || !Answers.Any())
             {
                 ModelState.AddModelError(string.Empty, "Answers are required for all questions.");
@@ -112,7 +112,7 @@ namespace Research_Software_Dev.Pages.Forms
 
             foreach (var answer in Answers)
             {
-                // Ensure the FormQuestionId is valid
+                // Ensures the FormQuestionId is valid
                 var formQuestion = Questions.FirstOrDefault(q => q.FormQuestionId == answer.FormQuestionId);
                 if (formQuestion == null)
                 {
@@ -120,7 +120,7 @@ namespace Research_Software_Dev.Pages.Forms
                     return Page();
                 }
 
-                // Add new FormAnswer to the database
+                // Adds new FormAnswer to the database
                 _context.FormAnswers.Add(new FormAnswer
                 {
                     AnswerId = Guid.NewGuid().ToString(),
