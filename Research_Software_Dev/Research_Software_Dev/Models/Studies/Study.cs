@@ -8,9 +8,11 @@ namespace Research_Software_Dev.Models.Studies
         public string StudyId { get; set; }
 
         [Required]
+        [Display(Name = "Study Name")]
         public string? StudyName { get; set; }
 
         [Required]
+        [Display(Name = "Study Description")]
         public string? StudyDescription { get; set; }
         
         //Constructors

@@ -15,14 +15,15 @@
 
     //initializing variables
     List<Study> studies = Model.Study;
+    bool flag = false;
 }
 
 <div class="text-center">
     @{
         if (isUser)
         {
-            <h1 class="display-4">Welcome @currentUser.ResearcherFirstName @currentUser.ResearcherLastName</h1>
-            <p>Your Studies:</p>
+            <h1 class="display-2 md-3">Welcome @currentUser.ResearcherFirstName @currentUser.ResearcherLastName!</h1>
+            <p class="display-4">Your Studies:</p>
             if (studies == null || !studies.Any())
             {
                 <p>No studies available.</p>
@@ -32,17 +33,30 @@
                 if (studies.Count > 3)
                 {
                     studies = studies.Take(3).ToList();
+                    flag = true;
                 }
-                <ul>
-                    @foreach (var item in studies)
-                    {
-                        <li>
-                            <p>Name: @Html.DisplayFor(modelItem => item.StudyName)</p>
-                            <p>Desc: @Html.DisplayFor(modelItem => item.StudyDescription)</p>
-                        </li>
-                    }
-                </ul>
-                <a asp-page="/Studies/Index">...</a>
+                <div class="d-flex justify-content-center">
+                    <ul class="list-group w-50 p-3" style="min-width: 400px;">
+                        @foreach (var item in studies)
+                        {
+                            <li class="list-group-item md-2">
+                                <p>Name: @Html.DisplayFor(modelItem => item.StudyName)</p>
+                                <p>Desc: @Html.DisplayFor(modelItem => item.StudyDescription)</p>
+                                <p>
+                                    <a class="btn btn-outline-dark" asp-page="/Studies/Edit" asp-route-id="@item.StudyId">Edit</a> |
+                                    <a class="btn btn-outline-dark" asp-page="/Studies/Details" asp-route-id="@item.StudyId">Details</a> |
+                                    <a class="btn btn-outline-danger" asp-page="/Studies/Delete" asp-route-id="@item.StudyId">Delete</a>
+                                </p>
+                            </li>
+                        }
+                        @if (flag)
+                        {
+                            <li class="list-group-item">
+                                <a class="link-primary" asp-page="/Studies/Index">View All</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
             }
         }
         else
