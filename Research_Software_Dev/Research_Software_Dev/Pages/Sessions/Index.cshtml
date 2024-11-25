@@ -5,7 +5,7 @@
     ViewData["Title"] = "Sessions";
 }
 
-<h1>Sessions</h1>
+<h1>Viewing Sessions</h1>
 
 <p>
     <a class="btn btn-outline-primary" asp-page="Create">Create a New Session</a>
@@ -25,7 +25,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Session[0].Study)
             </th>
-            <th></th>
+            <th>
+                Actions
+            </th>
         </tr>
     </thead>
     <tbody>

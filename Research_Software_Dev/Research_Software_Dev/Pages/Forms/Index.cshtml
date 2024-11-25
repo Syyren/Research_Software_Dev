@@ -4,16 +4,18 @@
     ViewData["Title"] = "Forms";
 }
 
-<h1>Forms</h1>
+<h1>Viewing Forms</h1>
 
 <p>
-    <a asp-page="./Create" class="btn btn-primary">Create New Form</a>
+    <a asp-page="./Create" class="btn btn-outline-primary">Create a New Form</a>
 </p>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Form Name</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Forms[0].FormName)
+            </th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -23,9 +25,9 @@
             <tr>
                 <td>@form.FormName</td>
                 <td>
-                    <a class="btn btn-outline-dark" style="min-width: 90px;"  asp-page="./Details" asp-route-id="@form.FormId">Details</a> |
-                    <a class="btn btn-outline-dark" style="min-width: 90px;"  asp-page="./Edit" asp-route-id="@form.FormId">Edit</a> |
-                    <a class="btn btn-outline-danger" style="min-width: 90px;"  asp-page="./Delete" asp-route-id="@form.FormId">Delete</a>
+                    <a class="btn btn-outline-dark" style="min-width: 90px;" asp-page="./Details" asp-route-id="@form.FormId">Details</a> |
+                    <a class="btn btn-outline-dark" style="min-width: 90px;" asp-page="./Edit" asp-route-id="@form.FormId">Edit</a> |
+                    <a class="btn btn-outline-danger" style="min-width: 90px;" asp-page="./Delete" asp-route-id="@form.FormId">Delete</a>
                 </td>
             </tr>
         }

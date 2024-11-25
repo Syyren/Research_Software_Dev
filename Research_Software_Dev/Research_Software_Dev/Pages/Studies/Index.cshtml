@@ -5,7 +5,7 @@
     ViewData["Title"] = "Studies List";
 }
 
-<h1>Viewing all Studies:</h1>
+<h1>Viewing all Studies</h1>
 
 <p>
     <a class="btn btn-outline-primary" asp-page="Create">Create a New Study</a>
@@ -19,7 +19,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Study[0].StudyDescription)
             </th>
-            <th></th>
+            <th>
+                Actions
+            </th>
         </tr>
     </thead>
     <tbody>

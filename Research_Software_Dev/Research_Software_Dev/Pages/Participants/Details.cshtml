@@ -2,13 +2,12 @@
 @model Research_Software_Dev.Pages.Participants.DetailsModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Participant Details";
 }
 
-<h1>Details</h1>
+<h1>Details for "@Model.Participant.ParticipantFirstName @Model.Participant.ParticipantLastName"</h1>
 
 <div>
-    <h4>Participant</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">

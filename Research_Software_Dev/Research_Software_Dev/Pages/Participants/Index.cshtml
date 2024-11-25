@@ -2,10 +2,10 @@
 @model Research_Software_Dev.Pages.Participants.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Participants";
 }
 
-<h1>Index</h1>
+<h1>Viewing Participants</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -29,9 +29,11 @@
                 @Html.DisplayNameFor(model => model.Participant[0].ParticipantPhoneNumber)
             </th>
             <th>
-                Study Name
+                @Html.DisplayNameFor(model => model.Participant[0].StudyName)
             </th>
-            <th></th>
+            <th>
+                Actions
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -56,9 +58,9 @@
                 @Html.DisplayFor(modelItem => item.StudyName)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.ParticipantId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ParticipantId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ParticipantId">Delete</a>
+                <a class="btn btn-outline-dark" style="min-width: 90px;" asp-page="./Edit" asp-route-id="@item.ParticipantId">Edit</a> |
+                <a class="btn btn-outline-dark" style="min-width: 90px;" asp-page="./Details" asp-route-id="@item.ParticipantId">Details</a> |
+                <a class="btn btn-outline-danger" style="min-width: 90px;" asp-page="./Delete" asp-route-id="@item.ParticipantId">Delete</a>
             </td>
         </tr>
 }
