@@ -1,0 +1,20 @@
+﻿@page "{sessionId}"
+@model Research_Software_Dev.Pages.ParticipantSessions.AddParticipantModel
+
+@{
+    ViewData["Title"] = "Add Participant to Session";
+}
+
+<h1>Add Participant to Session</h1>
+
+<form method="post">
+    <input type="hidden" asp-for="SessionId" />
+
+    <div class="form-group">
+        <label asp-for="ParticipantId" class="control-label">Select Participant</label>
+        <select asp-for="ParticipantId" class="form-control" asp-items="Model.ParticipantList"></select>
+        <span asp-validation-for="ParticipantId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Participant</button>
+</form>

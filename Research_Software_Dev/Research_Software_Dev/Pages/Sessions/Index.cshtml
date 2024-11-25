@@ -2,10 +2,10 @@
 @model Research_Software_Dev.Pages.Sessions.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Sessions";
 }
 
-<h1>Index</h1>
+<h1>Sessions</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -29,26 +29,28 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Session) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TimeStart)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TimeEnd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Study.StudyId)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.SessionId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.SessionId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.SessionId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Session)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeStart)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeEnd)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Study.StudyName)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.SessionId">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.SessionId">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.SessionId">Delete</a> |
+                    <a asp-page="./AddParticipant" asp-route-sessionId="@item.SessionId">Add Participant</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
