@@ -26,6 +26,9 @@ namespace Research_Software_Dev.Pages.Participants
         [BindProperty]
         public Participant Participant { get; set; } = default!;
 
+        [BindProperty]
+        public string StudyName { get; set; } = string.Empty;
+
         public async Task<IActionResult> OnGetAsync(string id)
         {
             if (id == null)
@@ -33,21 +36,28 @@ namespace Research_Software_Dev.Pages.Participants
                 return NotFound();
             }
 
+            //get the logged-in researcher's ID
             var researcherId = _userManager.GetUserId(User);
 
             if (string.IsNullOrEmpty(researcherId))
             {
-                return RedirectToPage("/NotFound");
+                return Unauthorized();
             }
-            //verifies ownership before deleting
+
+            //fetch participant and verify the logged-in researcher is associated with the study
             var participantStudy = await _context.ParticipantStudies
-                .FirstOrDefaultAsync(ps => ps.ParticipantId == Participant.ParticipantId &&
+                .Include(ps => ps.Participant)
+                .Include(ps => ps.Study) //include Study for StudyName
+                .FirstOrDefaultAsync(ps => ps.ParticipantId == id &&
                     _context.ResearcherStudies.Any(rs => rs.StudyId == ps.StudyId && rs.ResearcherId == researcherId));
+
             if (participantStudy == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
+
             Participant = participantStudy.Participant;
+            StudyName = participantStudy.Study.StudyName;
             return Page();
         }
 
@@ -59,15 +69,19 @@ namespace Research_Software_Dev.Pages.Participants
             }
 
             var researcherId = _userManager.GetUserId(User);
+            if (string.IsNullOrEmpty(researcherId))
+            {
+                return RedirectToPage("/NotFound");
+            }
 
             if (string.IsNullOrEmpty(researcherId))
             {
                 return RedirectToPage("/NotFound");
             }
 
-            //verifies ownership before deleting
+            //get and verifies ownership before updating
             var participantStudy = await _context.ParticipantStudies
-                .FirstOrDefaultAsync(ps => ps.ParticipantId == Participant.ParticipantId &&
+                .FirstOrDefaultAsync(ps => ps.ParticipantId == id &&
                     _context.ResearcherStudies.Any(rs => rs.StudyId == ps.StudyId && rs.ResearcherId == researcherId));
 
             if (participantStudy == null)
@@ -78,18 +92,16 @@ namespace Research_Software_Dev.Pages.Participants
             //remove the association from ParticipantStudies
             _context.ParticipantStudies.Remove(participantStudy);
 
-            //remove the participant
-            var otherAssociationsExist = await _context.ParticipantStudies.AnyAsync(ps => ps.ParticipantId == id);
-            if (!otherAssociationsExist)
+            //remove participant
+            var participant = await _context.Participants.FindAsync(id);
+            if (participant != null)
             {
-                var participant = await _context.Participants.FindAsync(id);
-                if (participant != null)
-                {
-                    _context.Participants.Remove(participant);
-                }
-            }
+                _context.Participants.Remove(participant);
+            }            
 
+            //save to db
             await _context.SaveChangesAsync();
+
             return RedirectToPage("./Index");
         }
     }

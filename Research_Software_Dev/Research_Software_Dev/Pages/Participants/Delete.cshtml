@@ -2,12 +2,12 @@
 @model Research_Software_Dev.Pages.Participants.DeleteModel
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "MHRA - Delete Participant";
 }
 
-<h1>Delete</h1>
+<h1>Delete Participant</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Are you sure you want to delete "@Model.Participant.ParticipantFirstName @Model.Participant.ParticipantLastName" from the study "@Model.StudyName"?</h3>
 <div>
     <h4>Participant</h4>
     <hr />
