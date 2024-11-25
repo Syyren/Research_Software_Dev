@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -82,11 +83,17 @@ namespace Research_Software_Dev.Pages.Participants
     public class ParticipantViewModel
     {
         public string ParticipantId { get; set; }
+        [Display(Name = "First Name")]
         public string ParticipantFirstName { get; set; }
+        [Display(Name = "Last Name")]
         public string ParticipantLastName { get; set; }
+        [Display(Name = "Address")]
         public string? ParticipantAddress { get; set; }
+        [Display(Name = "Email")]
         public string? ParticipantEmail { get; set; }
+        [Display(Name = "Phone Number")]
         public string? ParticipantPhoneNumber { get; set; }
+        [Display(Name = "Study Name")]
         public string StudyName { get; set; }
     }
 }
