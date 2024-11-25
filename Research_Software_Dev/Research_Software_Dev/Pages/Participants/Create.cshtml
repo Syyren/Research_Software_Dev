@@ -12,6 +12,11 @@
 <div class="row">
     <div class="col-md-4">
         <form method="post">
+
+            <div class="form-group">
+                <input type="hidden" asp-for="Participant.ParticipantId" value="temp" />
+            </div>
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <span class="text-danger">*</span>
@@ -41,9 +46,14 @@
                 <span asp-validation-for="Participant.ParticipantPhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SelectedStudyId">Select Study</label>
-                <select asp-for="SelectedStudyId" class="form-control" asp-items="Model.StudyOptions"></select>
-                <span asp-validation-for="SelectedStudyId" class="text-danger"></span>
+                <label for="StudyId">Select Study</label>
+                <select asp-for="SelectedStudyId" class="form-control">
+                    <option value="">-- Select a Study --</option>
+                    @foreach (var study in Model.Studies)
+                    {
+                        <option value="@study.StudyId">@study.StudyName</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

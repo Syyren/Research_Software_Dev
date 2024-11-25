@@ -29,7 +29,7 @@ namespace Research_Software_Dev.Pages.Participants
         public Participant Participant { get; set; }
 
         // dropdown list of studies
-        public SelectList StudyOptions { get; set; }
+        public List<Study> Studies { get; set; } = new List<Study>();
 
         //Bind StudyId from the dropdown
         [BindProperty]
@@ -45,36 +45,17 @@ namespace Research_Software_Dev.Pages.Participants
             }
 
             // Fetch studies associated with the researcher
-            var researcherStudies = await _context.ResearcherStudies
+            Studies = await _context.ResearcherStudies
                 .Where(rs => rs.ResearcherId == researcherId)
                 .Include(rs => rs.Study)
                 .Select(rs => rs.Study)
                 .ToListAsync();
-
-            // Populate the dropdown list
-            StudyOptions = new SelectList(researcherStudies, "StudyId", "Title");
 
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                //reload the dropdown list in case of a validation error
-                var researcherIdForPost = _userManager.GetUserId(User);
-                var researcherStudies = await _context.ResearcherStudies
-                    .Where(rs => rs.ResearcherId == researcherIdForPost)
-                    .Include(rs => rs.Study)
-                    .Select(rs => rs.Study)
-                    .ToListAsync();
-
-                StudyOptions = new SelectList(researcherStudies, "StudyId", "Title");
-                return Page();
-            }
-
-            //generates a unique ParticipantId using GUID
-            Participant.ParticipantId = Guid.NewGuid().ToString();
 
             //gets the logged-in user's ID (ResearcherId)
             var researcherId = _userManager.GetUserId(User);
@@ -82,6 +63,37 @@ namespace Research_Software_Dev.Pages.Participants
             {
                 return RedirectToPage("/NotFound");
             }
+
+            if (!ModelState.IsValid)
+            {
+                //reload dropdown list in event of a validation error
+                Studies = await _context.ResearcherStudies
+                    .Where(rs => rs.ResearcherId == researcherId)
+                    .Include(rs => rs.Study)
+                    .Select(rs => rs.Study)
+                    .ToListAsync();
+                return Page();
+            }
+
+            //researcher must have selected study matching in researcher studies
+            var researcherStudy = await _context.ResearcherStudies
+                .FirstOrDefaultAsync(rs => rs.ResearcherId == researcherId && rs.StudyId == SelectedStudyId);
+
+            if (researcherStudy == null)
+            {
+                //if researcher not associated with selected study, error
+                ModelState.AddModelError("SelectedStudyId", "You are not associated with this study.");
+                Studies = await _context.ResearcherStudies
+                    .Where(rs => rs.ResearcherId == researcherId)
+                    .Include(rs => rs.Study)
+                    .Select(rs => rs.Study)
+                    .ToListAsync();
+                return Page();
+            }
+
+
+            //generates a unique ParticipantId using GUID
+            Participant.ParticipantId = Guid.NewGuid().ToString();
 
             //creates a ResearcherStudy entry to associate the study with the researcher
             var participantStudy = new ParticipantStudy
