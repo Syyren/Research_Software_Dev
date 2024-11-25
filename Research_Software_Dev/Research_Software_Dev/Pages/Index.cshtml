@@ -1,50 +1,63 @@
 ﻿@page
 @model IndexModel
-@using Research_Software_Dev.Data.TempData
 @using Research_Software_Dev.Models.Researchers
 @using Research_Software_Dev.Models.Studies
+@using System.Net.Http.Json
+@inject UserManager<Researcher> UserManager
+@inject IHttpClientFactory HttpClientFactory
+
 @{
     ViewData["Title"] = "MHRA - Home";
-    TempResearcher temp_researcher = new();
-    Researcher researcher = temp_researcher.researcher1;
-    TempStudies temp_studies = new();
-    TempResearcherStudies tempResearcherStudies = new(temp_researcher, temp_studies);
-    List<ResearcherStudy> studies = [
-        tempResearcherStudies.researcher_study1, 
-        tempResearcherStudies.researcher_study2, 
-        tempResearcherStudies.researcher_study3,
-        tempResearcherStudies.researcher_study4
-    ];
-    bool flag = false;}
+
+    //gets the current user
+    var currentUser = UserManager.GetUserAsync(User).Result;
+    bool isUser = currentUser != null;
+
+    //initializing variables
+    List<Study> studies = null;
+    bool flag = false;
+
+    if (isUser)
+    {
+        //calling the API to fetch studies
+        var httpClient = HttpClientFactory.CreateClient("ApiClient");
+        var response = httpClient.GetAsync("/api/researcher/studies").Result;
+
+        if (response.IsSuccessStatusCode)
+        {
+            studies = response.Content.ReadFromJsonAsync<List<Study>>().Result;
+        }
+    }
+}
 
 <div class="text-center">
     @{
-        if (researcher != null)
+        if (isUser)
         {
-            <h1 class="display-4">Welcome @researcher.ResearcherFirstName</h1>
-            <p>Studies:</p>
+            <h1 class="display-4">Welcome @currentUser.ResearcherFirstName @currentUser.ResearcherLastName</h1>
+            <p>Your Studies:</p>
             if (studies == null || !studies.Any())
             {
                 <p>No studies available.</p>
             }
-            if (studies != null)
+            else
             {
                 if (studies.Count > 3)
                 {
-                    studies = studies.GetRange(0, 3);
+                    studies = studies.Take(3).ToList();
                     flag = true;
                 }
                 <ul>
-                @{
-                    foreach (ResearcherStudy study in studies)
-                    {
-                        <li>@study.StudyName</li>
+                    @{
+                        foreach (var study in studies)
+                        {
+                            <li>@study.StudyName</li>
+                        }
+                        if (flag)
+                        {
+                            <li>...</li>
+                        }
                     }
-                    if (flag)
-                    {
-                        <li>...</li>
-                    }
-                }
                 </ul>
             }
         }

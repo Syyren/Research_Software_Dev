@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Research_Software_Dev.Data;
 
@@ -11,9 +12,11 @@ using Research_Software_Dev.Data;
 namespace Research_Software_Dev.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241124192445_UpdateNov24")]
+    partial class UpdateNov24
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -161,16 +164,8 @@ namespace Research_Software_Dev.Migrations
 
             modelBuilder.Entity("Research_Software_Dev.Models.Forms.Form", b =>
                 {
-<<<<<<< HEAD
-                    b.Property<int>("FormId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FormId"));
-=======
                     b.Property<string>("FormId")
                         .HasColumnType("nvarchar(450)");
->>>>>>> dev
 
                     b.Property<string>("FormName")
                         .IsRequired()
@@ -183,31 +178,13 @@ namespace Research_Software_Dev.Migrations
 
             modelBuilder.Entity("Research_Software_Dev.Models.Forms.FormAnswer", b =>
                 {
-<<<<<<< HEAD
-                    b.Property<int>("AnswerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AnswerId"));
-=======
                     b.Property<string>("AnswerId")
                         .HasColumnType("nvarchar(450)");
->>>>>>> dev
 
                     b.Property<string>("Answer")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
-                    b.Property<int?>("FormId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ParticipantSessionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("QuestionId")
-                        .IsRequired()
-=======
                     b.Property<string>("FormQuestionId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -222,7 +199,6 @@ namespace Research_Software_Dev.Migrations
 
                     b.Property<string>("SessionId")
                         .IsRequired()
->>>>>>> dev
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("TimeStamp")
@@ -230,35 +206,15 @@ namespace Research_Software_Dev.Migrations
 
                     b.HasKey("AnswerId");
 
-<<<<<<< HEAD
-                    b.HasIndex("QuestionId");
-=======
                     b.HasIndex("FormQuestionId");
 
                     b.HasIndex("ParticipantId", "SessionId");
->>>>>>> dev
 
                     b.ToTable("FormAnswers");
                 });
 
             modelBuilder.Entity("Research_Software_Dev.Models.Forms.FormQuestion", b =>
                 {
-<<<<<<< HEAD
-                    b.Property<string>("QuestionId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("FormId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("QuestionDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("QuestionNumber")
-                        .HasColumnType("int");
-
-                    b.HasKey("QuestionId");
-=======
                     b.Property<string>("FormQuestionId")
                         .HasColumnType("nvarchar(450)");
 
@@ -276,22 +232,12 @@ namespace Research_Software_Dev.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.HasKey("FormQuestionId");
->>>>>>> dev
 
                     b.HasIndex("FormId");
 
                     b.ToTable("FormQuestions");
                 });
 
-<<<<<<< HEAD
-            modelBuilder.Entity("Research_Software_Dev.Models.Studies.Study", b =>
-                {
-                    b.Property<int>("StudyId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudyId"));
-=======
             modelBuilder.Entity("Research_Software_Dev.Models.Participants.Participant", b =>
                 {
                     b.Property<string>("ParticipantId")
@@ -462,7 +408,17 @@ namespace Research_Software_Dev.Migrations
                     b.Property<string>("StudyId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("StudyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("ResearcherId", "StudyId");
+
+                    b.HasIndex("Id");
 
                     b.HasIndex("StudyId");
 
@@ -498,7 +454,6 @@ namespace Research_Software_Dev.Migrations
                 {
                     b.Property<string>("StudyId")
                         .HasColumnType("nvarchar(450)");
->>>>>>> dev
 
                     b.Property<string>("StudyDescription")
                         .IsRequired()
@@ -510,11 +465,7 @@ namespace Research_Software_Dev.Migrations
 
                     b.HasKey("StudyId");
 
-<<<<<<< HEAD
-                    b.ToTable("Study");
-=======
                     b.ToTable("Studies");
->>>>>>> dev
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -570,15 +521,6 @@ namespace Research_Software_Dev.Migrations
 
             modelBuilder.Entity("Research_Software_Dev.Models.Forms.FormAnswer", b =>
                 {
-<<<<<<< HEAD
-                    b.HasOne("Research_Software_Dev.Models.Forms.FormQuestion", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-=======
                     b.HasOne("Research_Software_Dev.Models.Forms.FormQuestion", "FormQuestion")
                         .WithMany()
                         .HasForeignKey("FormQuestionId")
@@ -594,17 +536,12 @@ namespace Research_Software_Dev.Migrations
                     b.Navigation("FormQuestion");
 
                     b.Navigation("ParticipantSession");
->>>>>>> dev
                 });
 
             modelBuilder.Entity("Research_Software_Dev.Models.Forms.FormQuestion", b =>
                 {
                     b.HasOne("Research_Software_Dev.Models.Forms.Form", "Form")
-<<<<<<< HEAD
-                        .WithMany("Questions")
-=======
                         .WithMany()
->>>>>>> dev
                         .HasForeignKey("FormId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -612,11 +549,6 @@ namespace Research_Software_Dev.Migrations
                     b.Navigation("Form");
                 });
 
-<<<<<<< HEAD
-            modelBuilder.Entity("Research_Software_Dev.Models.Forms.Form", b =>
-                {
-                    b.Navigation("Questions");
-=======
             modelBuilder.Entity("Research_Software_Dev.Models.Participants.ParticipantSession", b =>
                 {
                     b.HasOne("Research_Software_Dev.Models.Participants.Participant", "Participant")
@@ -678,7 +610,7 @@ namespace Research_Software_Dev.Migrations
                 {
                     b.HasOne("Research_Software_Dev.Models.Researchers.Researcher", "Researcher")
                         .WithMany()
-                        .HasForeignKey("ResearcherId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -702,7 +634,6 @@ namespace Research_Software_Dev.Migrations
                         .IsRequired();
 
                     b.Navigation("Study");
->>>>>>> dev
                 });
 #pragma warning restore 612, 618
         }

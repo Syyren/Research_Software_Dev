@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Research_Software_Dev.Data;
+using Research_Software_Dev.Models.Researchers;
+using Research_Software_Dev.Models.Researchers.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +12,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<Researcher>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
+builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("ApiClient", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7018");
+});
 
 var app = builder.Build();
 
@@ -33,14 +41,23 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+<<<<<<< HEAD
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+=======
+app.UseAuthentication();
+>>>>>>> dev
 app.UseAuthorization();
 
 app.MapRazorPages();
 
+<<<<<<< HEAD
 app.MapDefaultControllerRoute();
+=======
+//Endpoints
+app.MapGetListOfStudies();
+>>>>>>> dev
 
 app.Run();

@@ -1,46 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Research_Software_Dev.Data;
+using Research_Software_Dev.Models.Researchers;
 using Research_Software_Dev.Models.Studies;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Studies
 {
     public class EditModel : PageModel
     {
-        private readonly Research_Software_Dev.Data.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<Researcher> _userManager;
 
-        public EditModel(Research_Software_Dev.Data.ApplicationDbContext context)
+        public EditModel(ApplicationDbContext context, UserManager<Researcher> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [BindProperty]
         public Study Study { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(string id)
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
-            var study =  await _context.Study.FirstOrDefaultAsync(m => m.StudyId == id);
-            if (study == null)
+            //gets the logged-in user's ID
+            var researcherId = _userManager.GetUserId(User);
+
+            if (string.IsNullOrEmpty(researcherId))
             {
-                return NotFound();
+                return Unauthorized();
             }
-            Study = study;
+
+            //fetches the study and verify ownership
+            var researcherStudy = await _context.ResearcherStudies
+                .Include(rs => rs.Study)
+                .FirstOrDefaultAsync(rs => rs.StudyId == id && rs.ResearcherId == researcherId);
+
+            if (researcherStudy == null)
+            {
+                return RedirectToPage("/NotFound");
+            }
+
+            Study = researcherStudy.Study;
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -48,6 +60,24 @@ namespace Research_Software_Dev.Pages.Studies
                 return Page();
             }
 
+            //gets the logged-in user's ID
+            var researcherId = _userManager.GetUserId(User);
+
+            if (string.IsNullOrEmpty(researcherId))
+            {
+                return RedirectToPage("/NotFound");
+            }
+
+            //verifies ownership before updating
+            var researcherStudy = await _context.ResearcherStudies
+                .FirstOrDefaultAsync(rs => rs.StudyId == Study.StudyId && rs.ResearcherId == researcherId);
+
+            if (researcherStudy == null)
+            {
+                return RedirectToPage("/NotFound");
+            }
+
+            //attaches and modifies the study
             _context.Attach(Study).State = EntityState.Modified;
 
             try
@@ -58,7 +88,7 @@ namespace Research_Software_Dev.Pages.Studies
             {
                 if (!StudyExists(Study.StudyId))
                 {
-                    return NotFound();
+                    return RedirectToPage("/NotFound");
                 }
                 else
                 {
@@ -69,9 +99,9 @@ namespace Research_Software_Dev.Pages.Studies
             return RedirectToPage("./Index");
         }
 
-        private bool StudyExists(int id)
+        private bool StudyExists(string id)
         {
-            return _context.Study.Any(e => e.StudyId == id);
+            return _context.Studies.Any(e => e.StudyId == id);
         }
     }
 }
