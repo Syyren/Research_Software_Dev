@@ -1,0 +1,17 @@
+﻿@page "{id}"
+@model Research_Software_Dev.Pages.Forms.DeleteModel
+@{
+    ViewData["Title"] = "Delete Form";
+}
+
+<h1>Delete Form</h1>
+
+<h2>Are you sure you want to delete this form?</h2>
+<div>
+    <h3>@Model.Form.FormName</h3>
+</div>
+
+<form method="post">
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+</form>

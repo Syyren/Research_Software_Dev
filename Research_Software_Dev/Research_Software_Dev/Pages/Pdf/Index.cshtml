@@ -1,0 +1,22 @@
+﻿@page
+@model Research_Software_Dev.Pages.Pdf.IndexModel
+@{
+    ViewData["Title"] = "Upload PDF";
+}
+
+<h1>Upload PDF</h1>
+
+<!-- Display error message if provided -->
+@if (ViewData["Message"] != null)
+{
+    <p style="color: red;">@ViewData["Message"]</p>
+}
+
+<!-- Form for PDF upload -->
+<form method="post" enctype="multipart/form-data">
+    <div>
+        <label for="pdfFile">Choose a PDF File:</label>
+        <input type="file" id="pdfFile" name="PdfFile" />
+    </div>
+    <button type="submit">Upload</button>
+</form>

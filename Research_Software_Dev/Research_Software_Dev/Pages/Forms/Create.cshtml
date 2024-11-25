@@ -1,0 +1,53 @@
+﻿@page
+@model Research_Software_Dev.Pages.Forms.CreateModel
+@{
+    ViewData["Title"] = "Create Form";
+}
+
+<h1>Create Form</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="FormName">Form Name</label>
+        <input type="text" id="FormName" asp-for="Form.FormName" class="form-control" />
+        <span asp-validation-for="Form.FormName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Questions</label>
+        <ul id="questions-list">
+        </ul>
+        <input type="text" id="new-question" placeholder="Enter a question" class="form-control" />
+        <button type="button" id="add-question" class="btn btn-secondary mt-2">Add Question</button>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <script>
+        const questions = [];
+        const questionList = document.getElementById("questions-list");
+        const addQuestionButton = document.getElementById("add-question");
+        const newQuestionInput = document.getElementById("new-question");
+
+        addQuestionButton.addEventListener("click", () => {
+            const question = newQuestionInput.value.trim();
+            if (question) {
+                questions.push(question);
+                const li = document.createElement("li");
+                li.textContent = question;
+                questionList.appendChild(li);
+
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "Questions";
+                input.value = question;
+                questionList.appendChild(input);
+
+                newQuestionInput.value = "";
+            }
+        });
+    </script>
+}

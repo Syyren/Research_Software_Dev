@@ -1,0 +1,30 @@
+﻿@page "{id}"
+@model Research_Software_Dev.Pages.Forms.DetailsModel
+@{
+    ViewData["Title"] = "Form Details";
+}
+
+<h1>Form Details</h1>
+
+<div>
+    <h2>@Model.Form.FormName</h2>
+</div>
+
+<h3>Questions</h3>
+@if (Model.Questions.Any())
+{
+    <ul>
+        @foreach (var question in Model.Questions)
+        {
+            <li>@question.QuestionDescription</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No questions available.</p>
+}
+
+<p>
+    <a asp-page="./Index" class="btn btn-secondary">Back to List</a>
+</p>

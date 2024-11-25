@@ -1,0 +1,33 @@
+﻿@page "{formId}/{participantSessionId}"
+@model Research_Software_Dev.Pages.Forms.SubmitAnswersModel
+@{
+    ViewData["Title"] = "Submit Answers";
+}
+
+<h1>Submit Answers</h1>
+
+<form method="post">
+    <input type="hidden" asp-for="FormId" />
+    <input type="hidden" asp-for="ParticipantId" />
+    <input type="hidden" asp-for="SessionId" />
+
+    <ul>
+        @if (Model.Questions != null && Model.Questions.Any())
+        {
+            @for (int i = 0; i < Model.Questions.Count; i++)
+            {
+                <li>
+                    <strong>@Model.Questions[i].QuestionNumber: @Model.Questions[i].QuestionDescription</strong>
+                    <input type="hidden" name="Answers[@i].QuestionId" value="@Model.Questions[i].FormQuestionId" />
+                    <textarea name="Answers[@i].Answer" class="form-control"></textarea>
+                </li>
+            }
+        }
+        else
+        {
+            <p>No questions available for this form.</p>
+        }
+    </ul>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

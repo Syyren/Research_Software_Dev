@@ -1,0 +1,31 @@
+﻿@page "{formId}/{questionId}"
+@model Research_Software_Dev.Pages.Forms.EditQuestionModel
+@{
+    ViewData["Title"] = "Edit Question";
+}
+
+<h1>Edit Question</h1>
+
+<form method="post">
+    <!-- Hidden fields for binding the composite key -->
+    <input type="hidden" asp-for="Question.FormId" />
+    <input type="hidden" asp-for="Question.FormQuestionId" />
+
+    <!-- Question Description -->
+    <div class="form-group">
+        <label asp-for="Question.QuestionDescription"></label>
+        <textarea asp-for="Question.QuestionDescription" class="form-control"></textarea>
+        <span asp-validation-for="Question.QuestionDescription" class="text-danger"></span>
+    </div>
+
+    <!-- Question Number -->
+    <div class="form-group">
+        <label asp-for="Question.QuestionNumber"></label>
+        <input asp-for="Question.QuestionNumber" class="form-control" readonly />
+        <span asp-validation-for="Question.QuestionNumber" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-page="./Edit" asp-route-id="@Model.Question.FormId" class="btn btn-secondary">Cancel</a>
+</form>
+

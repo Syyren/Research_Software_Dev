@@ -1,0 +1,36 @@
+﻿@page "{formId:int}"
+@model Research_Software_Dev.Pages.Pdf.ResultsModel
+@{
+    ViewData["Title"] = "Parsed PDF Results";
+}
+
+<h1>Parsed PDF Results</h1>
+
+<!-- Display Form Information -->
+@if (Model.Form != null)
+{
+    <h2>Form: @Model.Form.FormName</h2>
+}
+
+<!-- Display Questions -->
+@if (Model.Questions != null && Model.Questions.Any())
+{
+    <h3>Questions:</h3>
+    <ul>
+        @foreach (var question in Model.Questions)
+        {
+            <li>
+                <strong>@question.QuestionNumber:</strong> @question.QuestionDescription
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No questions found for this form.</p>
+}
+
+<!-- Display Navigation -->
+<p>
+    <a asp-page="/Pdf/Index" class="btn btn-secondary">Back to Upload</a>
+</p>

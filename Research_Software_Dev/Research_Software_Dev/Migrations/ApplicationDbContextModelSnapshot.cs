@@ -176,10 +176,14 @@ namespace Research_Software_Dev.Migrations
             modelBuilder.Entity("Research_Software_Dev.Models.Forms.FormAnswer", b =>
                 {
                     b.Property<string>("AnswerId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Answer")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FormId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FormQuestionId")
@@ -192,7 +196,7 @@ namespace Research_Software_Dev.Migrations
 
                     b.Property<string>("QuestionId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SessionId")
                         .IsRequired()
@@ -204,6 +208,8 @@ namespace Research_Software_Dev.Migrations
                     b.HasKey("AnswerId");
 
                     b.HasIndex("FormQuestionId");
+
+                    b.HasIndex("QuestionId");
 
                     b.HasIndex("ParticipantId", "SessionId");
 
@@ -219,14 +225,12 @@ namespace Research_Software_Dev.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("FormQuestionDescription")
+                    b.Property<string>("QuestionDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FormQuestionNumber")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                    b.Property<int>("QuestionNumber")
+                        .HasColumnType("int");
 
                     b.HasKey("FormQuestionId");
 
@@ -514,21 +518,29 @@ namespace Research_Software_Dev.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Research_Software_Dev.Models.Forms.FormQuestion", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Research_Software_Dev.Models.Participants.ParticipantSession", "ParticipantSession")
                         .WithMany()
                         .HasForeignKey("ParticipantId", "SessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("FormQuestion");
 
                     b.Navigation("ParticipantSession");
+
+                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("Research_Software_Dev.Models.Forms.FormQuestion", b =>
                 {
                     b.HasOne("Research_Software_Dev.Models.Forms.Form", "Form")
-                        .WithMany()
+                        .WithMany("Questions")
                         .HasForeignKey("FormId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -621,6 +633,11 @@ namespace Research_Software_Dev.Migrations
                         .IsRequired();
 
                     b.Navigation("Study");
+                });
+
+            modelBuilder.Entity("Research_Software_Dev.Models.Forms.Form", b =>
+                {
+                    b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
         }
