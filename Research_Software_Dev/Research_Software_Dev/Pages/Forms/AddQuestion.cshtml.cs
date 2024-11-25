@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Forms;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Forms
@@ -24,11 +26,15 @@ namespace Research_Software_Dev.Pages.Forms
 
         public async Task<IActionResult> OnGetAsync(string formId)
         {
-            // Checks if the form exists
+            if (string.IsNullOrEmpty(formId))
+            {
+                return NotFound("FormId is missing.");
+            }
+
             var form = await _context.Forms.FindAsync(formId);
             if (form == null)
             {
-                return NotFound();
+                return NotFound("Form not found.");
             }
 
             FormId = formId;
@@ -37,8 +43,21 @@ namespace Research_Software_Dev.Pages.Forms
 
         public async Task<IActionResult> OnPostAsync()
         {
+            Console.WriteLine("Starting OnPostAsync...");
+
+            if (string.IsNullOrEmpty(FormId))
+            {
+                Console.WriteLine("FormId is missing or empty.");
+                ModelState.AddModelError(nameof(FormId), "FormId is required.");
+                return Page();
+            }
+
+            Console.WriteLine($"FormId: {FormId}");
+            Console.WriteLine($"QuestionDescription: {Question.QuestionDescription}");
+
             if (!ModelState.IsValid)
             {
+                Console.WriteLine("ModelState is invalid.");
                 foreach (var error in ModelState)
                 {
                     Console.WriteLine($"{error.Key}: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
@@ -46,10 +65,10 @@ namespace Research_Software_Dev.Pages.Forms
                 return Page();
             }
 
-            // Sets the FormId for the new question
+            // Assign FormId explicitly
             Question.FormId = FormId;
 
-            // Determine the next question number
+            // Get the next question number
             var lastQuestionNumber = await _context.FormQuestions
                 .Where(q => q.FormId == FormId)
                 .OrderByDescending(q => q.QuestionNumber)
@@ -58,11 +77,19 @@ namespace Research_Software_Dev.Pages.Forms
 
             Question.QuestionNumber = lastQuestionNumber + 1;
 
-            // Adds the question to the database
-            _context.FormQuestions.Add(Question);
-            await _context.SaveChangesAsync();
+            Console.WriteLine("Saving the question...");
+            try
+            {
+                _context.FormQuestions.Add(Question);
+                await _context.SaveChangesAsync();
+                Console.WriteLine("Question saved successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving question: {ex.Message}");
+                throw;
+            }
 
-            // Redirects back to the Edit page for the form
             return RedirectToPage("./Edit", new { id = FormId });
         }
     }

@@ -17,7 +17,7 @@ namespace Research_Software_Dev.Pages.Forms
         }
 
         [BindProperty]
-        public int FormId { get; set; }
+        public string FormId { get; set; }
 
         [BindProperty]
         public FormQuestion Question { get; set; }
@@ -49,6 +49,11 @@ namespace Research_Software_Dev.Pages.Forms
         {
             if (!ModelState.IsValid)
             {
+                // Logs validation errors for debugging
+                foreach (var error in ModelState)
+                {
+                    Console.WriteLine($"{error.Key}: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
+                }
                 return Page();
             }
 

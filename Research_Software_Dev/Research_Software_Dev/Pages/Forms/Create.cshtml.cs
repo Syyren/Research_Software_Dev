@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Forms;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -24,23 +25,37 @@ namespace Research_Software_Dev.Pages.Forms
 
         public void OnGet()
         {
+            // Pre-generate FormId
+            Form = new Form
+            {
+                FormId = Guid.NewGuid().ToString()
+            };
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
+                // Logs validation errors for debugging
+                foreach (var error in ModelState)
+                {
+                    Console.WriteLine($"{error.Key}: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
+                }
                 return Page();
             }
 
+            Console.WriteLine($"FormId: {Form.FormId}");
+            Console.WriteLine($"FormName: {Form.FormName}");
+            Console.WriteLine($"Questions: {string.Join(", ", Questions)}");
+
             _context.Forms.Add(Form);
             await _context.SaveChangesAsync();
-            Form.FormId = Guid.NewGuid().ToString();
 
             foreach (var questionText in Questions)
             {
                 _context.FormQuestions.Add(new FormQuestion
                 {
+                    FormQuestionId = Guid.NewGuid().ToString(),
                     QuestionDescription = questionText,
                     FormId = Form.FormId
                 });

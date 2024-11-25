@@ -18,7 +18,7 @@ namespace Research_Software_Dev.Pages.Forms
         [BindProperty]
         public Form Form { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int id)
+        public async Task<IActionResult> OnGetAsync(string id)
         {
             Form = await _context.Forms.FindAsync(id);
 
@@ -30,7 +30,7 @@ namespace Research_Software_Dev.Pages.Forms
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int id)
+        public async Task<IActionResult> OnPostAsync(string id)
         {
             var form = await _context.Forms.FindAsync(id);
 

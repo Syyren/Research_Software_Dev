@@ -1,22 +1,25 @@
-﻿@page "{participantSessionId}"
+﻿@page "{participantId}/{sessionId}"
 @model Research_Software_Dev.Pages.Forms.SelectFormModel
 @{
     ViewData["Title"] = "Select Form";
 }
 
-<h1>Select a Form</h1>
+<h1>Select Form</h1>
 
 <form method="post">
-    <input type="hidden" asp-for="ParticipantSessionId" />
+    <input type="hidden" asp-for="ParticipantId" />
+    <input type="hidden" asp-for="SessionId" />
 
     <div class="form-group">
-        <label for="FormId">Available Forms</label>
+        <label for="FormId">Form</label>
         <select asp-for="FormId" class="form-control">
+            <option value="">-- Select a Form --</option>
             @foreach (var form in Model.Forms)
             {
                 <option value="@form.FormId">@form.FormName</option>
             }
         </select>
+        <span asp-validation-for="FormId" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Next</button>

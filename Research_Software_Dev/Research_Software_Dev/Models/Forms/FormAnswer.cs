@@ -22,14 +22,13 @@ namespace Research_Software_Dev.Models.Forms
         public string SessionId { get; set; }
 
         [ForeignKey("ParticipantId, SessionId")]
-        public ParticipantSession ParticipantSession { get; set; }
+        public ParticipantSession? ParticipantSession { get; set; }
         //FormQuestion FK
         [Required]
-        public string QuestionId { get; set; }
-        public FormQuestion Question { get; set; }
+        public string FormQuestionId { get; set; }
         public string? FormId { get; internal set; }
         [ForeignKey("FormQuestionId")]
-        public FormQuestion FormQuestion { get; set; }
+        public FormQuestion? FormQuestion { get; set; }
 
         //Constructors
         public FormAnswer() { }
@@ -41,7 +40,7 @@ namespace Research_Software_Dev.Models.Forms
             TimeStamp = timeStamp;
             ParticipantId = participantId;
             SessionId = sessionId;
-            QuestionId = questionId;
+            FormQuestionId = questionId;
             FormId = formId;
         }
     }
