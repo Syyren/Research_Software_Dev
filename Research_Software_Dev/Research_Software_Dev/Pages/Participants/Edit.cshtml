@@ -13,6 +13,7 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Participant.ParticipantId" />
+            <input type="hidden" asp-for="@Model.StudyName" />
             <div class="form-group">
                 <span class="text-danger">*</span>
                 <label asp-for="Participant.ParticipantFirstName" class="control-label"></label>
