@@ -1,0 +1,19 @@
+﻿@page "{id}"
+@model Research_Software_Dev.Pages.Admin.EditModel
+@{
+    ViewData["Title"] = "Edit User Roles";
+}
+
+<h1>Edit Roles for @Model.User.Email</h1>
+
+<form method="post">
+    @foreach (var role in Model.AllRoles)
+    {
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="SelectedRoles" value="@role"
+            @(Model.UserRoles.Contains(role) ? "checked" : "") />
+            <label class="form-check-label">@role</label>
+        </div>
+    }
+    <button type="submit" class="btn btn-primary mt-3">Save</button>
+</form>

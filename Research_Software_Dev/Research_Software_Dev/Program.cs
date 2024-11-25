@@ -24,6 +24,15 @@ builder.Services.AddHttpClient("ApiClient", client =>
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    // Seed roles and users
+    await SeedRoles.Initialize(services);
+}
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
