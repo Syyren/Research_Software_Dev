@@ -7,16 +7,18 @@
 <h1>Create Form</h1>
 
 <form method="post">
+    <!-- Hidden FormId -->
+    <input type="hidden" asp-for="Form.FormId" />
+
     <div class="form-group">
         <label for="FormName">Form Name</label>
-        <input type="text" id="FormName" asp-for="Form.FormName" class="form-control" />
+        <input type="text" id="FormName" asp-for="Form.FormName" class="form-control" required />
         <span asp-validation-for="Form.FormName" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label>Questions</label>
-        <ul id="questions-list">
-        </ul>
+        <ul id="questions-list"></ul>
         <input type="text" id="new-question" placeholder="Enter a question" class="form-control" />
         <button type="button" id="add-question" class="btn btn-secondary mt-2">Add Question</button>
     </div>

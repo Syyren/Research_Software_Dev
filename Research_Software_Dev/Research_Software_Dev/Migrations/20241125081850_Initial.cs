@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Research_Software_Dev.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigrations : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -347,9 +347,8 @@ namespace Research_Software_Dev.Migrations
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ParticipantId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SessionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    QuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FormId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FormQuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    FormQuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FormId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -357,12 +356,6 @@ namespace Research_Software_Dev.Migrations
                     table.ForeignKey(
                         name: "FK_FormAnswers_FormQuestions_FormQuestionId",
                         column: x => x.FormQuestionId,
-                        principalTable: "FormQuestions",
-                        principalColumn: "FormQuestionId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FormAnswers_FormQuestions_QuestionId",
-                        column: x => x.QuestionId,
                         principalTable: "FormQuestions",
                         principalColumn: "FormQuestionId",
                         onDelete: ReferentialAction.Restrict);
@@ -373,6 +366,26 @@ namespace Research_Software_Dev.Migrations
                         principalColumns: new[] { "ParticipantId", "SessionId" },
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Participants",
+                columns: new[] { "ParticipantId", "ParticipantAddress", "ParticipantEmail", "ParticipantFirstName", "ParticipantLastName", "ParticipantPhoneNumber" },
+                values: new object[] { "P1", "123 Main Street", "johndoe@example.com", "John", "Doe", "555-1234" });
+
+            migrationBuilder.InsertData(
+                table: "Studies",
+                columns: new[] { "StudyId", "StudyDescription", "StudyName" },
+                values: new object[] { "Study1", "A study focused on health and wellness.", "Health Study" });
+
+            migrationBuilder.InsertData(
+                table: "Sessions",
+                columns: new[] { "SessionId", "Date", "StudyId", "TimeEnd", "TimeStart" },
+                values: new object[] { "Session1", new DateOnly(2024, 11, 25), "Study1", new TimeOnly(10, 0, 0), new TimeOnly(9, 0, 0) });
+
+            migrationBuilder.InsertData(
+                table: "ParticipantSessions",
+                columns: new[] { "ParticipantId", "SessionId" },
+                values: new object[] { "P1", "Session1" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -410,11 +423,6 @@ namespace Research_Software_Dev.Migrations
                 name: "IX_FormAnswers_ParticipantId_SessionId",
                 table: "FormAnswers",
                 columns: new[] { "ParticipantId", "SessionId" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FormAnswers_QuestionId",
-                table: "FormAnswers",
-                column: "QuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FormQuestions_FormId",

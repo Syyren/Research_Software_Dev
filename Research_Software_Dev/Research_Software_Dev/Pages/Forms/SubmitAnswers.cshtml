@@ -1,4 +1,4 @@
-﻿@page "{formId}/{participantSessionId}"
+﻿@page "{formId}/{participantId}/{sessionId}"
 @model Research_Software_Dev.Pages.Forms.SubmitAnswersModel
 @{
     ViewData["Title"] = "Submit Answers";
@@ -7,27 +7,40 @@
 <h1>Submit Answers</h1>
 
 <form method="post">
+    <!-- Hidden inputs for key IDs -->
     <input type="hidden" asp-for="FormId" />
     <input type="hidden" asp-for="ParticipantId" />
     <input type="hidden" asp-for="SessionId" />
 
-    <ul>
-        @if (Model.Questions != null && Model.Questions.Any())
-        {
-            @for (int i = 0; i < Model.Questions.Count; i++)
-            {
-                <li>
-                    <strong>@Model.Questions[i].QuestionNumber: @Model.Questions[i].QuestionDescription</strong>
-                    <input type="hidden" name="Answers[@i].QuestionId" value="@Model.Questions[i].FormQuestionId" />
-                    <textarea name="Answers[@i].Answer" class="form-control"></textarea>
-                </li>
-            }
-        }
-        else
-        {
-            <p>No questions available for this form.</p>
-        }
-    </ul>
+    <div class="form-group">
+        <!-- Display form details -->
+        <h2>Form: @Model.FormName</h2>
+        <p>Participant: @Model.ParticipantName</p>
+        <p>Session: @Model.SessionId</p>
+    </div>
 
+    <div class="form-group">
+        <h3>Questions</h3>
+        @for (int i = 0; i < Model.Questions.Count; i++)
+        {
+            <div class="form-group">
+                <!-- Question label -->
+                <label>@Model.Questions[i].QuestionDescription</label>
+
+                <!-- Hidden inputs for answer metadata -->
+                <input type="hidden" name="Answers[@i].FormId" value="@Model.FormId" />
+                <input type="hidden" name="Answers[@i].ParticipantId" value="@Model.ParticipantId" />
+                <input type="hidden" name="Answers[@i].SessionId" value="@Model.SessionId" />
+                <input type="hidden" name="Answers[@i].FormQuestionId" value="@Model.Questions[i].FormQuestionId" />
+                <input type="hidden" name="Answers[@i].AnswerId" value="@Guid.NewGuid()" />
+
+                <!-- Answer input field -->
+                <input type="text" name="Answers[@i].Answer" class="form-control" />
+            </div>
+        }
+    </div>
+
+    <!-- Submission buttons -->
     <button type="submit" class="btn btn-primary">Submit</button>
+    <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
 </form>

@@ -2,13 +2,13 @@
 @model Research_Software_Dev.Pages.Studies.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "MHRA - Studies List";
 }
 
-<h1>Index</h1>
+<h1>Viewing all Studies:</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a class="btn btn-outline-primary" asp-page="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -23,7 +23,8 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Study) {
+@foreach (var item in Model.Study) 
+{
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.StudyName)
@@ -32,9 +33,9 @@
                 @Html.DisplayFor(modelItem => item.StudyDescription)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.StudyId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.StudyId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.StudyId">Delete</a>
+                <a class="btn btn-outline-dark" asp-page="./Edit" asp-route-id="@item.StudyId">Edit</a> |
+                <a class="btn btn-outline-dark" asp-page="./Details" asp-route-id="@item.StudyId">Details</a> |
+                <a class="btn btn-outline-danger" asp-page="./Delete" asp-route-id="@item.StudyId">Delete</a>
             </td>
         </tr>
 }

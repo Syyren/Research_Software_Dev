@@ -19,36 +19,34 @@ namespace Research_Software_Dev.Pages.Forms
         }
 
         [BindProperty]
-        public int ParticipantSessionId { get; set; }
+        public string FormId { get; set; }
 
         [BindProperty]
-        public string FormId { get; set; }
+        public string ParticipantId { get; set; }
+
+        [BindProperty]
+        public string SessionId { get; set; }
 
         public List<Form> Forms { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int participantSessionId)
+        public async Task<IActionResult> OnGetAsync(string participantId, string sessionId)
         {
-            ParticipantSessionId = participantSessionId;
+            ParticipantId = participantId;
+            SessionId = sessionId;
 
-            // Loads available forms from the database
-            Forms = await _context.Forms.ToListAsync();
-
-            if (!Forms.Any())
-            {
-                return NotFound("No forms available.");
-            }
-
+            Forms = await _context.Forms.OrderBy(f => f.FormName).ToListAsync();
             return Page();
         }
 
         public IActionResult OnPost()
         {
-            if (!ModelState.IsValid)
+            if (string.IsNullOrEmpty(FormId))
             {
+                ModelState.AddModelError(string.Empty, "Please select a form.");
                 return Page();
             }
 
-            return RedirectToPage("./SubmitAnswers", new { formId = FormId, participantSessionId = ParticipantSessionId });
+            return RedirectToPage("./SubmitAnswers", new { formId = FormId, participantId = ParticipantId, sessionId = SessionId });
         }
     }
 }

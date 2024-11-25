@@ -30,26 +30,67 @@ namespace Research_Software_Dev.Pages.Forms
         [BindProperty]
         public string SessionId { get; set; }
 
+        public string ParticipantName { get; set; }
+        public string FormName { get; set; }
         public List<FormQuestion> Questions { get; set; }
+        public ParticipantSession ParticipantSession { get; set; }
 
         [BindProperty]
         public List<FormAnswer> Answers { get; set; }
 
         public async Task<IActionResult> OnGetAsync(string formId, string participantId, string sessionId)
         {
+            if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(participantId) || string.IsNullOrEmpty(sessionId))
+            {
+                return BadRequest("FormId, ParticipantId, and SessionId are required.");
+            }
+
             FormId = formId;
             ParticipantId = participantId;
             SessionId = sessionId;
 
-            // Loads questions for the form
+            // Fetch Form Name
+            FormName = await _context.Forms
+                .Where(f => f.FormId == formId)
+                .Select(f => f.FormName)
+                .FirstOrDefaultAsync();
+
+            if (string.IsNullOrEmpty(FormName))
+            {
+                return NotFound("Form not found.");
+            }
+
+            // Fetch Participant Name
+            ParticipantName = await _context.Participants
+                .Where(p => p.ParticipantId == participantId)
+                .Select(p => p.ParticipantFirstName + " " + p.ParticipantLastName)
+                .FirstOrDefaultAsync();
+
+            if (string.IsNullOrEmpty(ParticipantName))
+            {
+                return NotFound("Participant not found.");
+            }
+
+            // Fetch Questions
             Questions = await _context.FormQuestions
                 .Where(q => q.FormId == formId)
                 .OrderBy(q => q.QuestionNumber)
                 .ToListAsync();
 
-            if (!Questions.Any())
+            if (Questions == null || !Questions.Any())
             {
                 return NotFound("No questions found for this form.");
+            }
+
+            // Fetch ParticipantSession
+            ParticipantSession = await _context.ParticipantSessions
+                .Include(ps => ps.Participant)
+                .Include(ps => ps.Session)
+                .FirstOrDefaultAsync(ps => ps.ParticipantId == participantId && ps.SessionId == sessionId);
+
+            if (ParticipantSession == null)
+            {
+                return NotFound("Participant and session relationship not found.");
             }
 
             return Page();
@@ -57,45 +98,54 @@ namespace Research_Software_Dev.Pages.Forms
 
         public async Task<IActionResult> OnPostAsync()
         {
-            // Reloads Questions to ensure they're initialized
+            // Ensure Questions are loaded
             Questions = await _context.FormQuestions
                 .Where(q => q.FormId == FormId)
-                .OrderBy(q => q.QuestionNumber)
                 .ToListAsync();
 
-            if (Questions == null || !Questions.Any())
-            {
-                ModelState.AddModelError(string.Empty, "No questions found for this form.");
-                return Page();
-            }
-
+            // Validate Answers
             if (Answers == null || !Answers.Any())
             {
-                ModelState.AddModelError(string.Empty, "No answers were provided.");
+                ModelState.AddModelError(string.Empty, "Answers are required for all questions.");
                 return Page();
             }
 
-            // Validates and saves answers
             foreach (var answer in Answers)
             {
-                if (string.IsNullOrEmpty(answer.QuestionId) || string.IsNullOrEmpty(answer.Answer))
+                // Ensure the FormQuestionId is valid
+                var formQuestion = Questions.FirstOrDefault(q => q.FormQuestionId == answer.FormQuestionId);
+                if (formQuestion == null)
                 {
-                    ModelState.AddModelError(string.Empty, "All questions must be answered.");
+                    ModelState.AddModelError(string.Empty, $"Invalid question ID provided: {answer.FormQuestionId}");
                     return Page();
                 }
 
-                // Assigns the composite key and other fields
-                answer.FormId = FormId;
-                answer.ParticipantId = ParticipantId;
-                answer.SessionId = SessionId;
-                answer.TimeStamp = DateTime.UtcNow;
+                // Add new FormAnswer to the database
+                _context.FormAnswers.Add(new FormAnswer
+                {
+                    AnswerId = Guid.NewGuid().ToString(),
+                    FormQuestionId = formQuestion.FormQuestionId,
+                    FormId = FormId,
+                    ParticipantId = ParticipantId,
+                    SessionId = SessionId,
+                    Answer = answer.Answer,
+                    TimeStamp = DateTime.UtcNow,
+                    FormQuestion = formQuestion,
+                    ParticipantSession = ParticipantSession
+                });
+            }
 
-                _context.FormAnswers.Add(answer);
+            if (!ModelState.IsValid)
+            {
+                foreach (var error in ModelState)
+                {
+                    Console.WriteLine($"{error.Key}: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
+                }
+                return Page();
             }
 
             await _context.SaveChangesAsync();
-
-            return RedirectToPage("./ViewAnswers", new { formId = FormId, participantId = ParticipantId, sessionId = SessionId });
+            return RedirectToPage("./Index");
         }
     }
 }

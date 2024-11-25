@@ -37,7 +37,7 @@ namespace Research_Software_Dev.Pages.Forms
 
             // Fetches answers from the database using composite key
             Answers = await _context.FormAnswers
-                .Include(a => a.Question) // Includes question data
+                .Include(a => a.FormQuestion) // Includes question data
                 .Where(a => a.FormId == formId && a.ParticipantId == participantId && a.SessionId == sessionId)
                 .ToListAsync();
 

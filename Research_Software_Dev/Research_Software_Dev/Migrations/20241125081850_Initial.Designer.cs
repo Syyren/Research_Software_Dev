@@ -12,8 +12,8 @@ using Research_Software_Dev.Data;
 namespace Research_Software_Dev.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241125023348_InitialMigrations")]
-    partial class InitialMigrations
+    [Migration("20241125081850_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -197,10 +197,6 @@ namespace Research_Software_Dev.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("QuestionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("SessionId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -211,8 +207,6 @@ namespace Research_Software_Dev.Migrations
                     b.HasKey("AnswerId");
 
                     b.HasIndex("FormQuestionId");
-
-                    b.HasIndex("QuestionId");
 
                     b.HasIndex("ParticipantId", "SessionId");
 
@@ -271,6 +265,17 @@ namespace Research_Software_Dev.Migrations
                     b.HasKey("ParticipantId");
 
                     b.ToTable("Participants");
+
+                    b.HasData(
+                        new
+                        {
+                            ParticipantId = "P1",
+                            ParticipantAddress = "123 Main Street",
+                            ParticipantEmail = "johndoe@example.com",
+                            ParticipantFirstName = "John",
+                            ParticipantLastName = "Doe",
+                            ParticipantPhoneNumber = "555-1234"
+                        });
                 });
 
             modelBuilder.Entity("Research_Software_Dev.Models.Participants.ParticipantSession", b =>
@@ -286,6 +291,13 @@ namespace Research_Software_Dev.Migrations
                     b.HasIndex("SessionId");
 
                     b.ToTable("ParticipantSessions");
+
+                    b.HasData(
+                        new
+                        {
+                            ParticipantId = "P1",
+                            SessionId = "Session1"
+                        });
                 });
 
             modelBuilder.Entity("Research_Software_Dev.Models.Participants.ParticipantStudy", b =>
@@ -442,6 +454,16 @@ namespace Research_Software_Dev.Migrations
                     b.HasIndex("StudyId");
 
                     b.ToTable("Sessions");
+
+                    b.HasData(
+                        new
+                        {
+                            SessionId = "Session1",
+                            Date = new DateOnly(2024, 11, 25),
+                            StudyId = "Study1",
+                            TimeEnd = new TimeOnly(10, 0, 0),
+                            TimeStart = new TimeOnly(9, 0, 0)
+                        });
                 });
 
             modelBuilder.Entity("Research_Software_Dev.Models.Studies.Study", b =>
@@ -460,6 +482,14 @@ namespace Research_Software_Dev.Migrations
                     b.HasKey("StudyId");
 
                     b.ToTable("Studies");
+
+                    b.HasData(
+                        new
+                        {
+                            StudyId = "Study1",
+                            StudyDescription = "A study focused on health and wellness.",
+                            StudyName = "Health Study"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -518,12 +548,6 @@ namespace Research_Software_Dev.Migrations
                     b.HasOne("Research_Software_Dev.Models.Forms.FormQuestion", "FormQuestion")
                         .WithMany()
                         .HasForeignKey("FormQuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Research_Software_Dev.Models.Forms.FormQuestion", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -536,8 +560,6 @@ namespace Research_Software_Dev.Migrations
                     b.Navigation("FormQuestion");
 
                     b.Navigation("ParticipantSession");
-
-                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("Research_Software_Dev.Models.Forms.FormQuestion", b =>

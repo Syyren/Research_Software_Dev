@@ -46,6 +46,47 @@ namespace Research_Software_Dev.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Study>().HasData(
+                new Study
+                {
+                    StudyId = "Study1",
+                    StudyName = "Health Study",
+                    StudyDescription = "A study focused on health and wellness."
+                }
+            );
+
+            // Seed Participant
+            modelBuilder.Entity<Participant>().HasData(
+                new Participant
+                {
+                    ParticipantId = "P1",
+                    ParticipantFirstName = "John",
+                    ParticipantLastName = "Doe",
+                    ParticipantAddress = "123 Main Street",
+                    ParticipantEmail = "johndoe@example.com",
+                    ParticipantPhoneNumber = "555-1234"
+                }
+            );
+
+            // Seed Session
+            modelBuilder.Entity<Session>().HasData(
+                new Session
+                {
+                    SessionId = "Session1",
+                    Date = DateOnly.FromDateTime(DateTime.Now),
+                    TimeStart = new TimeOnly(9, 0),
+                    TimeEnd = new TimeOnly(10, 0),
+                    StudyId = "Study1" // Ensure this StudyId exists in your Study table
+                }
+            );
+
+            // Seed ParticipantSession to link Participant and Session
+            modelBuilder.Entity<ParticipantSession>().HasData(new ParticipantSession
+            {
+                ParticipantId = "P1",
+                SessionId = "Session1"
+            });
+
             base.OnModelCreating(modelBuilder);
 
             // Forms and Questions Relationship
@@ -57,9 +98,9 @@ namespace Research_Software_Dev.Data
 
             // Answers and Questions Relationship
             modelBuilder.Entity<FormAnswer>()
-                .HasOne(fa => fa.Question)
+                .HasOne(fa => fa.FormQuestion)
                 .WithMany()
-                .HasForeignKey(fa => fa.QuestionId)
+                .HasForeignKey(fa => fa.FormQuestionId)
                 .OnDelete(DeleteBehavior.Restrict); // Prevents multiple cascade paths from FormQuestion.
 
             // Answers and ParticipantSessions Relationship
