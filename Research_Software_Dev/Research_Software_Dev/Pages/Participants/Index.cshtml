@@ -2,14 +2,27 @@
 @model Research_Software_Dev.Pages.Participants.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "MHRA - View Participants";
 }
 
-<h1>Index</h1>
+<h1>Your Participants</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+<form method="get">
+    <div class="form-group">
+        <label for="studyFilter">Filter by Study:</label>
+        <select asp-for="SelectedStudyId" class="form-control">
+            <option value="">-- Select a Study --</option>
+            @foreach (var study in Model.Studies)
+            {
+                <option value="@study.StudyId">@study.StudyName</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -29,9 +42,8 @@
                 @Html.DisplayNameFor(model => model.Participant[0].ParticipantPhoneNumber)
             </th>
             <th>
-                Study Name
+                @Html.DisplayNameFor(model => model.Participant[0].StudyName)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
