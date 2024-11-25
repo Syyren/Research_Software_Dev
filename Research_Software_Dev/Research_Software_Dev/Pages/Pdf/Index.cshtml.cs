@@ -74,7 +74,7 @@ namespace Research_Software_Dev.Pages.Pdf
                 await _context.SaveChangesAsync(); // Saves all questions
 
                 // Redirects to the Results page with data
-                return RedirectToPage("/Pdf/Results", new { formId = form.FormId });
+                return RedirectToPage("/Forms/Index");
             }
             catch (Exception ex)
             {
