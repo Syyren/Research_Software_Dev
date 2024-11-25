@@ -8,30 +8,30 @@
 <h1>Viewing Participants</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a class="btn btn-outline-primary" asp-page="Create">Register a New Participant</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
+            <th style="max-width: 10vw;">
                 @Html.DisplayNameFor(model => model.Participant[0].ParticipantFirstName)
             </th>
-            <th>
+            <th style="max-width: 10vw;">
                 @Html.DisplayNameFor(model => model.Participant[0].ParticipantLastName)
             </th>
-            <th>
+            <th style="max-width: 10vw;">
                 @Html.DisplayNameFor(model => model.Participant[0].ParticipantAddress)
             </th>
-            <th>
+            <th style="max-width: 10vw;">
                 @Html.DisplayNameFor(model => model.Participant[0].ParticipantEmail)
             </th>
-            <th>
+            <th style="max-width: 10vw;">
                 @Html.DisplayNameFor(model => model.Participant[0].ParticipantPhoneNumber)
             </th>
-            <th>
+            <th style="max-width: 10vw;">
                 @Html.DisplayNameFor(model => model.Participant[0].StudyName)
             </th>
-            <th>
+            <th style="max-width: 10vw;">
                 Actions
             </th>
         </tr>

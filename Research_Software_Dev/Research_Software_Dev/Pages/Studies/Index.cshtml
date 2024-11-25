@@ -13,10 +13,10 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
+            <th style="max-width: 10vw">
                 @Html.DisplayNameFor(model => model.Study[0].StudyName)
             </th>
-            <th>
+            <th style="max-width: 40vw">
                 @Html.DisplayNameFor(model => model.Study[0].StudyDescription)
             </th>
             <th>
@@ -28,10 +28,10 @@
 @foreach (var item in Model.Study) 
 {
         <tr>
-            <td style="max-width: 10vw">
+            <td>
                 @Html.DisplayFor(modelItem => item.StudyName)
             </td>
-            <td class="study-description" style="max-width: 40vw">
+            <td>
                 @Html.DisplayFor(modelItem => item.StudyDescription)
             </td>
             <td>
