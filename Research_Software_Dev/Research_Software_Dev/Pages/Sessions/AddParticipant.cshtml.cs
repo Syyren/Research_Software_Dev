@@ -34,7 +34,7 @@ namespace Research_Software_Dev.Pages.ParticipantSessions
 
             SessionId = sessionId;
 
-            // Populate the participant dropdown using SelectList
+            // Populates the participant dropdown using SelectList
             ParticipantList = new SelectList(
                 _context.Participants.ToList(),
                 "ParticipantId",
@@ -47,7 +47,7 @@ namespace Research_Software_Dev.Pages.ParticipantSessions
         {
             if (!ModelState.IsValid)
             {
-                // Re-populate the dropdown if the form is invalid
+                // Re-populates the dropdown if the form is invalid
                 ParticipantList = new SelectList(
                     _context.Participants.ToList(),
                     "ParticipantId",
@@ -65,7 +65,7 @@ namespace Research_Software_Dev.Pages.ParticipantSessions
             _context.ParticipantSessions.Add(participantSession);
             await _context.SaveChangesAsync();
 
-            // Redirect back to Sessions Index after adding the participant
+            // Redirects back to Sessions Index after adding the participant
             return RedirectToPage("/Sessions/Index");
         }
     }

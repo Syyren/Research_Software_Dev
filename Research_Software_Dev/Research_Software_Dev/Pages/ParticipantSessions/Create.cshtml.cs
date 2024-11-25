@@ -22,7 +22,7 @@ namespace Research_Software_Dev.Pages.ParticipantSessions
 
         public IActionResult OnGet()
         {
-            // Populate dropdowns
+            // Populates dropdowns
             ViewData["ParticipantId"] = new SelectList(
                 _context.Participants.Select(p => new
                 {

@@ -57,7 +57,7 @@ namespace Research_Software_Dev.Pages.Forms
                 return Page();
             }
 
-            // Find the existing question in the database
+            // Finds the existing question in the database
             var existingQuestion = await _context.FormQuestions
                 .FirstOrDefaultAsync(q => q.FormQuestionId == Question.FormQuestionId);
 
@@ -66,7 +66,7 @@ namespace Research_Software_Dev.Pages.Forms
                 return NotFound();
             }
 
-            // Update the question's properties
+            // Updates the question's properties
             existingQuestion.QuestionDescription = Question.QuestionDescription;
 
             try
