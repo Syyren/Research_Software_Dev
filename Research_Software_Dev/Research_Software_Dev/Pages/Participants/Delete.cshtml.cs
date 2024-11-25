@@ -27,6 +27,9 @@ namespace Research_Software_Dev.Pages.Participants
         public Participant Participant { get; set; } = default!;
 
         [BindProperty]
+        public bool DeleteFromAllStudies { get; set; } = false;
+
+        [BindProperty]
         public string StudyName { get; set; } = string.Empty;
 
         public async Task<IActionResult> OnGetAsync(string id)
@@ -74,11 +77,6 @@ namespace Research_Software_Dev.Pages.Participants
                 return RedirectToPage("/NotFound");
             }
 
-            if (string.IsNullOrEmpty(researcherId))
-            {
-                return RedirectToPage("/NotFound");
-            }
-
             //get and verifies ownership before updating
             var participantStudy = await _context.ParticipantStudies
                 .FirstOrDefaultAsync(ps => ps.ParticipantId == id &&
@@ -89,19 +87,43 @@ namespace Research_Software_Dev.Pages.Participants
                 return NotFound();
             }
 
-            //remove the association from ParticipantStudies
-            _context.ParticipantStudies.Remove(participantStudy);
-
-            //remove participant
-            var participant = await _context.Participants.FindAsync(id);
-            if (participant != null)
+            //If Participant is being removed from all studies via checkbox
+            if (DeleteFromAllStudies)
             {
-                _context.Participants.Remove(participant);
-            }            
+                //get participant from all studies they are in
+                var participantStudies = await _context.ParticipantStudies
+                    .Where(ps => ps.ParticipantId == id)
+                    .ToListAsync();
 
+                //if participant in any studies => remove
+                if (participantStudies.Any())
+                {
+                    //Remove from all studies
+                    _context.ParticipantStudies.RemoveRange(participantStudies);
+                    
+                    
+                }
+                //remove participant
+                var participant = await _context.Participants.FindAsync(id);
+                if (participant != null)
+                {
+                    _context.Participants.Remove(participant);
+                }
+            }
+            else 
+            { 
+                //remove from ParticipantStudies
+                _context.ParticipantStudies.Remove(participantStudy);
+
+                //remove participant
+                var participant = await _context.Participants.FindAsync(id);
+                if (participant != null)
+                {
+                    _context.Participants.Remove(participant);
+                }            
+            }
             //save to db
             await _context.SaveChangesAsync();
-
             return RedirectToPage("./Index");
         }
     }
