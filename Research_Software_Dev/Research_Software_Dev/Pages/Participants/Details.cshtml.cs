@@ -22,6 +22,7 @@ namespace Research_Software_Dev.Pages.Participants
         }
 
         public Participant Participant { get; set; } = default!;
+        public string StudyName { get; set; } = string.Empty;
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
@@ -41,14 +42,16 @@ namespace Research_Software_Dev.Pages.Participants
             //check if participant and researcher is in same study
             var participantStudy = await _context.ParticipantStudies
                 .Include(ps => ps.Participant)
-                .Include(ps => ps.Study)
+                .Include(ps => ps.Study) //include Study for StudyName
                 .FirstOrDefaultAsync(ps => ps.ParticipantId == id
                     && _context.ResearcherStudies.Any(rs => rs.StudyId == ps.StudyId && rs.ResearcherId == researcherId));
+
             if (participantStudy == null)
             {
                 return RedirectToPage("/NotFound");
             }
             Participant = participantStudy.Participant;
+            StudyName = participantStudy.Study.StudyName;
             return Page();
         }
     }
