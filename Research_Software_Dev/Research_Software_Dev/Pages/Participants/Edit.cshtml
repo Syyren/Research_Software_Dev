@@ -2,10 +2,10 @@
 @model Research_Software_Dev.Pages.Participants.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "MHRA - Edit Participant";
 }
 
-<h1>Edit</h1>
+<h1>Editing Participant Details</h1>
 
 <h4>Participant</h4>
 <hr />
@@ -40,6 +40,10 @@
                 <label asp-for="Participant.ParticipantPhoneNumber" class="control-label"></label>
                 <input asp-for="Participant.ParticipantPhoneNumber" class="form-control" />
                 <span asp-validation-for="Participant.ParticipantPhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Associated Study</label>
+                <h4>@Model.StudyName</h4>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

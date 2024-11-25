@@ -28,6 +28,9 @@ namespace Research_Software_Dev.Pages.Participants
         [BindProperty]
         public Participant Participant { get; set; } = default!;
 
+        [BindProperty]
+        public string StudyName { get; set; } = string.Empty;
+
         public async Task<IActionResult> OnGetAsync(string id)
         {
             if (id == null)
@@ -35,7 +38,7 @@ namespace Research_Software_Dev.Pages.Participants
                 return RedirectToPage("/NotFound");
             }
 
-            // Get the logged-in researcher's ID
+            //get the logged-in researcher's ID
             var researcherId = _userManager.GetUserId(User);
 
             if (string.IsNullOrEmpty(researcherId))
@@ -43,6 +46,20 @@ namespace Research_Software_Dev.Pages.Participants
                 return Unauthorized();
             }
 
+            //fetch participant and verify the logged-in researcher is associated with the study
+            var participantStudy = await _context.ParticipantStudies
+                .Include(ps => ps.Participant)
+                .Include(ps => ps.Study) //include Study for StudyName
+                .FirstOrDefaultAsync(ps => ps.ParticipantId == id &&
+                    _context.ResearcherStudies.Any(rs => rs.StudyId == ps.StudyId && rs.ResearcherId == researcherId));
+
+            if (participantStudy == null)
+            {
+                return RedirectToPage("/NotFound");
+            }
+
+            Participant = participantStudy.Participant;
+            StudyName = participantStudy.Study.StudyName;
             return Page();
         }
 
@@ -57,6 +74,10 @@ namespace Research_Software_Dev.Pages.Participants
 
             //gets the logged-in user's ID
             var researcherId = _userManager.GetUserId(User);
+            if (string.IsNullOrEmpty(researcherId))
+            {
+                return RedirectToPage("/NotFound");
+            }
 
             //verifies ownership before updating
             var participantStudy = await _context.ParticipantStudies
