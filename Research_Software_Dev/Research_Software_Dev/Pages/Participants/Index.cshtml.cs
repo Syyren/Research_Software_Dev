@@ -24,7 +24,7 @@ namespace Research_Software_Dev.Pages.Participants
             _userManager = userManager;
         }
 
-        public List<Participant> Participant { get; set; }
+        public List<ParticipantViewModel> Participant { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -33,21 +33,38 @@ namespace Research_Software_Dev.Pages.Participants
 
             if (string.IsNullOrEmpty(researcherId))
             {
-                //if no user is logged in, redirect or show a message as needed
-                Participant = new List<Participant>();
                 return RedirectToPage("/NotFound"); ;
             }
 
             //fetches Participants associated with the current Researcher through Studies
             Participant = await _context.ParticipantStudies
-                .Include(ps => ps.Participant)
-                .Include(ps => ps.Study)
-                .Where(ps => _context.ResearcherStudies
-                    .Any(rs => rs.StudyId == ps.StudyId && rs.ResearcherId == researcherId))
-                .Select(ps => ps.Participant)
-                .ToListAsync();
+            .Include(ps => ps.Participant)
+            .Include(ps => ps.Study)
+            .Where(ps => _context.ResearcherStudies
+                .Any(rs => rs.StudyId == ps.StudyId && rs.ResearcherId == researcherId))
+            .Select(ps => new ParticipantViewModel
+            {
+                ParticipantId = ps.Participant.ParticipantId,
+                ParticipantFirstName = ps.Participant.ParticipantFirstName,
+                ParticipantLastName = ps.Participant.ParticipantLastName,
+                ParticipantAddress = ps.Participant.ParticipantAddress,
+                ParticipantEmail = ps.Participant.ParticipantEmail,
+                ParticipantPhoneNumber = ps.Participant.ParticipantPhoneNumber,
+                StudyName = ps.Study.StudyName
+            })
+            .ToListAsync();
 
             return Page();
         }
+    }
+    public class ParticipantViewModel
+    {
+        public string ParticipantId { get; set; }
+        public string ParticipantFirstName { get; set; }
+        public string ParticipantLastName { get; set; }
+        public string? ParticipantAddress { get; set; }
+        public string? ParticipantEmail { get; set; }
+        public string? ParticipantPhoneNumber { get; set; }
+        public string StudyName { get; set; }
     }
 }
