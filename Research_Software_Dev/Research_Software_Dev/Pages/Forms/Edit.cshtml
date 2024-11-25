@@ -8,7 +8,7 @@
 
 <form method="post">
     <!-- Adds Question Button -->
-    <a asp-page="./AddQuestion" asp-route-formId="@Model.Form.FormId" class="btn btn-success">Add Question</a>
+    <a asp-page="./AddQuestion" asp-route-formId="@Model.Form.FormId" class="btn btn-outline-success">Add a Question</a>
 
     <input type="hidden" asp-for="Form.FormId" />
 
@@ -36,8 +36,8 @@
                             <input type="text" asp-for="Questions[@i].QuestionDescription" value="@Model.Questions[i].QuestionDescription" class="form-control" readonly />
                         </div>
                         <div class="col-3 text-end">
-                            <a asp-page="./EditQuestion" asp-route-formId="@Model.Form.FormId" asp-route-questionId="@Model.Questions[i].FormQuestionId" class="btn btn-primary">Edit</a>
-                            <a asp-page="./DeleteQuestion" asp-route-formId="@Model.Form.FormId" asp-route-questionId="@Model.Questions[i].FormQuestionId" class="btn btn-danger">Delete</a>
+                            <a class="btn btn-outline-dark" asp-page="./EditQuestion" asp-route-formId="@Model.Form.FormId" asp-route-questionId="@Model.Questions[i].FormQuestionId">Edit</a>
+                            <a class="btn btn-outline-danger" asp-page="./DeleteQuestion" asp-route-formId="@Model.Form.FormId" asp-route-questionId="@Model.Questions[i].FormQuestionId">Delete</a>
                         </div>
                     </div>
                 </li>

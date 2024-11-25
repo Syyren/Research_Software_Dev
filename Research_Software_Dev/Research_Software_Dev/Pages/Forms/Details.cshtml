@@ -4,26 +4,37 @@
     ViewData["Title"] = "Form Details";
 }
 
-<h1>Form Details</h1>
+<h1>"@Model.Form.FormName" Details</h1>
 
 <div>
-    <h2>@Model.Form.FormName</h2>
-</div>
-
-<h3>Questions</h3>
-@if (Model.Questions.Any())
-{
-    <ul>
-        @foreach (var question in Model.Questions)
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Form.FormName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Form.FormName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Form.Questions)
+        </dt>
+        <dd class="col-sm-10">
+        @if (Model.Questions.Any())
         {
-            <li>@question.QuestionDescription</li>
+            <ul class="list-group">
+                @foreach (var question in Model.Questions)
+                {
+                    <li class="list-group-item">@question.QuestionDescription</li>
+                }
+            </ul>
         }
-    </ul>
-}
-else
-{
-    <p>No questions available.</p>
-}
+        else
+        {
+            <p>No questions available.</p>
+        }
+        </dd>
+    </dl>
+</div>
 
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Form.FormId" class="btn btn-outline-dark">Edit</a> |
