@@ -20,7 +20,7 @@ namespace Research_Software_Dev.Pages.Forms
         public Form Form { get; set; }
         public List<FormQuestion> Questions { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int id)
+        public async Task<IActionResult> OnGetAsync(string id)
         {
             Form = await _context.Forms.FindAsync(id);
             if (Form == null)

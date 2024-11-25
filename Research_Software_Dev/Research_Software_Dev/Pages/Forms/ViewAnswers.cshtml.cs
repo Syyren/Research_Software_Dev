@@ -19,27 +19,31 @@ namespace Research_Software_Dev.Pages.Forms
         }
 
         [BindProperty]
-        public int FormId { get; set; }
+        public string FormId { get; set; }
 
         [BindProperty]
-        public int ParticipantSessionId { get; set; }
+        public string ParticipantId { get; set; }
+
+        [BindProperty]
+        public string SessionId { get; set; }
 
         public List<FormAnswer> Answers { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int formId, int participantSessionId)
+        public async Task<IActionResult> OnGetAsync(string formId, string participantId, string sessionId)
         {
             FormId = formId;
-            ParticipantSessionId = participantSessionId;
+            ParticipantId = participantId;
+            SessionId = sessionId;
 
-            // Fetches answers from the database
+            // Fetches answers from the database using composite key
             Answers = await _context.FormAnswers
                 .Include(a => a.Question) // Includes question data
-                .Where(a => a.FormId == formId && a.ParticipantSessionId == participantSessionId)
+                .Where(a => a.FormId == formId && a.ParticipantId == participantId && a.SessionId == sessionId)
                 .ToListAsync();
 
             if (!Answers.Any())
             {
-                return NotFound("No answers found for the specified form and participant session.");
+                return NotFound("No answers found for the specified form, participant, and session.");
             }
 
             return Page();

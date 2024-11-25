@@ -24,7 +24,7 @@ namespace Research_Software_Dev.Pages.Forms
         [BindProperty]
         public List<FormQuestion> Questions { get; set; } = new();
 
-        public async Task<IActionResult> OnGetAsync(int id)
+        public async Task<IActionResult> OnGetAsync(string id)
         {
             Form = await _context.Forms.FindAsync(id);
             if (Form == null)
@@ -37,6 +37,12 @@ namespace Research_Software_Dev.Pages.Forms
                 .OrderBy(q => q.QuestionNumber)
                 .ToListAsync();
 
+            // Ensure FormId is assigned to all questions
+            foreach (var question in Questions)
+            {
+                question.FormId = id;
+            }
+
             return Page();
         }
 
@@ -44,7 +50,7 @@ namespace Research_Software_Dev.Pages.Forms
         {
             if (!ModelState.IsValid)
             {
-                // Logs validation errors
+                // Logs validation errors for debugging
                 foreach (var error in ModelState)
                 {
                     Console.WriteLine($"{error.Key}: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
@@ -52,44 +58,52 @@ namespace Research_Software_Dev.Pages.Forms
                 return Page();
             }
 
-            // Loads the form from the database
-            var existingForm = await _context.Forms.FindAsync(Form.FormId);
+            var existingForm = await _context.Forms
+                .Include(f => f.Questions)
+                .FirstOrDefaultAsync(f => f.FormId == Form.FormId);
 
             if (existingForm == null)
             {
                 return NotFound();
             }
 
-            // Updates form properties
+            // Update the form's name
             existingForm.FormName = Form.FormName;
 
-            var questions = existingForm.Questions
-            .OrderBy(q => q.QuestionNumber)
-            .ToList();
+            // Update or add questions
+            foreach (var question in Questions)
+            {
+                question.FormId = existingForm.FormId;
 
-            for (int i = 0; i < questions.Count; i++)
-            {
-                questions[i].QuestionNumber = i + 1;
-                _context.Entry(questions[i]).State = EntityState.Modified;
-            }
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Forms.Any(f => f.FormId == Form.FormId))
+                if (string.IsNullOrEmpty(question.FormQuestionId))
                 {
-                    return NotFound();
+                    // Add new question
+                    _context.FormQuestions.Add(question);
                 }
                 else
                 {
-                    throw;
+                    // Update existing question
+                    var existingQuestion = existingForm.Questions
+                        .FirstOrDefault(q => q.FormQuestionId == question.FormQuestionId);
+
+                    if (existingQuestion != null)
+                    {
+                        existingQuestion.QuestionDescription = question.QuestionDescription;
+                        existingQuestion.QuestionNumber = question.QuestionNumber;
+                        _context.Entry(existingQuestion).State = EntityState.Modified;
+                    }
                 }
             }
 
-            // Redirects to the Index page or another appropriate page
+            // Renumber questions sequentially
+            var reorderedQuestions = Questions.OrderBy(q => q.QuestionNumber).ToList();
+            for (int i = 0; i < reorderedQuestions.Count; i++)
+            {
+                reorderedQuestions[i].QuestionNumber = i + 1;
+            }
+
+            await _context.SaveChangesAsync();
+
             return RedirectToPage("./Index");
         }
     }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Forms;
 using System.Collections.Generic;
@@ -20,9 +21,9 @@ namespace Research_Software_Dev.Pages.Pdf
             _context = context;
         }
 
-        public async Task<IActionResult> OnGetAsync(int formId)
+        public async Task<IActionResult> OnGetAsync(string formId)
         {
-            // Fetch the form details by ID
+            // Fetches the form details by ID
             Form = await _context.Forms.FindAsync(formId);
 
             if (Form == null)
@@ -30,11 +31,11 @@ namespace Research_Software_Dev.Pages.Pdf
                 return NotFound();
             }
 
-            // Fetch and sort the associated questions by QuestionNumber
-            Questions = _context.FormQuestions
+            // Fetches and sorts the associated questions by QuestionNumber
+            Questions = await _context.FormQuestions
                 .Where(q => q.FormId == formId)
-                .OrderBy(q => q.QuestionNumber) // Sort by QuestionNumber ascending
-                .ToList();
+                .OrderBy(q => q.QuestionNumber) // Sorts by QuestionNumber ascending
+                .ToListAsync();
 
             return Page();
         }

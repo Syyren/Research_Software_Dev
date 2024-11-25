@@ -24,7 +24,7 @@ namespace Research_Software_Dev.Pages.Pdf
 
         public void OnGet()
         {
-            // Load any necessary data or initialize the page
+            // Loads any necessary data or initialize the page
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -37,49 +37,43 @@ namespace Research_Software_Dev.Pages.Pdf
 
             try
             {
-                // Define the upload folder path
+                // Defines the upload folder path
                 var uploadDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
 
-                // Ensure the directory exists
+                // Ensures the directory exists
                 if (!Directory.Exists(uploadDir))
                 {
                     Directory.CreateDirectory(uploadDir);
                 }
 
-                // Define the full file path
+                // Defines the full file path
                 var filePath = Path.Combine(uploadDir, PdfFile.FileName);
 
-                // Save the file to the uploads folder
+                // Saves the file to the uploads folder
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await PdfFile.CopyToAsync(stream);
                 }
 
-                // Parse the PDF
+                // Parses the PDF
                 var (form, questions, answers) = _pdfInterpreter.ParsePdf(filePath);
 
-                // Save the parsed data to the database
-                _context.Forms.Add(form); // Save the Form
+                form.FormId = Guid.NewGuid().ToString();
+
+                // Saves the parsed data to the database
+                _context.Forms.Add(form); // Saves the Form
                 await _context.SaveChangesAsync(); // Save to generate FormId
 
                 foreach (var question in questions)
                 {
-                    question.FormId = form.FormId; // Associate the question with the Form
+                    question.FormId = form.FormId; // Associates the question with the Form
                     _context.FormQuestions.Add(question);
                     question.QuestionNumber = question.QuestionNumber + 1;
                 }
 
-                await _context.SaveChangesAsync(); // Save all questions
+                await _context.SaveChangesAsync(); // Saves all questions
 
-                // Optional: Add answers (depends on your app's workflow)
-                foreach (var answer in answers)
-                {
-                    _context.FormAnswers.Add(answer); // Save answers (if applicable)
-                }
-
-                await _context.SaveChangesAsync();
-
-                // Redirect to the Results page with data
+                // Redirects to the Results page with data
                 return RedirectToPage("/Pdf/Results", new { formId = form.FormId });
             }
             catch (Exception ex)

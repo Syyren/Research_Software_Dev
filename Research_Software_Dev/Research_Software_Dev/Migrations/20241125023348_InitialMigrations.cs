@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Research_Software_Dev.Migrations
 {
     /// <inheritdoc />
-    public partial class RedundancyGone : Migration
+    public partial class InitialMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -120,8 +120,8 @@ namespace Research_Software_Dev.Migrations
                 columns: table => new
                 {
                     FormQuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FormQuestionNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    FormQuestionDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    QuestionNumber = table.Column<int>(type: "int", nullable: false),
+                    QuestionDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FormId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -249,8 +249,7 @@ namespace Research_Software_Dev.Migrations
                 columns: table => new
                 {
                     ResearcherId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    StudyId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    StudyName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    StudyId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -319,14 +318,15 @@ namespace Research_Software_Dev.Migrations
                 columns: table => new
                 {
                     ResearcherId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    SessionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    SessionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ResearcherSessions", x => new { x.ResearcherId, x.SessionId });
                     table.ForeignKey(
-                        name: "FK_ResearcherSessions_Researchers_ResearcherId",
-                        column: x => x.ResearcherId,
+                        name: "FK_ResearcherSessions_Researchers_Id",
+                        column: x => x.Id,
                         principalTable: "Researchers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -347,7 +347,8 @@ namespace Research_Software_Dev.Migrations
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ParticipantId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SessionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    QuestionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    QuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FormId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FormQuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -360,11 +361,17 @@ namespace Research_Software_Dev.Migrations
                         principalColumn: "FormQuestionId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_FormAnswers_FormQuestions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "FormQuestions",
+                        principalColumn: "FormQuestionId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_FormAnswers_ParticipantSessions_ParticipantId_SessionId",
                         columns: x => new { x.ParticipantId, x.SessionId },
                         principalTable: "ParticipantSessions",
                         principalColumns: new[] { "ParticipantId", "SessionId" },
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -405,6 +412,11 @@ namespace Research_Software_Dev.Migrations
                 columns: new[] { "ParticipantId", "SessionId" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_FormAnswers_QuestionId",
+                table: "FormAnswers",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FormQuestions_FormId",
                 table: "FormQuestions",
                 column: "FormId");
@@ -430,6 +442,11 @@ namespace Research_Software_Dev.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ResearcherSessions_Id",
+                table: "ResearcherSessions",
+                column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ResearcherSessions_SessionId",

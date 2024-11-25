@@ -22,7 +22,7 @@ namespace Research_Software_Dev.Pages.Forms
         public int ParticipantSessionId { get; set; }
 
         [BindProperty]
-        public int FormId { get; set; }
+        public string FormId { get; set; }
 
         public List<Form> Forms { get; set; }
 

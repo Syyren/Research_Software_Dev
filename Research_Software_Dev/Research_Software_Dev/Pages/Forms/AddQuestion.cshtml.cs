@@ -20,9 +20,9 @@ namespace Research_Software_Dev.Pages.Forms
         public FormQuestion Question { get; set; }
 
         [BindProperty]
-        public int FormId { get; set; }
+        public string FormId { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int formId)
+        public async Task<IActionResult> OnGetAsync(string formId)
         {
             // Checks if the form exists
             var form = await _context.Forms.FindAsync(formId);
@@ -48,6 +48,15 @@ namespace Research_Software_Dev.Pages.Forms
 
             // Sets the FormId for the new question
             Question.FormId = FormId;
+
+            // Determine the next question number
+            var lastQuestionNumber = await _context.FormQuestions
+                .Where(q => q.FormId == FormId)
+                .OrderByDescending(q => q.QuestionNumber)
+                .Select(q => q.QuestionNumber)
+                .FirstOrDefaultAsync();
+
+            Question.QuestionNumber = lastQuestionNumber + 1;
 
             // Adds the question to the database
             _context.FormQuestions.Add(Question);

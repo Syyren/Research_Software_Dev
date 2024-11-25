@@ -19,17 +19,17 @@ namespace Research_Software_Dev.Pages.Forms
         public string QuestionId { get; set; }
 
         [BindProperty]
-        public int FormId { get; set; }
+        public string FormId { get; set; } // Updated to match the expected data type.
 
         public string QuestionDescription { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int formId, string questionId)
+        public async Task<IActionResult> OnGetAsync(string formId, string questionId)
         {
             FormId = formId;
             QuestionId = questionId;
 
             var question = await _context.FormQuestions
-                .FirstOrDefaultAsync(q => q.QuestionId == questionId);
+                .FirstOrDefaultAsync(q => q.FormQuestionId == questionId && q.FormId == formId); // Ensuring composite key integrity.
 
             if (question == null)
             {
@@ -44,7 +44,7 @@ namespace Research_Software_Dev.Pages.Forms
         public async Task<IActionResult> OnPostAsync()
         {
             var question = await _context.FormQuestions
-                .FirstOrDefaultAsync(q => q.QuestionId == QuestionId);
+                .FirstOrDefaultAsync(q => q.FormQuestionId == QuestionId && q.FormId == FormId); // Ensuring composite key integrity.
 
             if (question != null)
             {

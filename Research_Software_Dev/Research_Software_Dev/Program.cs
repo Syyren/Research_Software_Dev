@@ -40,24 +40,16 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-<<<<<<< HEAD
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-=======
 app.UseAuthentication();
->>>>>>> dev
 app.UseAuthorization();
 
 app.MapRazorPages();
-
-<<<<<<< HEAD
 app.MapDefaultControllerRoute();
-=======
+
 //Endpoints
 app.MapGetListOfStudies();
->>>>>>> dev
 
 app.Run();

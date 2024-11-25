@@ -7,23 +7,23 @@ namespace Research_Software_Dev.Pages.Forms
     public class SelectParticipantModel : PageModel
     {
         [BindProperty]
-        public int FormId { get; set; }
+        public string FormId { get; set; }
 
         [BindProperty]
-        public int ParticipantSessionId { get; set; }
+        public string ParticipantSessionId { get; set; }
 
-        public Dictionary<int, string> ParticipantSessions { get; set; }
+        public Dictionary<string, string> ParticipantSessions { get; set; }
 
-        public IActionResult OnGet(int formId)
+        public IActionResult OnGet(string formId)
         {
             FormId = formId;
 
             // Placeholder participant sessions
-            ParticipantSessions = new Dictionary<int, string>
+            ParticipantSessions = new Dictionary<string, string>
             {
-                { 1, "Session A" },
-                { 2, "Session B" },
-                { 3, "Session C" }
+                { "1", "Session A" },
+                { "2", "Session B" },
+                { "3", "Session C" }
             };
 
             return Page();
@@ -36,7 +36,7 @@ namespace Research_Software_Dev.Pages.Forms
                 return Page();
             }
 
-            return RedirectToPage("./SelectForm", new { participantSessionId = ParticipantSessionId });
+            return RedirectToPage("./SelectForm", new { formId = FormId, participantSessionId = ParticipantSessionId });
         }
     }
 }

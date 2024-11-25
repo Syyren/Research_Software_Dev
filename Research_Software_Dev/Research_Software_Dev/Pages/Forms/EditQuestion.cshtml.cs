@@ -22,11 +22,20 @@ namespace Research_Software_Dev.Pages.Forms
         [BindProperty]
         public FormQuestion Question { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int formId, string questionId)
+        public async Task<IActionResult> OnGetAsync(string formId, string questionId)
         {
-            FormId = formId;
+            if (!ModelState.IsValid)
+            {
+                // Logs validation errors for debugging
+                foreach (var error in ModelState)
+                {
+                    Console.WriteLine($"{error.Key}: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
+                }
+                return Page();
+            }
 
-            Question = await _context.FormQuestions.FindAsync(questionId);
+            Question = await _context.FormQuestions
+                .FirstOrDefaultAsync(q => q.FormId == formId && q.FormQuestionId == questionId);
 
             if (Question == null)
             {
@@ -40,46 +49,39 @@ namespace Research_Software_Dev.Pages.Forms
         {
             if (!ModelState.IsValid)
             {
-                foreach (var error in ModelState)
-                {
-                    Console.WriteLine($"{error.Key}: {string.Join(",", error.Value.Errors.Select(e => e.ErrorMessage))}");
-                }
                 return Page();
             }
 
-            // Fetches the existing question from the database
-            var existingQuestion = await _context.FormQuestions.FindAsync(Question.QuestionId);
+            // Find the existing question in the database
+            var existingQuestion = await _context.FormQuestions
+                .FirstOrDefaultAsync(q => q.FormQuestionId == Question.FormQuestionId);
 
             if (existingQuestion == null)
             {
-                return NotFound(); // Question does not exist
+                return NotFound();
             }
 
-            // Updates the question properties
+            // Update the question's properties
             existingQuestion.QuestionDescription = Question.QuestionDescription;
-            existingQuestion.QuestionNumber = Question.QuestionNumber;
-
-            // Marks the entity as modified
-            _context.Attach(existingQuestion).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync(); // Saves changes to the database
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.FormQuestions.Any(q => q.QuestionId == Question.QuestionId))
+                if (!_context.FormQuestions.Any(q => q.FormQuestionId == Question.FormQuestionId))
                 {
-                    return NotFound(); // Handles concurrency issue if the record no longer exists
+                    return NotFound();
                 }
                 else
                 {
-                    throw; // Rethrows other concurrency exceptions
+                    throw;
                 }
             }
 
-            // Redirects back to the form's edit page
-            return RedirectToPage("./Edit", new { id = FormId });
+            return RedirectToPage("./Edit", new { id = Question.FormId });
         }
+
     }
 }

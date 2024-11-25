@@ -38,21 +38,30 @@ namespace Research_Software_Dev.Services
             {
                 if (isFirstLine)
                 {
-                    form.FormName = line; // Set the form name
-                    isFirstLine = false;  // Ensure the title is only set once
+                    form.FormName = line;
+                    isFirstLine = false;
                     continue;
                 }
 
-                // Identify and process questions
                 if (IsQuestion(line))
                 {
+                    string description = ExtractQuestionDescription(line);
+
+                    // Ensure the description is valid
+                    if (string.IsNullOrWhiteSpace(description))
+                    {
+                        throw new InvalidOperationException("Invalid question description detected in the PDF.");
+                    }
+
                     var question = new FormQuestion
                     {
+                        FormQuestionId = Guid.NewGuid().ToString(),
                         QuestionNumber = ExtractQuestionNumber(line),
-                        QuestionDescription = ExtractQuestionDescription(line),
-                        FormId = form.FormId, // Link the question to the form
+                        QuestionDescription = description,
+                        FormId = form.FormId,
                         Form = form
                     };
+
                     questions.Add(question);
                 }
             }

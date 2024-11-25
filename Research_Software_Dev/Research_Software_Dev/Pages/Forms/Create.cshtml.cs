@@ -35,6 +35,7 @@ namespace Research_Software_Dev.Pages.Forms
 
             _context.Forms.Add(Form);
             await _context.SaveChangesAsync();
+            Form.FormId = Guid.NewGuid().ToString();
 
             foreach (var questionText in Questions)
             {

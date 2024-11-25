@@ -1,4 +1,4 @@
-﻿@page "{formId:int}/{participantSessionId:int}"
+﻿@page "{formId}/{participantSessionId}"
 @model Research_Software_Dev.Pages.Forms.SubmitAnswersModel
 @{
     ViewData["Title"] = "Submit Answers";
@@ -8,7 +8,8 @@
 
 <form method="post">
     <input type="hidden" asp-for="FormId" />
-    <input type="hidden" asp-for="ParticipantSessionId" />
+    <input type="hidden" asp-for="ParticipantId" />
+    <input type="hidden" asp-for="SessionId" />
 
     <ul>
         @if (Model.Questions != null && Model.Questions.Any())
@@ -17,7 +18,7 @@
             {
                 <li>
                     <strong>@Model.Questions[i].QuestionNumber: @Model.Questions[i].QuestionDescription</strong>
-                    <input type="hidden" name="Answers[@i].QuestionId" value="@Model.Questions[i].QuestionId" />
+                    <input type="hidden" name="Answers[@i].QuestionId" value="@Model.Questions[i].FormQuestionId" />
                     <textarea name="Answers[@i].Answer" class="form-control"></textarea>
                 </li>
             }
