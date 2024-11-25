@@ -23,16 +23,16 @@ namespace Research_Software_Dev.Pages.Studies
 
         public List<Study> Study { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
             //gets the current user's ID
             var researcherId = _userManager.GetUserId(User);
 
             if (string.IsNullOrEmpty(researcherId))
             {
-                //o user is logged in, redirect or show a message as needed
+                //if no user is logged in, redirect or show a message as needed
                 Study = new List<Study>();
-                return;
+                return RedirectToPage("/NotFound"); ;
             }
 
             //fetches studies associated with the current user
@@ -41,6 +41,7 @@ namespace Research_Software_Dev.Pages.Studies
                 .Include(rs => rs.Study)
                 .Select(rs => rs.Study)
                 .ToListAsync();
+            return Page();
         }
     }
 }

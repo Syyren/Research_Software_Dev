@@ -14,20 +14,7 @@
     bool isUser = currentUser != null;
 
     //initializing variables
-    List<Study> studies = null;
-    bool flag = false;
-
-    if (isUser)
-    {
-        //calling the API to fetch studies
-        var httpClient = HttpClientFactory.CreateClient("ApiClient");
-        var response = httpClient.GetAsync("/api/researcher/studies").Result;
-
-        if (response.IsSuccessStatusCode)
-        {
-            studies = response.Content.ReadFromJsonAsync<List<Study>>().Result;
-        }
-    }
+    List<Study> studies = Model.Study;
 }
 
 <div class="text-center">
@@ -45,20 +32,17 @@
                 if (studies.Count > 3)
                 {
                     studies = studies.Take(3).ToList();
-                    flag = true;
                 }
                 <ul>
-                    @{
-                        foreach (var study in studies)
-                        {
-                            <li>@study.StudyName</li>
-                        }
-                        if (flag)
-                        {
-                            <li>...</li>
-                        }
+                    @foreach (var item in studies)
+                    {
+                        <li>
+                            <p>Name: @Html.DisplayFor(modelItem => item.StudyName)</p>
+                            <p>Desc: @Html.DisplayFor(modelItem => item.StudyDescription)</p>
+                        </li>
                     }
                 </ul>
+                <a asp-page="/Studies/Index">...</a>
             }
         }
         else
