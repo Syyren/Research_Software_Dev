@@ -28,7 +28,7 @@
             <div class="form-group">
                 <span class="text-danger">*</span>
                 <label asp-for="Study.StudyDescription" class="control-label"></label>
-                <input asp-for="Study.StudyDescription" class="form-control" />
+                <textarea style="min-height: 200px; max-height: 200px; resize: none;" asp-for="Study.StudyDescription" class="form-control"></textarea>
                 <span asp-validation-for="Study.StudyDescription" class="text-danger"></span>
             </div>
 
