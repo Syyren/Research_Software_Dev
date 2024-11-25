@@ -10,6 +10,19 @@
 <p>
     <a class="btn btn-outline-primary" asp-page="Create">Register a New Participant</a>
 </p>
+<form method="get">
+    <div class="form-group">
+        <label for="studyFilter">Filter by Study:</label>
+        <select asp-for="SelectedStudyId" class="form-control">
+            <option value="">-- Select a Study --</option>
+            @foreach (var study in Model.Studies)
+            {
+                <option value="@study.StudyId">@study.StudyName</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
 <table class="table">
     <thead>
         <tr>
