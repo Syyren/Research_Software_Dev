@@ -12,14 +12,14 @@ namespace Research_Software_Dev.Models.Researchers
         public string ResearcherId { get; set; }
 
         [ForeignKey("Id")]
-        public Researcher Researcher { get; set; }
+        public Researcher? Researcher { get; set; }
 
 
         [Required]
         public string SessionId { get; set; }
 
         [ForeignKey("SessionId")]
-        public Session Session { get; set; }
+        public Session? Session { get; set; }
 
         //Constructors
         public ResearcherSession() { }

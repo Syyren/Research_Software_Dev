@@ -1,0 +1,43 @@
+﻿@page
+@model Research_Software_Dev.Pages.Sessions.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Session</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Session.Date)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Session.Date)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Session.TimeStart)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Session.TimeStart)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Session.TimeEnd)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Session.TimeEnd)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Session.Study)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Session.Study.StudyId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Session.SessionId">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

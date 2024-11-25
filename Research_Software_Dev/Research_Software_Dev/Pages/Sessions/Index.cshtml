@@ -1,0 +1,54 @@
+﻿@page
+@model Research_Software_Dev.Pages.Sessions.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Session[0].Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Session[0].TimeStart)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Session[0].TimeEnd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Session[0].Study)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Session) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeStart)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeEnd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Study.StudyId)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.SessionId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.SessionId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.SessionId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

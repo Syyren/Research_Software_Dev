@@ -13,14 +13,14 @@ namespace Research_Software_Dev.Models.Participants
         public string ParticipantId { get; set; }
 
         [ForeignKey("ParticipantId")]
-        public Participant Participant { get; set; }
+        public Participant? Participant { get; set; }
 
         //Session FK
         [Required]
         public string SessionId { get; set; }
 
         [ForeignKey("SessionId")]
-        public Session Session { get; set; }
+        public Session? Session { get; set; }
 
         //Constructors
         public ParticipantSession() { }
