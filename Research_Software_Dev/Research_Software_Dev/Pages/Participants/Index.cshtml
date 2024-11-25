@@ -13,15 +13,17 @@
 <form method="get">
     <div class="form-group">
         <label for="studyFilter">Filter by Study:</label>
-        <select asp-for="SelectedStudyId" class="form-control">
-            <option value="">-- Select a Study --</option>
-            @foreach (var study in Model.Studies)
-            {
-                <option value="@study.StudyId">@study.StudyName</option>
-            }
-        </select>
+        <div class="d-flex w-50">
+            <select asp-for="SelectedStudyId" class="form-control">
+                <option value="">-- Select a Study --</option>
+                @foreach (var study in Model.Studies)
+                {
+                    <option value="@study.StudyId">@study.StudyName</option>
+                }
+            </select>
+            <button type="submit" class="btn btn-outline-info">Filter</button>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Filter</button>
 </form>
 <table class="table">
     <thead>

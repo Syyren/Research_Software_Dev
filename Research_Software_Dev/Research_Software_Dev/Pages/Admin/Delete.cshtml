@@ -1,0 +1,14 @@
+﻿@page "{id}"
+@model Research_Software_Dev.Pages.Admin.DeleteModel
+@{
+    ViewData["Title"] = "Delete User";
+}
+
+<h1>Delete User</h1>
+
+<p>Are you sure you want to delete user @Model.User.Email?</p>
+
+<form method="post">
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+</form>

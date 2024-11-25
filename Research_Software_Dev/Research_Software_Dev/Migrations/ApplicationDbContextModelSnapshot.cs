@@ -288,13 +288,6 @@ namespace Research_Software_Dev.Migrations
                     b.HasIndex("SessionId");
 
                     b.ToTable("ParticipantSessions");
-
-                    b.HasData(
-                        new
-                        {
-                            ParticipantId = "P1",
-                            SessionId = "Session1"
-                        });
                 });
 
             modelBuilder.Entity("Research_Software_Dev.Models.Participants.ParticipantStudy", b =>
@@ -390,6 +383,28 @@ namespace Research_Software_Dev.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("Researchers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "Researcher1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "2ca72ee5-32e9-44a5-9546-4d4007df0c28",
+                            Email = "alice.smith@example.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ALICE.SMITH@EXAMPLE.COM",
+                            NormalizedUserName = "ALICE.SMITH@EXAMPLE.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIMipTMk8YduFTiE58dnx04HHVKp/myV8KYMYdprqrUyoPeAr7MHOGMLJfUhdTcIFw==",
+                            PhoneNumber = "555-5678",
+                            PhoneNumberConfirmed = false,
+                            ResearcherAddress = "456 Science Road",
+                            ResearcherFirstName = "Alice",
+                            ResearcherLastName = "Smith",
+                            SecurityStamp = "77370e8c-ae27-405c-b317-f746295946b5",
+                            TwoFactorEnabled = false,
+                            UserName = "alice.smith@example.com"
+                        });
                 });
 
             modelBuilder.Entity("Research_Software_Dev.Models.Researchers.ResearcherSession", b =>
@@ -426,6 +441,13 @@ namespace Research_Software_Dev.Migrations
                     b.HasIndex("StudyId");
 
                     b.ToTable("ResearcherStudies");
+
+                    b.HasData(
+                        new
+                        {
+                            ResearcherId = "63c863ed-f363-46e7-9ef5-a2e4fd7c677d",
+                            StudyId = "Study1"
+                        });
                 });
 
             modelBuilder.Entity("Research_Software_Dev.Models.Sessions.Session", b =>
@@ -486,6 +508,12 @@ namespace Research_Software_Dev.Migrations
                             StudyId = "Study1",
                             StudyDescription = "A study focused on health and wellness.",
                             StudyName = "Health Study"
+                        },
+                        new
+                        {
+                            StudyId = "Study2",
+                            StudyDescription = "A study focused on cognitive development.",
+                            StudyName = "Cognitive Study"
                         });
                 });
 

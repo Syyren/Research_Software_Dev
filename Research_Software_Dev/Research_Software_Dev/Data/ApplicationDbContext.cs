@@ -46,12 +46,35 @@ namespace Research_Software_Dev.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Seed Researcher
+            modelBuilder.Entity<Researcher>().HasData(
+                new Researcher
+                {
+                    Id = "Researcher1",
+                    ResearcherFirstName = "Alice",
+                    ResearcherLastName = "Smith",
+                    ResearcherAddress = "456 Science Road",
+                    Email = "alice.smith@example.com",
+                    PhoneNumber = "555-5678",
+                    UserName = "alice.smith@example.com",
+                    NormalizedUserName = "ALICE.SMITH@EXAMPLE.COM",
+                    NormalizedEmail = "ALICE.SMITH@EXAMPLE.COM",
+                    PasswordHash = new PasswordHasher<Researcher>().HashPassword(null, "Password123!")
+                }
+            );
+
             modelBuilder.Entity<Study>().HasData(
                 new Study
                 {
                     StudyId = "Study1",
                     StudyName = "Health Study",
                     StudyDescription = "A study focused on health and wellness."
+                },
+                new Study
+                {
+                    StudyId = "Study2",
+                    StudyName = "Cognitive Study",
+                    StudyDescription = "A study focused on cognitive development."
                 }
             );
 
@@ -80,12 +103,14 @@ namespace Research_Software_Dev.Data
                 }
             );
 
-            // Seed ParticipantSession to link Participant and Session
-            modelBuilder.Entity<ParticipantSession>().HasData(new ParticipantSession
-            {
-                ParticipantId = "P1",
-                SessionId = "Session1"
-            });
+            // Seed ResearcherStudy
+            modelBuilder.Entity<ResearcherStudy>().HasData(
+                new ResearcherStudy
+                {
+                    ResearcherId = "63c863ed-f363-46e7-9ef5-a2e4fd7c677d",
+                    StudyId = "Study1"
+                }
+            );
 
             base.OnModelCreating(modelBuilder);
 
