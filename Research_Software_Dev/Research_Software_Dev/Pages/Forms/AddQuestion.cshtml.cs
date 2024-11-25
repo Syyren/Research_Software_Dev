@@ -65,10 +65,10 @@ namespace Research_Software_Dev.Pages.Forms
                 return Page();
             }
 
-            // Assign FormId explicitly
+            // Assigns FormId explicitly
             Question.FormId = FormId;
 
-            // Get the next question number
+            // Gets the next question number
             var lastQuestionNumber = await _context.FormQuestions
                 .Where(q => q.FormId == FormId)
                 .OrderByDescending(q => q.QuestionNumber)

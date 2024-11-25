@@ -1,0 +1,69 @@
+﻿@page
+@model Research_Software_Dev.Pages.Participants.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Participant</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+
+            <div class="form-group">
+                <input type="hidden" asp-for="Participant.ParticipantId" value="temp" />
+            </div>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Participant.ParticipantFirstName" class="control-label"></label>
+                <input asp-for="Participant.ParticipantFirstName" class="form-control" />
+                <span asp-validation-for="Participant.ParticipantFirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Participant.ParticipantLastName" class="control-label"></label>
+                <input asp-for="Participant.ParticipantLastName" class="form-control" />
+                <span asp-validation-for="Participant.ParticipantLastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Participant.ParticipantAddress" class="control-label"></label>
+                <input asp-for="Participant.ParticipantAddress" class="form-control" />
+                <span asp-validation-for="Participant.ParticipantAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Participant.ParticipantEmail" class="control-label"></label>
+                <input asp-for="Participant.ParticipantEmail" class="form-control" />
+                <span asp-validation-for="Participant.ParticipantEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Participant.ParticipantPhoneNumber" class="control-label"></label>
+                <input asp-for="Participant.ParticipantPhoneNumber" class="form-control" />
+                <span asp-validation-for="Participant.ParticipantPhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label for="StudyId">Select Study</label>
+                <select asp-for="SelectedStudyId" class="form-control">
+                    <option value="">-- Select a Study --</option>
+                    @foreach (var study in Model.Studies)
+                    {
+                        <option value="@study.StudyId">@study.StudyName</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+

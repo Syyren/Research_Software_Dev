@@ -29,7 +29,7 @@ namespace Research_Software_Dev.Pages.Forms
         {
             ParticipantId = participantId;
 
-            // Load sessions linked to the participant
+            // Loads sessions linked to the participant
             Sessions = await _context.ParticipantSessions
                 .Where(ps => ps.ParticipantId == participantId)
                 .Include(ps => ps.Session)
@@ -38,7 +38,7 @@ namespace Research_Software_Dev.Pages.Forms
 
             if (!Sessions.Any())
             {
-                // Handle the case where no sessions are found
+                // Handles the case where no sessions are found
                 ModelState.AddModelError(string.Empty, "No sessions found for the selected participant.");
                 return Page();
             }

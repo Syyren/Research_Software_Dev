@@ -19,7 +19,7 @@ namespace Research_Software_Dev.Pages.Forms
         public string QuestionId { get; set; }
 
         [BindProperty]
-        public string FormId { get; set; } // Updated to match the expected data type.
+        public string FormId { get; set; }
 
         public string QuestionDescription { get; set; }
 
@@ -29,7 +29,7 @@ namespace Research_Software_Dev.Pages.Forms
             QuestionId = questionId;
 
             var question = await _context.FormQuestions
-                .FirstOrDefaultAsync(q => q.FormQuestionId == questionId && q.FormId == formId); // Ensuring composite key integrity.
+                .FirstOrDefaultAsync(q => q.FormQuestionId == questionId && q.FormId == formId);
 
             if (question == null)
             {
@@ -44,7 +44,7 @@ namespace Research_Software_Dev.Pages.Forms
         public async Task<IActionResult> OnPostAsync()
         {
             var question = await _context.FormQuestions
-                .FirstOrDefaultAsync(q => q.FormQuestionId == QuestionId && q.FormId == FormId); // Ensuring composite key integrity.
+                .FirstOrDefaultAsync(q => q.FormQuestionId == QuestionId && q.FormId == FormId);
 
             if (question != null)
             {

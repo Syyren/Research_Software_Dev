@@ -37,7 +37,7 @@ namespace Research_Software_Dev.Pages.Forms
                 .OrderBy(q => q.QuestionNumber)
                 .ToListAsync();
 
-            // Ensure FormId is assigned to all questions
+            // Ensures FormId is assigned to all questions
             foreach (var question in Questions)
             {
                 question.FormId = id;
@@ -67,22 +67,22 @@ namespace Research_Software_Dev.Pages.Forms
                 return NotFound();
             }
 
-            // Update the form's name
+            // Updates the form's name
             existingForm.FormName = Form.FormName;
 
-            // Update or add questions
+            // Updates or add questions
             foreach (var question in Questions)
             {
                 question.FormId = existingForm.FormId;
 
                 if (string.IsNullOrEmpty(question.FormQuestionId))
                 {
-                    // Add new question
+                    // Adds new question
                     _context.FormQuestions.Add(question);
                 }
                 else
                 {
-                    // Update existing question
+                    // Updates existing question
                     var existingQuestion = existingForm.Questions
                         .FirstOrDefault(q => q.FormQuestionId == question.FormQuestionId);
 
@@ -95,7 +95,7 @@ namespace Research_Software_Dev.Pages.Forms
                 }
             }
 
-            // Renumber questions sequentially
+            // Renumbers questions sequentially
             var reorderedQuestions = Questions.OrderBy(q => q.QuestionNumber).ToList();
             for (int i = 0; i < reorderedQuestions.Count; i++)
             {

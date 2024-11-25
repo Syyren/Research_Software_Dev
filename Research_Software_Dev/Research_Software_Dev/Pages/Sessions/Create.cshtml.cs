@@ -24,7 +24,7 @@ namespace Research_Software_Dev.Pages.Sessions
 
         public IActionResult OnGet()
         {
-            // Populate StudyId dropdown with studies
+            // Populates StudyId dropdown with studies
             ViewData["StudyId"] = new SelectList(_context.Studies, "StudyId", "StudyName");
             return Page();
         }
@@ -33,12 +33,12 @@ namespace Research_Software_Dev.Pages.Sessions
         {
             if (!ModelState.IsValid)
             {
-                // Repopulate dropdown if validation fails
+                // Repopulates dropdown if validation fails
                 ViewData["StudyId"] = new SelectList(await _context.Studies.ToListAsync(), "StudyId", "StudyName");
                 return Page();
             }
 
-            // Explicitly check StudyId and handle validation
+            // Explicitly checks StudyId and handle validation
             if (string.IsNullOrEmpty(Session.StudyId))
             {
                 ModelState.AddModelError("Session.StudyId", "StudyId is required.");
@@ -46,7 +46,7 @@ namespace Research_Software_Dev.Pages.Sessions
                 return Page();
             }
 
-            // Add session to database
+            // Adds session to database
             _context.Sessions.Add(Session);
             await _context.SaveChangesAsync();
 
