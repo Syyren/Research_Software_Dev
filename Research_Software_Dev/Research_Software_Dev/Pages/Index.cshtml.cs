@@ -33,7 +33,7 @@ namespace Research_Software_Dev.Pages
             {
                 //if no user is logged in makes an empty study
                 Study = new List<Study>();
-                return RedirectToPage("/NotFound");
+                return Page();
             }
 
             //fetches studies associated with the current user
