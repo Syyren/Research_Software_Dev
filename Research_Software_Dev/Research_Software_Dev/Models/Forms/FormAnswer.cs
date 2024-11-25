@@ -28,6 +28,7 @@ namespace Research_Software_Dev.Models.Forms
         public string FormQuestionId { get; set; }
         public string? FormId { get; internal set; }
         [ForeignKey("FormQuestionId")]
+        [Display(Name = "Form Question")]
         public FormQuestion? FormQuestion { get; set; }
 
         //Constructors

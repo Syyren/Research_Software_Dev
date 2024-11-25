@@ -23,9 +23,9 @@
             <tr>
                 <td>@form.FormName</td>
                 <td>
-                    <a asp-page="./Details" asp-route-id="@form.FormId" class="btn btn-info">Details</a>
-                    <a asp-page="./Edit" asp-route-id="@form.FormId" class="btn btn-warning">Edit</a>
-                    <a asp-page="./Delete" asp-route-id="@form.FormId" class="btn btn-danger">Delete</a>
+                    <a class="btn btn-outline-dark" style="min-width: 90px;"  asp-page="./Details" asp-route-id="@form.FormId">Details</a> |
+                    <a class="btn btn-outline-dark" style="min-width: 90px;"  asp-page="./Edit" asp-route-id="@form.FormId">Edit</a> |
+                    <a class="btn btn-outline-danger" style="min-width: 90px;"  asp-page="./Delete" asp-route-id="@form.FormId">Delete</a>
                 </td>
             </tr>
         }
