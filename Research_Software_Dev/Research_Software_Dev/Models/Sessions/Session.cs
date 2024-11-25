@@ -25,7 +25,7 @@ namespace Research_Software_Dev.Models.Sessions
         [Required]
         public string StudyId { get; set; }
         [ForeignKey("StudyId")]
-        public Study Study { get; set; }
+        public Study? Study { get; set; }
 
         //Constructors
         public Session(){ }
