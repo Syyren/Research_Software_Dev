@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -33,6 +34,7 @@ namespace Research_Software_Dev.Pages.Participants
 
         //Bind StudyId from the dropdown
         [BindProperty]
+        [Required(ErrorMessage="A Study is Required")]
         public string SelectedStudyId { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
