@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Research_Software_Dev.Migrations
 {
     /// <inheritdoc />
-    public partial class Nov252024Update : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -318,15 +318,14 @@ namespace Research_Software_Dev.Migrations
                 columns: table => new
                 {
                     ResearcherId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    SessionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    SessionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ResearcherSessions", x => new { x.ResearcherId, x.SessionId });
                     table.ForeignKey(
-                        name: "FK_ResearcherSessions_Researchers_Id",
-                        column: x => x.Id,
+                        name: "FK_ResearcherSessions_Researchers_ResearcherId",
+                        column: x => x.ResearcherId,
                         principalTable: "Researchers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -366,26 +365,6 @@ namespace Research_Software_Dev.Migrations
                         principalColumns: new[] { "ParticipantId", "SessionId" },
                         onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.InsertData(
-                table: "Participants",
-                columns: new[] { "ParticipantId", "ParticipantAddress", "ParticipantEmail", "ParticipantFirstName", "ParticipantLastName", "ParticipantPhoneNumber" },
-                values: new object[] { "P1", "123 Main Street", "johndoe@example.com", "John", "Doe", "555-1234" });
-
-            migrationBuilder.InsertData(
-                table: "Studies",
-                columns: new[] { "StudyId", "StudyDescription", "StudyName" },
-                values: new object[] { "Study1", "A study focused on health and wellness.", "Health Study" });
-
-            migrationBuilder.InsertData(
-                table: "Sessions",
-                columns: new[] { "SessionId", "Date", "StudyId", "TimeEnd", "TimeStart" },
-                values: new object[] { "Session1", new DateOnly(2024, 11, 25), "Study1", new TimeOnly(10, 0, 0), new TimeOnly(9, 0, 0) });
-
-            migrationBuilder.InsertData(
-                table: "ParticipantSessions",
-                columns: new[] { "ParticipantId", "SessionId" },
-                values: new object[] { "P1", "Session1" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -450,11 +429,6 @@ namespace Research_Software_Dev.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ResearcherSessions_Id",
-                table: "ResearcherSessions",
-                column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ResearcherSessions_SessionId",

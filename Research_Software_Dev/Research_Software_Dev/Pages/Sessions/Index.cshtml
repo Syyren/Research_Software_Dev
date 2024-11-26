@@ -14,16 +14,16 @@
     <thead>
         <tr>
             <th style="max-width: 15vw; min-width: 10vw;">
-                @Html.DisplayNameFor(model => model.Session[0].Date)
+                @Html.DisplayNameFor(model => model.Sessions[0].Date)
             </th>
             <th style="max-width: 10vw;">
-                @Html.DisplayNameFor(model => model.Session[0].TimeStart)
+                @Html.DisplayNameFor(model => model.Sessions[0].TimeStart)
             </th>
             <th style="max-width: 10vw;">
-                @Html.DisplayNameFor(model => model.Session[0].TimeEnd)
+                @Html.DisplayNameFor(model => model.Sessions[0].TimeEnd)
             </th>
             <th style="max-width: 10vw;">
-                @Html.DisplayNameFor(model => model.Session[0].Study)
+                @Html.DisplayNameFor(model => model.Sessions[0].Study)
             </th>
             <th style="max-width: 20vw;">
                 Actions
@@ -31,7 +31,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Session)
+        @foreach (var item in Model.Sessions)
         {
             <tr>
                 <td>

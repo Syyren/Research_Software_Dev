@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Research_Software_Dev.Data;
+using Research_Software_Dev.Models.Participants;
+using Research_Software_Dev.Models.Researchers;
 using Research_Software_Dev.Models.Sessions;
 using Research_Software_Dev.Models.Studies;
 using System;
@@ -96,6 +98,20 @@ namespace Research_Software_Dev.Pages.Sessions
             // Adds session to database
             _context.Sessions.Add(Session);
             await _context.SaveChangesAsync();
+
+            // Adds the UserId and SessionId to ResearcherSessions
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var researcherSession = new ResearcherSession
+            {
+                ResearcherId = userId,
+                SessionId = Session.SessionId
+            };
+
+            Console.WriteLine("\nUserId: "+researcherSession.ResearcherId+"\nSessionId: "+ researcherSession.SessionId);
+
+            _context.ResearcherSessions.Add(researcherSession);
+            await _context.SaveChangesAsync();
+
 
             return RedirectToPage("./Index");
         }

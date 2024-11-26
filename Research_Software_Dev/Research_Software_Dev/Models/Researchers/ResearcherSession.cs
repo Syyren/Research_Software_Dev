@@ -11,7 +11,7 @@ namespace Research_Software_Dev.Models.Researchers
         [Required]
         public string ResearcherId { get; set; }
 
-        [ForeignKey("Id")]
+        [ForeignKey("ResearcherId")]
         public Researcher? Researcher { get; set; }
 
 
