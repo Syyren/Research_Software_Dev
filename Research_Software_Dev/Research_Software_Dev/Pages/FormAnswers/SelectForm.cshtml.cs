@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -5,10 +6,12 @@ using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Forms;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Forms
 {
+    [Authorize]
     public class SelectFormModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -34,7 +37,20 @@ namespace Research_Software_Dev.Pages.Forms
             ParticipantId = participantId;
             SessionId = sessionId;
 
-            Forms = await _context.Forms.OrderBy(f => f.FormName).ToListAsync();
+            var roles = User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (roles.Contains("Study Admin") || roles.Contains("High-Auth") || roles.Contains("Mid-Auth"))
+            {
+                Forms = await _context.Forms.OrderBy(f => f.FormName).ToListAsync();
+            }
+            else
+            {
+                return Forbid();
+            }
+
             return Page();
         }
 

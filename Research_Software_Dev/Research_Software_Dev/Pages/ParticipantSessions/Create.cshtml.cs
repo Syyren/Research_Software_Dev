@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Research_Software_Dev.Data;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.ParticipantSessions
 {
+    [Authorize]
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -22,6 +24,17 @@ namespace Research_Software_Dev.Pages.ParticipantSessions
 
         public IActionResult OnGet()
         {
+            // Fetch roles and verify permissions
+            var roles = User.Claims
+                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             // Populates dropdowns
             ViewData["ParticipantId"] = new SelectList(
                 _context.Participants.Select(p => new
@@ -48,6 +61,17 @@ namespace Research_Software_Dev.Pages.ParticipantSessions
 
         public async Task<IActionResult> OnPostAsync()
         {
+            // Fetch roles and verify permissions
+            var roles = User.Claims
+                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             if (!ModelState.IsValid)
             {
                 foreach (var error in ModelState)

@@ -25,6 +25,17 @@ namespace Research_Software_Dev.Pages.Sessions
 
         public async Task<IActionResult> OnGetAsync()
         {
+            // Verify permissions
+            var roles = User.Claims
+                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth") && !roles.Contains("Mid-Auth"))
+            {
+                return Forbid();
+            }
+
             // Get the current logged-in user's ID
             var userId = _userManager.GetUserId(User);
 

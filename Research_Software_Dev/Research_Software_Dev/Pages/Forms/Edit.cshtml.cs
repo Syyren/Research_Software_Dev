@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -5,10 +6,12 @@ using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Forms;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Forms
 {
+    [Authorize]
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -26,6 +29,16 @@ namespace Research_Software_Dev.Pages.Forms
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
+            var roles = User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             Form = await _context.Forms.FindAsync(id);
             if (Form == null)
             {
@@ -37,7 +50,6 @@ namespace Research_Software_Dev.Pages.Forms
                 .OrderBy(q => q.QuestionNumber)
                 .ToListAsync();
 
-            // Ensures FormId is assigned to all questions
             foreach (var question in Questions)
             {
                 question.FormId = id;
@@ -48,13 +60,18 @@ namespace Research_Software_Dev.Pages.Forms
 
         public async Task<IActionResult> OnPostAsync()
         {
+            var roles = User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             if (!ModelState.IsValid)
             {
-                // Logs validation errors for debugging
-                foreach (var error in ModelState)
-                {
-                    Console.WriteLine($"{error.Key}: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
-                }
                 return Page();
             }
 
@@ -67,22 +84,18 @@ namespace Research_Software_Dev.Pages.Forms
                 return NotFound();
             }
 
-            // Updates the form's name
             existingForm.FormName = Form.FormName;
 
-            // Updates or add questions
             foreach (var question in Questions)
             {
                 question.FormId = existingForm.FormId;
 
                 if (string.IsNullOrEmpty(question.FormQuestionId))
                 {
-                    // Adds new question
                     _context.FormQuestions.Add(question);
                 }
                 else
                 {
-                    // Updates existing question
                     var existingQuestion = existingForm.Questions
                         .FirstOrDefault(q => q.FormQuestionId == question.FormQuestionId);
 
@@ -95,7 +108,6 @@ namespace Research_Software_Dev.Pages.Forms
                 }
             }
 
-            // Renumbers questions sequentially
             var reorderedQuestions = Questions.OrderBy(q => q.QuestionNumber).ToList();
             for (int i = 0; i < reorderedQuestions.Count; i++)
             {

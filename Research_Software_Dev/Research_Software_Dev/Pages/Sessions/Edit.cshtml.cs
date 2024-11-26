@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +12,7 @@ using Research_Software_Dev.Models.Sessions;
 
 namespace Research_Software_Dev.Pages.Sessions
 {
+    [Authorize]
     public class EditModel : PageModel
     {
         private readonly Research_Software_Dev.Data.ApplicationDbContext _context;
@@ -25,25 +27,45 @@ namespace Research_Software_Dev.Pages.Sessions
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
+            // Verify permissions
+            var roles = User.Claims
+                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var session =  await _context.Sessions.FirstOrDefaultAsync(m => m.SessionId == id);
+            var session = await _context.Sessions.FirstOrDefaultAsync(m => m.SessionId == id);
             if (session == null)
             {
                 return NotFound();
             }
             Session = session;
-           ViewData["StudyId"] = new SelectList(_context.Studies, "StudyId", "StudyId");
+            ViewData["StudyId"] = new SelectList(_context.Studies, "StudyId", "StudyId");
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+            // Verify permissions
+            var roles = User.Claims
+                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             if (!ModelState.IsValid)
             {
                 return Page();

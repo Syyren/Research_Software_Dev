@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Sessions
 {
+    [Authorize]
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -28,6 +30,17 @@ namespace Research_Software_Dev.Pages.Sessions
 
         public IActionResult OnGet()
         {
+            // Verify permissions
+            var roles = User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             // Get the current logged-in researcher's ID
             var researcherId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -75,11 +88,19 @@ namespace Research_Software_Dev.Pages.Sessions
             return Page();
         }
 
-
-
-
         public async Task<IActionResult> OnPostAsync()
         {
+            // Verify permissions
+            var roles = User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             if (!ModelState.IsValid)
             {
                 // Repopulates dropdown if validation fails
@@ -107,11 +128,10 @@ namespace Research_Software_Dev.Pages.Sessions
                 SessionId = Session.SessionId
             };
 
-            Console.WriteLine("\nUserId: "+researcherSession.ResearcherId+"\nSessionId: "+ researcherSession.SessionId);
+            Console.WriteLine("\nUserId: " + researcherSession.ResearcherId + "\nSessionId: " + researcherSession.SessionId);
 
             _context.ResearcherSessions.Add(researcherSession);
             await _context.SaveChangesAsync();
-
 
             return RedirectToPage("./Index");
         }

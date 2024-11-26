@@ -1,12 +1,18 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Participants;
 using Research_Software_Dev.Models.Sessions;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Forms
 {
+    [Authorize]
     public class SelectSessionModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -29,18 +35,28 @@ namespace Research_Software_Dev.Pages.Forms
         {
             ParticipantId = participantId;
 
-            // Loads sessions linked to the participant
-            Sessions = await _context.ParticipantSessions
-                .Where(ps => ps.ParticipantId == participantId)
-                .Include(ps => ps.Session)
-                .Select(ps => ps.Session)
-                .ToListAsync();
+            var roles = User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
 
-            if (!Sessions.Any())
+            if (roles.Contains("Study Admin") || roles.Contains("High-Auth") || roles.Contains("Mid-Auth"))
             {
-                // Handles the case where no sessions are found
-                ModelState.AddModelError(string.Empty, "No sessions found for the selected participant.");
-                return Page();
+                Sessions = await _context.ParticipantSessions
+                    .Where(ps => ps.ParticipantId == participantId)
+                    .Include(ps => ps.Session)
+                    .Select(ps => ps.Session)
+                    .ToListAsync();
+
+                if (!Sessions.Any())
+                {
+                    ModelState.AddModelError(string.Empty, "No sessions found for the selected participant.");
+                    return Page();
+                }
+            }
+            else
+            {
+                return Forbid();
             }
 
             return Page();

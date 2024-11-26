@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +9,12 @@ using Research_Software_Dev.Models.Sessions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Forms
 {
+    [Authorize]
     public class SubmitAnswersModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -45,11 +48,20 @@ namespace Research_Software_Dev.Pages.Forms
                 return BadRequest("FormId, ParticipantId, and SessionId are required.");
             }
 
+            var roles = User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth") && !roles.Contains("Mid-Auth"))
+            {
+                return Forbid();
+            }
+
             FormId = formId;
             ParticipantId = participantId;
             SessionId = sessionId;
 
-            // Fetches Form Name
             FormName = await _context.Forms
                 .Where(f => f.FormId == formId)
                 .Select(f => f.FormName)
@@ -60,7 +72,6 @@ namespace Research_Software_Dev.Pages.Forms
                 return NotFound("Form not found.");
             }
 
-            // Fetches Participant Name
             ParticipantName = await _context.Participants
                 .Where(p => p.ParticipantId == participantId)
                 .Select(p => p.ParticipantFirstName + " " + p.ParticipantLastName)
@@ -71,7 +82,6 @@ namespace Research_Software_Dev.Pages.Forms
                 return NotFound("Participant not found.");
             }
 
-            // Fetches Questions
             Questions = await _context.FormQuestions
                 .Where(q => q.FormId == formId)
                 .OrderBy(q => q.QuestionNumber)
@@ -82,7 +92,6 @@ namespace Research_Software_Dev.Pages.Forms
                 return NotFound("No questions found for this form.");
             }
 
-            // Fetches ParticipantSession
             ParticipantSession = await _context.ParticipantSessions
                 .Include(ps => ps.Participant)
                 .Include(ps => ps.Session)
@@ -98,12 +107,10 @@ namespace Research_Software_Dev.Pages.Forms
 
         public async Task<IActionResult> OnPostAsync()
         {
-            // Ensures Questions are loaded
             Questions = await _context.FormQuestions
                 .Where(q => q.FormId == FormId)
                 .ToListAsync();
 
-            // Validates Answers
             if (Answers == null || !Answers.Any())
             {
                 ModelState.AddModelError(string.Empty, "Answers are required for all questions.");
@@ -112,7 +119,6 @@ namespace Research_Software_Dev.Pages.Forms
 
             foreach (var answer in Answers)
             {
-                // Ensures the FormQuestionId is valid
                 var formQuestion = Questions.FirstOrDefault(q => q.FormQuestionId == answer.FormQuestionId);
                 if (formQuestion == null)
                 {
@@ -120,7 +126,6 @@ namespace Research_Software_Dev.Pages.Forms
                     return Page();
                 }
 
-                // Adds new FormAnswer to the database
                 _context.FormAnswers.Add(new FormAnswer
                 {
                     AnswerId = Guid.NewGuid().ToString(),

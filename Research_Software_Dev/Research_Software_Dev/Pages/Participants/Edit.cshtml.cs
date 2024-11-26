@@ -46,6 +46,17 @@ namespace Research_Software_Dev.Pages.Participants
                 return Unauthorized();
             }
 
+            // Fetch roles and verify permissions
+            var roles = User.Claims
+                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             //fetch participant and verify the logged-in researcher is associated with the study
             var participantStudy = await _context.ParticipantStudies
                 .Include(ps => ps.Participant)
@@ -77,6 +88,17 @@ namespace Research_Software_Dev.Pages.Participants
             if (string.IsNullOrEmpty(researcherId))
             {
                 return RedirectToPage("/NotFound");
+            }
+
+            // Fetch roles and verify permissions
+            var roles = User.Claims
+                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
             }
 
             //verifies ownership before updating

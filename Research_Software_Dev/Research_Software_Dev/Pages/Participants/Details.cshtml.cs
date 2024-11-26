@@ -1,5 +1,4 @@
-﻿
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -37,6 +36,17 @@ namespace Research_Software_Dev.Pages.Participants
             if (string.IsNullOrEmpty(researcherId))
             {
                 return RedirectToPage("/NotFound");
+            }
+
+            // Fetch roles and verify permissions
+            var roles = User.Claims
+                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth") && !roles.Contains("Mid-Auth"))
+            {
+                return Forbid();
             }
 
             //check if participant and researcher is in same study

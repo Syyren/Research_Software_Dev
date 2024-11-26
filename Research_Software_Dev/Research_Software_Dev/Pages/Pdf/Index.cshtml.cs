@@ -1,13 +1,16 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Forms;
 using Research_Software_Dev.Services;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Pdf
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -24,11 +27,22 @@ namespace Research_Software_Dev.Pages.Pdf
 
         public void OnGet()
         {
-            // Loads any necessary data or initialize the page
+            // Loads any necessary data or initializes the page
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            // Fetch roles and verify permissions
+            var roles = User.Claims
+                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             if (PdfFile == null || PdfFile.Length == 0)
             {
                 ViewData["Message"] = "No file selected for upload.";
@@ -68,7 +82,7 @@ namespace Research_Software_Dev.Pages.Pdf
                 {
                     question.FormId = form.FormId; // Associates the question with the Form
                     _context.FormQuestions.Add(question);
-                    question.QuestionNumber = question.QuestionNumber + 1;
+                    question.QuestionNumber += 1;
                 }
 
                 await _context.SaveChangesAsync(); // Saves all questions

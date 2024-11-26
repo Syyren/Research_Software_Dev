@@ -1,13 +1,17 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Forms;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Forms
 {
+    [Authorize]
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -23,30 +27,46 @@ namespace Research_Software_Dev.Pages.Forms
             _context = context;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            // Pre-generates FormId
+            var roles = User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             Form = new Form
             {
                 FormId = Guid.NewGuid().ToString()
             };
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            var roles = User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             if (!ModelState.IsValid)
             {
-                // Logs validation errors for debugging
                 foreach (var error in ModelState)
                 {
                     Console.WriteLine($"{error.Key}: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
                 }
                 return Page();
             }
-
-            Console.WriteLine($"FormId: {Form.FormId}");
-            Console.WriteLine($"FormName: {Form.FormName}");
-            Console.WriteLine($"Questions: {string.Join(", ", Questions)}");
 
             _context.Forms.Add(Form);
             await _context.SaveChangesAsync();

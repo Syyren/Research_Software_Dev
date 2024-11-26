@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.ParticipantSessions
 {
+    [Authorize]
     public class AddParticipantModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -27,6 +29,17 @@ namespace Research_Software_Dev.Pages.ParticipantSessions
 
         public IActionResult OnGet(string sessionId)
         {
+            // Verify permissions
+            var roles = User.Claims
+                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             if (string.IsNullOrEmpty(sessionId))
             {
                 return NotFound("Session ID is required.");
@@ -45,9 +58,32 @@ namespace Research_Software_Dev.Pages.ParticipantSessions
 
         public async Task<IActionResult> OnPostAsync()
         {
+            // Verify permissions
+            var roles = User.Claims
+                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             if (!ModelState.IsValid)
             {
                 // Re-populates the dropdown if the form is invalid
+                ParticipantList = new SelectList(
+                    _context.Participants.ToList(),
+                    "ParticipantId",
+                    "ParticipantFirstName");
+
+                return Page();
+            }
+
+            // Prevent duplicate participant-session relationships
+            if (_context.ParticipantSessions.Any(ps => ps.ParticipantId == ParticipantId && ps.SessionId == SessionId))
+            {
+                ModelState.AddModelError("", "This participant is already assigned to the selected session.");
                 ParticipantList = new SelectList(
                     _context.Participants.ToList(),
                     "ParticipantId",

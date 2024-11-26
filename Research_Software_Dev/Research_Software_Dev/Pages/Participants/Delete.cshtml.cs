@@ -47,6 +47,17 @@ namespace Research_Software_Dev.Pages.Participants
                 return Unauthorized();
             }
 
+            // Fetch roles and verify permissions
+            var roles = User.Claims
+                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             //fetch participant and verify the logged-in researcher is associated with the study
             var participantStudy = await _context.ParticipantStudies
                 .Include(ps => ps.Participant)
@@ -77,6 +88,17 @@ namespace Research_Software_Dev.Pages.Participants
                 return RedirectToPage("/NotFound");
             }
 
+            // Fetch roles and verify permissions
+            var roles = User.Claims
+                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             //get and verifies ownership before updating
             var participantStudy = await _context.ParticipantStudies
                 .FirstOrDefaultAsync(ps => ps.ParticipantId == id &&
@@ -100,9 +122,8 @@ namespace Research_Software_Dev.Pages.Participants
                 {
                     //Remove from all studies
                     _context.ParticipantStudies.RemoveRange(participantStudies);
-                    
-                    
                 }
+
                 //remove participant
                 var participant = await _context.Participants.FindAsync(id);
                 if (participant != null)
@@ -110,8 +131,8 @@ namespace Research_Software_Dev.Pages.Participants
                     _context.Participants.Remove(participant);
                 }
             }
-            else 
-            { 
+            else
+            {
                 //remove from ParticipantStudies
                 _context.ParticipantStudies.Remove(participantStudy);
 
@@ -120,8 +141,9 @@ namespace Research_Software_Dev.Pages.Participants
                 if (participant != null)
                 {
                     _context.Participants.Remove(participant);
-                }            
+                }
             }
+
             //save to db
             await _context.SaveChangesAsync();
             return RedirectToPage("./Index");

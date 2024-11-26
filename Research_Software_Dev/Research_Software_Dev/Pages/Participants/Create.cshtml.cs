@@ -56,12 +56,22 @@ namespace Research_Software_Dev.Pages.Participants
 
         public async Task<IActionResult> OnPostAsync()
         {
-
             //gets the logged-in user's ID (ResearcherId)
             var researcherId = _userManager.GetUserId(User);
             if (string.IsNullOrEmpty(researcherId))
             {
                 return RedirectToPage("/NotFound");
+            }
+
+            // Check authorization - only Study Admins or High-Auth users can create participants
+            var roles = User.Claims
+                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
             }
 
             if (!ModelState.IsValid)
@@ -90,7 +100,6 @@ namespace Research_Software_Dev.Pages.Participants
                     .ToListAsync();
                 return Page();
             }
-
 
             //generates a unique ParticipantId using GUID
             Participant.ParticipantId = Guid.NewGuid().ToString();

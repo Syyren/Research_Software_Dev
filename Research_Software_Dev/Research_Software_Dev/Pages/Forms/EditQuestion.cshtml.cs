@@ -1,12 +1,16 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Forms;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Forms
 {
+    [Authorize]
     public class EditQuestionModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -24,13 +28,18 @@ namespace Research_Software_Dev.Pages.Forms
 
         public async Task<IActionResult> OnGetAsync(string formId, string questionId)
         {
+            var roles = User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             if (!ModelState.IsValid)
             {
-                // Logs validation errors for debugging
-                foreach (var error in ModelState)
-                {
-                    Console.WriteLine($"{error.Key}: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
-                }
                 return Page();
             }
 
@@ -47,17 +56,21 @@ namespace Research_Software_Dev.Pages.Forms
 
         public async Task<IActionResult> OnPostAsync()
         {
+            var roles = User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            {
+                return Forbid();
+            }
+
             if (!ModelState.IsValid)
             {
-                // Logs validation errors for debugging
-                foreach (var error in ModelState)
-                {
-                    Console.WriteLine($"{error.Key}: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
-                }
                 return Page();
             }
 
-            // Finds the existing question in the database
             var existingQuestion = await _context.FormQuestions
                 .FirstOrDefaultAsync(q => q.FormQuestionId == Question.FormQuestionId);
 
@@ -66,7 +79,6 @@ namespace Research_Software_Dev.Pages.Forms
                 return NotFound();
             }
 
-            // Updates the question's properties
             existingQuestion.QuestionDescription = Question.QuestionDescription;
 
             try
@@ -87,6 +99,5 @@ namespace Research_Software_Dev.Pages.Forms
 
             return RedirectToPage("./Edit", new { id = Question.FormId });
         }
-
     }
 }
