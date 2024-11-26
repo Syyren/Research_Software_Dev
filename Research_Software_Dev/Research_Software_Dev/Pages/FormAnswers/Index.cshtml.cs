@@ -40,7 +40,7 @@ namespace Research_Software_Dev.Pages.Forms
                     .ThenBy(p => p.ParticipantFirstName)
                     .ToListAsync();
             }
-            else if (roles.Contains("Mid-Auth"))
+            else if (roles.Contains("Mid-Auth") || roles.Contains("Researcher") || roles.Contains("Low-Auth"))
             {
                 Participants = await _context.Participants
                     .Select(p => new Participant

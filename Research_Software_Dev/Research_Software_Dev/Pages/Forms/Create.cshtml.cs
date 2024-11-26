@@ -34,7 +34,7 @@ namespace Research_Software_Dev.Pages.Forms
                 .Select(c => c.Value)
                 .ToList();
 
-            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth") && !roles.Contains("Mid-Auth") && !roles.Contains("Researcher"))
             {
                 return Forbid();
             }
@@ -54,7 +54,7 @@ namespace Research_Software_Dev.Pages.Forms
                 .Select(c => c.Value)
                 .ToList();
 
-            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth") && !roles.Contains("Mid-Auth") && !roles.Contains("Researcher"))
             {
                 return Forbid();
             }

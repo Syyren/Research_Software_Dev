@@ -42,7 +42,7 @@ namespace Research_Software_Dev.Pages.Forms
                 .Select(c => c.Value)
                 .ToList();
 
-            if (roles.Contains("Study Admin") || roles.Contains("High-Auth") || roles.Contains("Mid-Auth"))
+            if (roles.Contains("Study Admin") || roles.Contains("High-Auth") || roles.Contains("Mid-Auth") || roles.Contains("Researcher") || roles.Contains("Low-Auth"))
             {
                 Forms = await _context.Forms.OrderBy(f => f.FormName).ToListAsync();
             }
