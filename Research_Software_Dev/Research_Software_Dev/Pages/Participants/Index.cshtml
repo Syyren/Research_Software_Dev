@@ -15,7 +15,7 @@
         <label for="studyFilter">Filter by Study:</label>
         <div class="d-flex w-50">
             <select asp-for="SelectedStudyId" class="form-control">
-                <option value="">-- Select a Study --</option>
+                <option value="">-- All Studies --</option>
                 @foreach (var study in Model.Studies)
                 {
                     <option value="@study.StudyId">@study.StudyName</option>
