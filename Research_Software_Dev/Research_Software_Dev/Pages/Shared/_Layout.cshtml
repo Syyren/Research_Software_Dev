@@ -19,7 +19,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">MHRA - Mental Health Research Aid</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -31,16 +31,17 @@
                         @if (isUser)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Studies/Index">View Studies</a>
+                                <a class="nav-link" asp-area="" asp-page="/Studies/Index">My Studies</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Sessions/Index">Sessions</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Participants/Index">Participants</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Forms/Index">Forms</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" asp-area="">
+                                    Study Tools
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-dark" data-bs-popper="static">
+                                    <a class="dropdown-item text-light" asp-area="" asp-page="/Participants/Index">Participants</a>
+                                    <a class="dropdown-item text-light" asp-area="" asp-page="/Sessions/Index">Sessions</a>
+                                    <a class="dropdown-item text-light" asp-area="" asp-page="/Forms/Index">Forms</a>
+                                </div>
                             </li>
                         }
                     </ul>
