@@ -16,7 +16,7 @@ namespace Research_Software_Dev.Pages.Participants
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Researcher> _userManager;
-        private readonly string[] pageauth = { "Study Admin", "High-Auth" };
+        private readonly string[] permissions = { "Study Admin", "High-Auth" };
 
         public DeleteModel(ApplicationDbContext context, UserManager<Researcher> userManager)
         {
@@ -54,7 +54,7 @@ namespace Research_Software_Dev.Pages.Participants
                 .Select(c => c.Value)
                 .ToList();
 
-            if (!roles.Any(role => pageauth.Contains(role)))
+            if (!roles.Any(role => permissions.Contains(role)))
             {
                 return Forbid();
             }
@@ -95,7 +95,7 @@ namespace Research_Software_Dev.Pages.Participants
                 .Select(c => c.Value)
                 .ToList();
 
-            if (!roles.Any(role => pageauth.Contains(role)))
+            if (!roles.Any(role => permissions.Contains(role)))
             {
                 return Forbid();
             }
