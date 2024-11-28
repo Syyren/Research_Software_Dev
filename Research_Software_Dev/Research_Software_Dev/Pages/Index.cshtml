@@ -7,7 +7,7 @@
 @inject IHttpClientFactory HttpClientFactory
 
 @{
-    ViewData["Title"] = "MHRA - Home";
+    ViewData["Title"] = "Home";
 
     //gets the current user
     var currentUser = UserManager.GetUserAsync(User).Result;
@@ -22,7 +22,7 @@
     @{
         if (isUser)
         {
-            <h1 class="display-2 md-3">Welcome @currentUser.ResearcherFirstName @currentUser.ResearcherLastName!</h1>
+            <h1 class="display-2 mb-3">Welcome @currentUser.ResearcherFirstName @currentUser.ResearcherLastName!</h1>
             <p class="display-4">Your Studies:</p>
             if (studies == null || !studies.Any())
             {
@@ -35,27 +35,29 @@
                     studies = studies.Take(3).ToList();
                     flag = true;
                 }
-                <div class="d-flex justify-content-center">
-                    <ul class="list-group w-75 p-3" style="min-width: 400px;">
-                        @foreach (var item in studies)
-                        {
-                            <li class="list-group-item md-2">
-                                <p>Name: @Html.DisplayFor(modelItem => item.StudyName)</p>
-                                <p>Desc: @Html.DisplayFor(modelItem => item.StudyDescription)</p>
-                                <p>
-                                    <a class="btn btn-outline-dark" asp-page="/Studies/Edit" asp-route-id="@item.StudyId">Edit</a> |
-                                    <a class="btn btn-outline-dark" asp-page="/Studies/Details" asp-route-id="@item.StudyId">Details</a> |
-                                    <a class="btn btn-outline-danger" asp-page="/Studies/Delete" asp-route-id="@item.StudyId">Delete</a>
-                                </p>
-                            </li>
-                        }
-                        @if (flag)
-                        {
-                            <li class="list-group-item">
-                                <a class="link-primary" asp-page="/Studies/Index">View All</a>
-                            </li>
-                        }
-                    </ul>
+                <div class="d-flex flex-column justify-content-center align-content-center align-items-center">
+                    @foreach (var item in studies)
+                    {
+                    <div class="card mb-2" style="width: 40vw; min-width: 370px">
+                        <div class="card-body">
+                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.StudyName)</h5>
+                            <div class="d-flex justify-content-center mb-2">
+                                <p class="card-text" style="max-height: 30vh; max-width: 30vw; min-width: 340px; overflow-y: scroll; padding: 5px;">Desc: @Html.DisplayFor(modelItem => item.StudyDescription)</p>
+                            </div>
+                            <div>
+                                <a class="btn btn-outline-dark" asp-page="/Studies/Edit" asp-route-id="@item.StudyId">Edit</a> |
+                                <a class="btn btn-outline-dark" asp-page="/Studies/Details" asp-route-id="@item.StudyId">Details</a> |
+                                <a class="btn btn-outline-danger" asp-page="/Studies/Delete" asp-route-id="@item.StudyId">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    @if (flag)
+                    {
+                    <div class="list-group-item mb-2">
+                        <a class="link-primary" asp-page="/Studies/Index">View All</a>
+                    </div>
+                    }   
                 </div>
             }
         }
