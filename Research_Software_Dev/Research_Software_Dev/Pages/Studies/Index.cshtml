@@ -8,36 +8,39 @@
 <h1>Viewing all Studies</h1>
 
 <a class="btn btn-outline-primary" asp-page="Create">Create a New Study</a>
-<table class="table">
-    <thead>
-        <tr>
-            <th style="max-width: 10vw">
-                @Html.DisplayNameFor(model => model.Study[0].StudyName)
-            </th>
-            <th style="max-width: 40vw">
-                @Html.DisplayNameFor(model => model.Study[0].StudyDescription)
-            </th>
-            <th>
-                Actions
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Study) 
-{
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.StudyName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StudyDescription)
-            </td>
-            <td>
-                <a class="btn btn-outline-dark" style="min-width: 90px;" asp-page="./Edit" asp-route-id="@item.StudyId">Edit</a> |
-                <a class="btn btn-outline-dark" style="min-width: 90px;" asp-page="./Details" asp-route-id="@item.StudyId">Details</a> |
-                <a class="btn btn-outline-danger" style="min-width: 90px;" asp-page="./Delete" asp-route-id="@item.StudyId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Study[0].StudyName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Study[0].StudyDescription)
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model.Study) 
+    {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudyDescription)
+                </td>
+                <td>
+                    <a class="btn btn-outline-dark" asp-page="./Edit" asp-route-id="@item.StudyId">Edit</a> |
+                    <a class="btn btn-outline-dark" asp-page="./Details" asp-route-id="@item.StudyId">Details</a> |
+                    <a class="btn btn-outline-danger" asp-page="./Delete" asp-route-id="@item.StudyId">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>
