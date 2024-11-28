@@ -10,28 +10,30 @@
     <a asp-page="./Create" class="btn btn-outline-primary">Create a New Form</a>
 </p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th style="max-width: 10vw;">
-                @Html.DisplayNameFor(model => model.Forms[0].FormName)
-            </th>
-            <th style="max-width: 10vw;">
-                Actions
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var form in Model.Forms)
-        {
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
             <tr>
-                <td>@form.FormName</td>
-                <td>
-                    <a class="btn btn-outline-dark" style="min-width: 90px;" asp-page="./Details" asp-route-id="@form.FormId">Details</a> |
-                    <a class="btn btn-outline-dark" style="min-width: 90px;" asp-page="./Edit" asp-route-id="@form.FormId">Edit</a> |
-                    <a class="btn btn-outline-danger" style="min-width: 90px;" asp-page="./Delete" asp-route-id="@form.FormId">Delete</a>
-                </td>
+                <th style="max-width: 10vw;">
+                    @Html.DisplayNameFor(model => model.Forms[0].FormName)
+                </th>
+                <th style="max-width: 10vw;">
+                    Actions
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var form in Model.Forms)
+            {
+                <tr>
+                    <td>@form.FormName</td>
+                    <td>
+                        <a class="btn btn-outline-dark" asp-page="./Details" asp-route-id="@form.FormId">Details</a> |
+                        <a class="btn btn-outline-dark" asp-page="./Edit" asp-route-id="@form.FormId">Edit</a> |
+                        <a class="btn btn-outline-danger" asp-page="./Delete" asp-route-id="@form.FormId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
