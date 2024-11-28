@@ -32,7 +32,11 @@
                     @Html.DisplayFor(modelItem => item.StudyName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.StudyDescription)
+                    <div style="max-height: 40vh; max-width: 20vw; overflow-y: scroll; padding: 5px;">
+                        <p>
+                            @Html.DisplayFor(modelItem => item.StudyDescription)
+                        </p>
+                    </div>
                 </td>
                 <td>
                     <a class="btn btn-outline-dark" asp-page="./Edit" asp-route-id="@item.StudyId">Edit</a> |
