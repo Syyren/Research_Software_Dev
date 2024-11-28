@@ -26,14 +26,14 @@ namespace Research_Software_Dev.Pages.ParticipantSessions
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             var participantsession = await _context.ParticipantSessions.FirstOrDefaultAsync(m => m.ParticipantId == id);
 
             if (participantsession == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             else
             {
@@ -46,7 +46,7 @@ namespace Research_Software_Dev.Pages.ParticipantSessions
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             var participantsession = await _context.ParticipantSessions.FindAsync(id);

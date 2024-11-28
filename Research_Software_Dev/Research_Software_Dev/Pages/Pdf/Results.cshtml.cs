@@ -28,7 +28,7 @@ namespace Research_Software_Dev.Pages.Pdf
 
             if (Form == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             // Fetches and sorts the associated questions by QuestionNumber

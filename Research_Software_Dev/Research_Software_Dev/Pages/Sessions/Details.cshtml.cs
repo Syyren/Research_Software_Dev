@@ -39,7 +39,7 @@ namespace Research_Software_Dev.Pages.Sessions
 
             if (id == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             // Fetch session details and verify access
@@ -50,7 +50,7 @@ namespace Research_Software_Dev.Pages.Sessions
 
             if (session == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             Session = session;

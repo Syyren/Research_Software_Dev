@@ -27,13 +27,13 @@ namespace Research_Software_Dev.Pages.ParticipantSessions
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             var participantsession =  await _context.ParticipantSessions.FirstOrDefaultAsync(m => m.ParticipantId == id);
             if (participantsession == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             ParticipantSession = participantsession;
            ViewData["ParticipantId"] = new SelectList(_context.Participants, "ParticipantId", "ParticipantId");
@@ -60,7 +60,7 @@ namespace Research_Software_Dev.Pages.ParticipantSessions
             {
                 if (!ParticipantSessionExists(ParticipantSession.ParticipantId))
                 {
-                    return NotFound();
+                    return RedirectToPage("/NotFound");
                 }
                 else
                 {

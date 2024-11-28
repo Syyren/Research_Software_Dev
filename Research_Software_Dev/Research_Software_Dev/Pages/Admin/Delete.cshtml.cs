@@ -22,7 +22,7 @@ namespace Research_Software_Dev.Pages.Admin
         public async Task<IActionResult> OnGetAsync(string id)
         {
             User = await _userManager.FindByIdAsync(id);
-            if (User == null) return NotFound();
+            if (User == null) return RedirectToPage("/NotFound");
 
             return Page();
         }
@@ -30,7 +30,7 @@ namespace Research_Software_Dev.Pages.Admin
         public async Task<IActionResult> OnPostAsync(string id)
         {
             User = await _userManager.FindByIdAsync(id);
-            if (User == null) return NotFound();
+            if (User == null) return RedirectToPage("/NotFound");
 
             await _userManager.DeleteAsync(User);
             return RedirectToPage("Index");

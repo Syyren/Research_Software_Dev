@@ -27,7 +27,7 @@ namespace Research_Software_Dev.Pages.Studies
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             //gets the logged-in user's ID
@@ -45,7 +45,7 @@ namespace Research_Software_Dev.Pages.Studies
 
             if (researcherStudy == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             Study = researcherStudy.Study;
@@ -56,7 +56,7 @@ namespace Research_Software_Dev.Pages.Studies
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             var researcherId = _userManager.GetUserId(User);
@@ -71,7 +71,7 @@ namespace Research_Software_Dev.Pages.Studies
 
             if (researcherStudy == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             //remove the association from ResearcherStudies

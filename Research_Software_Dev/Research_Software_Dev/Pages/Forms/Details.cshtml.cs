@@ -39,7 +39,7 @@ namespace Research_Software_Dev.Pages.Forms
             Form = await _context.Forms.FindAsync(id);
             if (Form == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             Questions = await _context.FormQuestions

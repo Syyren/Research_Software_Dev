@@ -31,7 +31,7 @@ namespace Research_Software_Dev.Pages.Admin
         public async Task<IActionResult> OnGetAsync(string id)
         {
             User = await _userManager.FindByIdAsync(id);
-            if (User == null) return NotFound();
+            if (User == null) return RedirectToPage("/NotFound");
 
             AllRoles = _roleManager.Roles.Select(r => r.Name).ToList();
             UserRoles = (await _userManager.GetRolesAsync(User)).ToList();
@@ -42,7 +42,7 @@ namespace Research_Software_Dev.Pages.Admin
         public async Task<IActionResult> OnPostAsync(string id)
         {
             User = await _userManager.FindByIdAsync(id);
-            if (User == null) return NotFound();
+            if (User == null) return RedirectToPage("/NotFound");
 
             var currentRoles = await _userManager.GetRolesAsync(User);
             var rolesToAdd = SelectedRoles.Except(currentRoles).ToList();

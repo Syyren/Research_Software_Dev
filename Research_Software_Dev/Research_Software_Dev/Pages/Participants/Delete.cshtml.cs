@@ -35,11 +35,6 @@ namespace Research_Software_Dev.Pages.Participants
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             //get the logged-in researcher's ID
             var researcherId = _userManager.GetUserId(User);
 
@@ -57,6 +52,11 @@ namespace Research_Software_Dev.Pages.Participants
             if (!roles.Any(role => permissions.Contains(role)))
             {
                 return Forbid();
+            }
+
+            if (id == null)
+            {
+                return RedirectToPage("/NotFound");
             }
 
             //fetch participant and verify the logged-in researcher is associated with the study
@@ -78,11 +78,6 @@ namespace Research_Software_Dev.Pages.Participants
 
         public async Task<IActionResult> OnPostAsync(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var researcherId = _userManager.GetUserId(User);
             if (string.IsNullOrEmpty(researcherId))
             {
@@ -100,6 +95,11 @@ namespace Research_Software_Dev.Pages.Participants
                 return Forbid();
             }
 
+            if (id == null)
+            {
+                return RedirectToPage("/NotFound");
+            }
+
             //get and verifies ownership before updating
             var participantStudy = await _context.ParticipantStudies
                 .FirstOrDefaultAsync(ps => ps.ParticipantId == id &&
@@ -107,7 +107,7 @@ namespace Research_Software_Dev.Pages.Participants
 
             if (participantStudy == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             //If Participant is being removed from all studies via checkbox

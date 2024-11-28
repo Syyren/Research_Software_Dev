@@ -13,6 +13,7 @@ namespace Research_Software_Dev.Pages.Participants
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Researcher> _userManager;
+        private readonly string[] permissions = { "Study Admin", "High-Auth", "Mid-Auth"};
 
         public DetailsModel(ApplicationDbContext context, UserManager<Researcher> userManager)
         {
@@ -25,11 +26,6 @@ namespace Research_Software_Dev.Pages.Participants
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
-            if (id == null)
-            {
-                return RedirectToPage("/NotFound");
-            }
-
             //gets the logged-in user's ID
             var researcherId = _userManager.GetUserId(User);
 
@@ -43,10 +39,14 @@ namespace Research_Software_Dev.Pages.Participants
                 .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
                 .Select(c => c.Value)
                 .ToList();
-
-            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth") && !roles.Contains("Mid-Auth"))
+            if (!roles.Any(role => permissions.Contains(role)))
             {
                 return Forbid();
+            }
+
+            if (id == null)
+            {
+                return RedirectToPage("/NotFound");
             }
 
             //check if participant and researcher is in same study

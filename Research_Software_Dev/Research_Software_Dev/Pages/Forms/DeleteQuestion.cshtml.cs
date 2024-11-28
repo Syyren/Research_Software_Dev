@@ -48,7 +48,7 @@ namespace Research_Software_Dev.Pages.Forms
 
             if (question == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             QuestionDescription = question.QuestionDescription;

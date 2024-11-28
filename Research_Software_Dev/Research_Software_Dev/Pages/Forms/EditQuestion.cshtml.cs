@@ -48,7 +48,7 @@ namespace Research_Software_Dev.Pages.Forms
 
             if (Question == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             return Page();
@@ -76,7 +76,7 @@ namespace Research_Software_Dev.Pages.Forms
 
             if (existingQuestion == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             existingQuestion.QuestionDescription = Question.QuestionDescription;
@@ -89,7 +89,7 @@ namespace Research_Software_Dev.Pages.Forms
             {
                 if (!_context.FormQuestions.Any(q => q.FormQuestionId == Question.FormQuestionId))
                 {
-                    return NotFound();
+                    return RedirectToPage("/NotFound");
                 }
                 else
                 {

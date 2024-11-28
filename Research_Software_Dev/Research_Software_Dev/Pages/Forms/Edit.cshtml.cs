@@ -42,7 +42,7 @@ namespace Research_Software_Dev.Pages.Forms
             Form = await _context.Forms.FindAsync(id);
             if (Form == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             Questions = await _context.FormQuestions
@@ -81,7 +81,7 @@ namespace Research_Software_Dev.Pages.Forms
 
             if (existingForm == null)
             {
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             existingForm.FormName = Form.FormName;
