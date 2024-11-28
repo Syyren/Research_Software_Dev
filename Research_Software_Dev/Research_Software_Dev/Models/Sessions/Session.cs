@@ -11,17 +11,17 @@ namespace Research_Software_Dev.Models.Sessions
 
         [Required]
         [DataType(DataType.Date)]
-        [Display(Name = "Session Date")]
+        [Display(Name = "Date")]
         public DateOnly Date { get; set; }
 
         [Required]
         [DataType(DataType.Time)]
-        [Display(Name = "Session Start Time")]
+        [Display(Name = "Start")]
         public TimeOnly TimeStart { get; set; }
 
         [Required]
         [DataType(DataType.Time)]
-        [Display(Name = "Session End Time")]
+        [Display(Name = "End")]
         public TimeOnly TimeEnd { get; set; }
 
         //Study Fk
