@@ -36,7 +36,7 @@ namespace Research_Software_Dev.Pages.Forms
                 return Forbid();
             }
 
-            Form = await _context.Forms.FindAsync(id);
+            Form = await _context.Forms.FirstOrDefaultAsync(f => f.FormId == id);
             if (Form == null)
             {
                 return NotFound();

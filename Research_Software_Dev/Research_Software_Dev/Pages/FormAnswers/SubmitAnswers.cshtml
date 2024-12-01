@@ -7,40 +7,70 @@
 <h1>Submit Answers</h1>
 
 <form method="post">
-    <!-- Hidden inputs for key IDs -->
     <input type="hidden" asp-for="FormId" />
     <input type="hidden" asp-for="ParticipantId" />
     <input type="hidden" asp-for="SessionId" />
 
     <div class="form-group">
-        <!-- Displays form details -->
         <h2>Form: @Model.FormName</h2>
         <p>Participant: @Model.ParticipantName</p>
-        <p>Session: @Model.SessionId</p>
+        <p>Session ID: @Model.SessionId</p>
     </div>
 
     <div class="form-group">
         <h3>Questions</h3>
+        @if (Model.Questions == null)
+        {
+            <p>Questions is null</p>
+        }
+        @if (!Model.Questions.Any())
+        {
+        <p>No questions found.</p>
+        }
+        else
+        {
+        <p>Total Questions: @Model.Questions.Count</p>
+        }
         @for (int i = 0; i < Model.Questions.Count; i++)
         {
-            <div class="form-group">
-                <!-- Question label -->
-                <label>@Model.Questions[i].QuestionDescription</label>
+            <div class="form-group mb-4">
 
-                <!-- Hidden inputs for answer metadata -->
-                <input type="hidden" name="Answers[@i].FormId" value="@Model.FormId" />
+                <label>@Model.Questions[i].QuestionNumber. @Model.Questions[i].QuestionDescription</label>
+
+                <input type="hidden" name="Answers[@i].AnswerId" value="@Guid.NewGuid().ToString()" />
+                <input type="hidden" name="Answers[@i].FormQuestionId" value="@Model.Questions[i].FormQuestionId" />
                 <input type="hidden" name="Answers[@i].ParticipantId" value="@Model.ParticipantId" />
                 <input type="hidden" name="Answers[@i].SessionId" value="@Model.SessionId" />
-                <input type="hidden" name="Answers[@i].FormQuestionId" value="@Model.Questions[i].FormQuestionId" />
-                <input type="hidden" name="Answers[@i].AnswerId" value="@Guid.NewGuid()" />
 
-                <!-- Answer input field -->
-                <input type="text" name="Answers[@i].Answer" class="form-control" />
+                @if (Model.Questions[i].Type == Research_Software_Dev.Models.Forms.QuestionType.SingleChoice)
+                {
+                    <select name="Answers[@i].TextAnswer" class="form-control" required>
+                        <option value="">-- Select an Option --</option>
+                        @foreach (var option in Model.Questions[i].GetOptions())
+                        {
+                            <option value="@option">@option</option>
+                        }
+                    </select>
+                }
+                else if (Model.Questions[i].Type == Research_Software_Dev.Models.Forms.QuestionType.LikertScale)
+                {
+                    <label>Rate on a scale of 1 to 5:</label>
+                    @for (int j = 1; j <= 5; j++)
+                    {
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="Answers[@i].TextAnswer" value="@j" required />
+                            <label class="form-check-label">@j</label>
+                        </div>
+                    }
+                }
+                else if (Model.Questions[i].Type == Research_Software_Dev.Models.Forms.QuestionType.FreeText)
+                {
+                    <input type="text" name="Answers[@i].TextAnswer" class="form-control" required />
+                }
             </div>
         }
     </div>
 
-    <!-- Submission buttons -->
     <button type="submit" class="btn btn-primary">Submit</button>
     <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
 </form>

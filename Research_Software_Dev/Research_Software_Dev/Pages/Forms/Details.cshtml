@@ -4,34 +4,46 @@
     ViewData["Title"] = "Form Details";
 }
 
-<h1>"@Model.Form.FormName" Details</h1>
+<h1>@Model.Form.FormName Details</h1>
 
 <div>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Form.FormName)
-        </dt>
+        <dt class="col-sm-2">Form Name</dt>
+        <dd class="col-sm-10">@Model.Form.FormName</dd>
+
+        <dt class="col-sm-2">Questions</dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Form.FormName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Form.Questions)
-        </dt>
-        <dd class="col-sm-10">
-        @if (Model.Questions.Any())
-        {
-            <ul class="list-group">
-                @foreach (var question in Model.Questions)
-                {
-                    <li class="list-group-item">@question.QuestionDescription</li>
-                }
-            </ul>
-        }
-        else
-        {
-            <p>No questions available.</p>
-        }
+            @if (Model.Questions.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var question in Model.Questions)
+                    {
+                        <li class="list-group-item">
+                            <strong>Question #@question.QuestionNumber:</strong> @question.QuestionDescription
+                            <br />
+                            <small>
+                                <strong>Type:</strong> @question.Type
+                                @if (!string.IsNullOrEmpty(question.OptionsJson))
+                                {
+                                    <br />
+                                    <strong>Options:</strong>
+                                    <ul>
+                                        @foreach (var option in System.Text.Json.JsonSerializer.Deserialize<List<string>>(question.OptionsJson))
+                                        {
+                                            <li>@option</li>
+                                        }
+                                    </ul>
+                                }
+                            </small>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No questions available.</p>
+            }
         </dd>
     </dl>
 </div>

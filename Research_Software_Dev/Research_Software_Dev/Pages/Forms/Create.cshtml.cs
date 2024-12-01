@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Forms;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -19,9 +18,6 @@ namespace Research_Software_Dev.Pages.Forms
         [BindProperty]
         public Form Form { get; set; }
 
-        [BindProperty]
-        public List<string> Questions { get; set; } = new();
-
         public CreateModel(ApplicationDbContext context)
         {
             _context = context;
@@ -29,12 +25,7 @@ namespace Research_Software_Dev.Pages.Forms
 
         public IActionResult OnGet()
         {
-            var roles = User.Claims
-                .Where(c => c.Type == ClaimTypes.Role)
-                .Select(c => c.Value)
-                .ToList();
-
-            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth") && !roles.Contains("Mid-Auth") && !roles.Contains("Researcher"))
+            if (!UserHasPermission())
             {
                 return Forbid();
             }
@@ -49,12 +40,7 @@ namespace Research_Software_Dev.Pages.Forms
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var roles = User.Claims
-                .Where(c => c.Type == ClaimTypes.Role)
-                .Select(c => c.Value)
-                .ToList();
-
-            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth") && !roles.Contains("Mid-Auth") && !roles.Contains("Researcher"))
+            if (!UserHasPermission())
             {
                 return Forbid();
             }
@@ -67,22 +53,21 @@ namespace Research_Software_Dev.Pages.Forms
                 }
                 return Page();
             }
-
             _context.Forms.Add(Form);
             await _context.SaveChangesAsync();
 
-            foreach (var questionText in Questions)
-            {
-                _context.FormQuestions.Add(new FormQuestion
-                {
-                    FormQuestionId = Guid.NewGuid().ToString(),
-                    QuestionDescription = questionText,
-                    FormId = Form.FormId
-                });
-            }
 
-            await _context.SaveChangesAsync();
             return RedirectToPage("./Index");
+        }
+
+        private bool UserHasPermission()
+        {
+            var roles = User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            return roles.Contains("Study Admin") || roles.Contains("High-Auth") || roles.Contains("Mid-Auth") || roles.Contains("Researcher");
         }
     }
 }

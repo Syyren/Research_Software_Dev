@@ -8,8 +8,8 @@
 
 <form method="post">
     <div class="form-group">
-        <label for="ParticipantId">Participant</label>
-        <select asp-for="ParticipantId" class="form-control">
+        <label asp-for="ParticipantId">Participant</label>
+        <select asp-for="ParticipantId" class="form-control" required>
             <option value="">-- Select a Participant --</option>
             @foreach (var participant in Model.Participants)
             {

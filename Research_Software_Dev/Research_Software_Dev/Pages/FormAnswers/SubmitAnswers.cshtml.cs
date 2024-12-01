@@ -22,6 +22,7 @@ namespace Research_Software_Dev.Pages.Forms
         public SubmitAnswersModel(ApplicationDbContext context)
         {
             _context = context;
+            Questions = new List<FormQuestion>();
         }
 
         [BindProperty]
@@ -44,19 +45,16 @@ namespace Research_Software_Dev.Pages.Forms
         public async Task<IActionResult> OnGetAsync(string formId, string participantId, string sessionId)
         {
             if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(participantId) || string.IsNullOrEmpty(sessionId))
-            {
                 return BadRequest("FormId, ParticipantId, and SessionId are required.");
-            }
 
             var roles = User.Claims
                 .Where(c => c.Type == ClaimTypes.Role)
                 .Select(c => c.Value)
                 .ToList();
 
-            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth") && !roles.Contains("Mid-Auth") && !roles.Contains("Low-Auth") && !roles.Contains("Researcher"))
-            {
+            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth") && !roles.Contains("Mid-Auth") &&
+                !roles.Contains("Low-Auth") && !roles.Contains("Researcher"))
                 return Forbid();
-            }
 
             FormId = formId;
             ParticipantId = participantId;
@@ -68,9 +66,7 @@ namespace Research_Software_Dev.Pages.Forms
                 .FirstOrDefaultAsync();
 
             if (string.IsNullOrEmpty(FormName))
-            {
                 return NotFound("Form not found.");
-            }
 
             ParticipantName = await _context.Participants
                 .Where(p => p.ParticipantId == participantId)
@@ -78,9 +74,7 @@ namespace Research_Software_Dev.Pages.Forms
                 .FirstOrDefaultAsync();
 
             if (string.IsNullOrEmpty(ParticipantName))
-            {
                 return NotFound("Participant not found.");
-            }
 
             Questions = await _context.FormQuestions
                 .Where(q => q.FormId == formId)
@@ -88,9 +82,7 @@ namespace Research_Software_Dev.Pages.Forms
                 .ToListAsync();
 
             if (Questions == null || !Questions.Any())
-            {
                 return NotFound("No questions found for this form.");
-            }
 
             ParticipantSession = await _context.ParticipantSessions
                 .Include(ps => ps.Participant)
@@ -98,58 +90,43 @@ namespace Research_Software_Dev.Pages.Forms
                 .FirstOrDefaultAsync(ps => ps.ParticipantId == participantId && ps.SessionId == sessionId);
 
             if (ParticipantSession == null)
-            {
                 return NotFound("Participant and session relationship not found.");
-            }
 
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!ModelState.IsValid || Answers == null || !Answers.Any())
+            {
+                ModelState.AddModelError(string.Empty, "You must answer all questions.");
+                return Page();
+            }
+
             Questions = await _context.FormQuestions
                 .Where(q => q.FormId == FormId)
+                .OrderBy(q => q.QuestionNumber)
                 .ToListAsync();
 
-            if (Answers == null || !Answers.Any())
+            foreach (var question in Questions)
             {
-                ModelState.AddModelError(string.Empty, "Answers are required for all questions.");
+                var answer = Answers.FirstOrDefault(a => a.FormQuestionId == question.FormQuestionId);
+                if (answer == null) continue;
+
+                answer.TimeStamp = DateTime.UtcNow;
+                _context.FormAnswers.Add(answer);
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                ModelState.AddModelError(string.Empty, "There was an error saving your answers. Please try again.");
                 return Page();
             }
 
-            foreach (var answer in Answers)
-            {
-                var formQuestion = Questions.FirstOrDefault(q => q.FormQuestionId == answer.FormQuestionId);
-                if (formQuestion == null)
-                {
-                    ModelState.AddModelError(string.Empty, $"Invalid question ID provided: {answer.FormQuestionId}");
-                    return Page();
-                }
-
-                _context.FormAnswers.Add(new FormAnswer
-                {
-                    AnswerId = Guid.NewGuid().ToString(),
-                    FormQuestionId = formQuestion.FormQuestionId,
-                    FormId = FormId,
-                    ParticipantId = ParticipantId,
-                    SessionId = SessionId,
-                    Answer = answer.Answer,
-                    TimeStamp = DateTime.UtcNow,
-                    FormQuestion = formQuestion,
-                    ParticipantSession = ParticipantSession
-                });
-            }
-
-            if (!ModelState.IsValid)
-            {
-                foreach (var error in ModelState)
-                {
-                    Console.WriteLine($"{error.Key}: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
-                }
-                return Page();
-            }
-
-            await _context.SaveChangesAsync();
             return RedirectToPage("./Index");
         }
     }

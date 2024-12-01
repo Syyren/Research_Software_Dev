@@ -7,12 +7,14 @@
 <h1>Select Form</h1>
 
 <form method="post">
+    <!-- Hidden fields to carry participant and session data -->
     <input type="hidden" asp-for="ParticipantId" />
     <input type="hidden" asp-for="SessionId" />
 
+    <!-- Form Selection -->
     <div class="form-group">
-        <label for="FormId">Form</label>
-        <select asp-for="FormId" class="form-control">
+        <label asp-for="FormId">Form</label>
+        <select asp-for="FormId" class="form-control" required>
             <option value="">-- Select a Form --</option>
             @foreach (var form in Model.Forms)
             {
@@ -22,5 +24,6 @@
         <span asp-validation-for="FormId" class="text-danger"></span>
     </div>
 
+    <!-- Submit Button -->
     <button type="submit" class="btn btn-primary">Next</button>
 </form>

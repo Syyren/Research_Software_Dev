@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Research_Software_Dev.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialSetup : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -122,6 +122,8 @@ namespace Research_Software_Dev.Migrations
                     FormQuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     QuestionNumber = table.Column<int>(type: "int", nullable: false),
                     QuestionDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    OptionsJson = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FormId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -342,12 +344,11 @@ namespace Research_Software_Dev.Migrations
                 columns: table => new
                 {
                     AnswerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Answer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TextAnswer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ParticipantId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SessionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FormQuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FormId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    FormQuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {

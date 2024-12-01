@@ -2,6 +2,7 @@
 using Research_Software_Dev.Models.Sessions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
 
 namespace Research_Software_Dev.Models.Forms
 {
@@ -10,12 +11,15 @@ namespace Research_Software_Dev.Models.Forms
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string AnswerId { get; set; }
+
         [Required]
-        public string Answer { get; set; }
+        public string TextAnswer { get; set; }
+
         [Required]
         [DataType(DataType.DateTime)]
         public DateTime TimeStamp { get; set; }
-        //ParticipantSession composite FK
+
+        // ParticipantSession composite FK
         [Required]
         public string ParticipantId { get; set; }
         [Required]
@@ -23,26 +27,24 @@ namespace Research_Software_Dev.Models.Forms
 
         [ForeignKey("ParticipantId, SessionId")]
         public ParticipantSession? ParticipantSession { get; set; }
-        //FormQuestion FK
+
+        // FormQuestion FK
         [Required]
         public string FormQuestionId { get; set; }
-        public string? FormId { get; internal set; }
         [ForeignKey("FormQuestionId")]
-        [Display(Name = "Form Question")]
         public FormQuestion? FormQuestion { get; set; }
 
-        //Constructors
         public FormAnswer() { }
-        public FormAnswer(string answerId, string answer, DateTime timeStamp, string participantId, 
-            string sessionId, string questionId, string formId)
+
+        public FormAnswer(string answerId, string? textAnswer, string? selectedOptionsJson, DateTime timeStamp,
+                          string participantId, string sessionId, string formQuestionId)
         {
             AnswerId = answerId;
-            Answer = answer;
+            TextAnswer = textAnswer;
             TimeStamp = timeStamp;
             ParticipantId = participantId;
             SessionId = sessionId;
-            FormQuestionId = questionId;
-            FormId = formId;
+            FormQuestionId = formQuestionId;
         }
     }
 }

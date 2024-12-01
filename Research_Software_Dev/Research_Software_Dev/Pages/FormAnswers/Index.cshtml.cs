@@ -21,7 +21,7 @@ namespace Research_Software_Dev.Pages.Forms
             _context = context;
         }
 
-        public List<Participant> Participants { get; set; }
+        public List<Participant> Participants { get; set; } = new();
 
         [BindProperty]
         public string ParticipantId { get; set; }
@@ -43,14 +43,14 @@ namespace Research_Software_Dev.Pages.Forms
             else if (roles.Contains("Mid-Auth") || roles.Contains("Researcher") || roles.Contains("Low-Auth"))
             {
                 Participants = await _context.Participants
+                    .OrderBy(p => p.ParticipantLastName)
+                    .ThenBy(p => p.ParticipantFirstName)
                     .Select(p => new Participant
                     {
                         ParticipantId = p.ParticipantId,
                         ParticipantFirstName = p.ParticipantFirstName,
                         ParticipantLastName = p.ParticipantLastName
                     })
-                    .OrderBy(p => p.ParticipantLastName)
-                    .ThenBy(p => p.ParticipantFirstName)
                     .ToListAsync();
             }
             else
