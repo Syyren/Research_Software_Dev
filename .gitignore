@@ -4,6 +4,7 @@
 *.cache
 *.editorconfig
 PdfInterpreter/venv/
+*.venv
 /Research_Software_Dev/.vs/
 /Research_Software_Dev/.vs/Research_Software_Dev/v17
 /Research_Software_Dev/Research_Software_Dev/.vs/
