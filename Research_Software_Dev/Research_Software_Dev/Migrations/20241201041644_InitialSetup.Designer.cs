@@ -12,8 +12,8 @@ using Research_Software_Dev.Data;
 namespace Research_Software_Dev.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241126002029_Initial")]
-    partial class Initial
+    [Migration("20241201041644_InitialSetup")]
+    partial class InitialSetup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -182,13 +182,6 @@ namespace Research_Software_Dev.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Answer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FormId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FormQuestionId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -200,6 +193,10 @@ namespace Research_Software_Dev.Migrations
                     b.Property<string>("SessionId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TextAnswer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime2");
@@ -222,11 +219,17 @@ namespace Research_Software_Dev.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("OptionsJson")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("QuestionDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("QuestionNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("FormQuestionId");

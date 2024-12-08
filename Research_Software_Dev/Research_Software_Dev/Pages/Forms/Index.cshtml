@@ -14,24 +14,33 @@
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th style="max-width: 10vw;">
+                <th>
                     @Html.DisplayNameFor(model => model.Forms[0].FormName)
                 </th>
-                <th style="max-width: 10vw;">
+                <th>
                     Actions
                 </th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var form in Model.Forms)
+            @if (Model.Forms != null && Model.Forms.Any())
+            {
+                @foreach (var form in Model.Forms)
+                {
+                    <tr>
+                        <td>@form.FormName</td>
+                        <td>
+                            <a class="btn btn-outline-dark" asp-page="./Details" asp-route-id="@form.FormId">Details</a>
+                            <a class="btn btn-outline-dark" asp-page="./Edit" asp-route-id="@form.FormId">Edit</a>
+                            <a class="btn btn-outline-danger" asp-page="./Delete" asp-route-id="@form.FormId">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td>@form.FormName</td>
-                    <td>
-                        <a class="btn btn-outline-dark" asp-page="./Details" asp-route-id="@form.FormId">Details</a> |
-                        <a class="btn btn-outline-dark" asp-page="./Edit" asp-route-id="@form.FormId">Edit</a> |
-                        <a class="btn btn-outline-danger" asp-page="./Delete" asp-route-id="@form.FormId">Delete</a>
-                    </td>
+                    <td colspan="2" class="text-center">No forms available.</td>
                 </tr>
             }
         </tbody>

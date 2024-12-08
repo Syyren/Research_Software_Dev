@@ -179,13 +179,6 @@ namespace Research_Software_Dev.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Answer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FormId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FormQuestionId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -197,6 +190,10 @@ namespace Research_Software_Dev.Migrations
                     b.Property<string>("SessionId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TextAnswer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime2");
@@ -219,11 +216,17 @@ namespace Research_Software_Dev.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("OptionsJson")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("QuestionDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("QuestionNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("FormQuestionId");

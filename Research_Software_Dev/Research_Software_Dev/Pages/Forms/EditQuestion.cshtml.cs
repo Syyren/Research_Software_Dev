@@ -21,13 +21,15 @@ namespace Research_Software_Dev.Pages.Forms
         }
 
         [BindProperty]
-        public string FormId { get; set; }
-
-        [BindProperty]
         public FormQuestion Question { get; set; }
 
         public async Task<IActionResult> OnGetAsync(string formId, string questionId)
         {
+            if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(questionId))
+            {
+                return NotFound("FormId or QuestionId is missing.");
+            }
+
             var roles = User.Claims
                 .Where(c => c.Type == ClaimTypes.Role)
                 .Select(c => c.Value)
@@ -36,11 +38,6 @@ namespace Research_Software_Dev.Pages.Forms
             if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
             {
                 return Forbid();
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return Page();
             }
 
             Question = await _context.FormQuestions
@@ -56,16 +53,6 @@ namespace Research_Software_Dev.Pages.Forms
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var roles = User.Claims
-                .Where(c => c.Type == ClaimTypes.Role)
-                .Select(c => c.Value)
-                .ToList();
-
-            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
-            {
-                return Forbid();
-            }
-
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -80,6 +67,8 @@ namespace Research_Software_Dev.Pages.Forms
             }
 
             existingQuestion.QuestionDescription = Question.QuestionDescription;
+            existingQuestion.Type = Question.Type;
+            existingQuestion.OptionsJson = Question.OptionsJson;
 
             try
             {
@@ -87,7 +76,7 @@ namespace Research_Software_Dev.Pages.Forms
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.FormQuestions.Any(q => q.FormQuestionId == Question.FormQuestionId))
+                if (!await _context.FormQuestions.AnyAsync(q => q.FormQuestionId == Question.FormQuestionId))
                 {
                     return RedirectToPage("/NotFound");
                 }

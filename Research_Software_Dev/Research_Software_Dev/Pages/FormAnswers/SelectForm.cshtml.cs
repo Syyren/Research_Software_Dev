@@ -30,13 +30,20 @@ namespace Research_Software_Dev.Pages.Forms
         [BindProperty]
         public string SessionId { get; set; }
 
-        public List<Form> Forms { get; set; }
+        public List<Form> Forms { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(string participantId, string sessionId)
         {
+            // Validate participant and session IDs
+            if (string.IsNullOrEmpty(participantId) || string.IsNullOrEmpty(sessionId))
+            {
+                return BadRequest("Participant ID and Session ID are required.");
+            }
+
             ParticipantId = participantId;
             SessionId = sessionId;
 
+            // Authorization roles
             var roles = User.Claims
                 .Where(c => c.Type == ClaimTypes.Role)
                 .Select(c => c.Value)
@@ -44,6 +51,7 @@ namespace Research_Software_Dev.Pages.Forms
 
             if (roles.Contains("Study Admin") || roles.Contains("High-Auth") || roles.Contains("Mid-Auth") || roles.Contains("Researcher") || roles.Contains("Low-Auth"))
             {
+                // Load forms sorted by name
                 Forms = await _context.Forms.OrderBy(f => f.FormName).ToListAsync();
             }
             else
@@ -56,12 +64,14 @@ namespace Research_Software_Dev.Pages.Forms
 
         public IActionResult OnPost()
         {
+            // Validate form selection
             if (string.IsNullOrEmpty(FormId))
             {
                 ModelState.AddModelError(string.Empty, "Please select a form.");
                 return Page();
             }
 
+            // Redirect to the answer submission page
             return RedirectToPage("./SubmitAnswers", new { formId = FormId, participantId = ParticipantId, sessionId = SessionId });
         }
     }
