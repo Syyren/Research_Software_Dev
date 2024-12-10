@@ -14,20 +14,25 @@
     </select>
 
     <!-- Step 2: Select Participants -->
-    <label for="participants">Select Participants:</label>
-    <select id="participants" name="Participants" multiple class="form-control">
+    <label>Select Participants:</label>
+    <div class="form-group">
         @if (Model.AvailableParticipants != null && Model.AvailableParticipants.Any())
         {
             @foreach (var participant in Model.AvailableParticipants)
             {
-                <option value="@participant.ParticipantId">@participant.ParticipantFirstName</option>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="participant_@participant.ParticipantId" name="Participants" value="@participant.ParticipantId" />
+                    <label class="form-check-label" for="participant_@participant.ParticipantId">
+                        @participant.ParticipantFirstName @participant.ParticipantLastName
+                    </label>
+                </div>
             }
         }
         else
         {
-            <option disabled>No participants available</option>
+            <p>No participants available</p>
         }
-    </select>
+    </div>
 
     <!-- Step 3: Select Date Range -->
     <label for="startDate">Select Start Date:</label>
@@ -39,9 +44,14 @@
     <button type="submit" class="btn btn-primary mt-2">Generate Chart</button>
 </form>
 
+<!-- Graph Container -->
 <canvas id="categoryTrendsChart" class="mt-4"></canvas>
 
+<!-- Save as PDF Button -->
+<button id="savePdfButton" class="btn btn-secondary mt-4">Save as PDF</button>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script>
     const chartData = @Html.Raw(Model.ChartDataJson ?? "{}");
 
@@ -55,19 +65,39 @@
             fill: false
         }));
 
-        new Chart(ctx, {
+        const chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: chartData.labels, // Session dates
+                labels: chartData.labels.map(label => new Date(label).toLocaleDateString()),
                 datasets: datasets
             },
             options: {
                 responsive: true,
                 scales: {
-                    x: { title: { display: true, text: "Session Dates" } },
+                    x: { title: { display: true, text: "Sessions" } },
                     y: { title: { display: true, text: "Average Scores" }, beginAtZero: true }
                 }
             }
+        });
+
+        // Save as PDF functionality
+        document.getElementById('savePdfButton').addEventListener('click', function () {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: 'landscape',
+                unit: 'px',
+                format: [1024, 768],
+            });
+
+            const canvas = document.getElementById('categoryTrendsChart');
+            const imgData = canvas.toDataURL('image/jpeg', 0.7);
+
+            // Add chart to PDF
+            pdf.text("Category Trends Over Sessions", 20, 20);
+            pdf.addImage(imgData, 'JPEG', 20, 40, 960, 540);
+
+            // Save PDF
+            pdf.save('Category_Trends_Chart.pdf');
         });
     }
 </script>

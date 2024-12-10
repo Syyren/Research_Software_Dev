@@ -1,0 +1,72 @@
+﻿@page
+@model Research_Software_Dev.Pages.Data.BubbleChartModel
+@{
+    ViewData["Title"] = "Bubble Chart: Session Attendance with Engagement";
+}
+
+<h1>Session Attendance: Bubble Chart</h1>
+
+<!-- Graph Container -->
+<canvas id="bubbleChart" class="mt-4"></canvas>
+
+<!-- Save as PDF Button -->
+<button id="savePdfButton" class="btn btn-secondary mt-4">Save as PDF</button>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+<script>
+    const chartData = @Html.Raw(Model.ChartDataJson ?? "[]");
+
+    if (chartData.length) {
+        const ctx = document.getElementById('bubbleChart').getContext('2d');
+
+        const bubbleChart = new Chart(ctx, {
+            type: 'bubble',
+            data: {
+                datasets: [{
+                    label: "Session Engagement",
+                    data: chartData,
+                    backgroundColor: "rgba(75, 192, 192, 0.5)",
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: { display: true, text: "Session Dates" },
+                        ticks: {
+                            callback: (value, index, values) => {
+                                const date = new Date((value - 25569) * 86400 * 1000); // Convert numeric value back to date
+                                return date.toLocaleDateString();
+                            }
+                        }
+                    },
+                    y: { title: { display: true, text: "Participants" }, type: 'category' }
+                }
+            }
+        });
+
+        // Save as PDF functionality
+        document.getElementById('savePdfButton').addEventListener('click', function () {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: 'landscape',
+                unit: 'px',
+                format: [1024, 768],
+            });
+
+            const canvas = document.getElementById('bubbleChart');
+            const imgData = canvas.toDataURL('image/jpeg', 0.7);
+
+            // Add chart to PDF
+            pdf.text("Session Attendance: Bubble Chart", 20, 20);
+            pdf.addImage(imgData, 'JPEG', 20, 40, 960, 540);
+
+            // Save PDF
+            pdf.save('Bubble_Chart_Session_Attendance.pdf');
+        });
+    }
+</script>

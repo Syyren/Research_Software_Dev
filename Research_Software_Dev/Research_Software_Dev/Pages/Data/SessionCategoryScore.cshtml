@@ -1,0 +1,107 @@
+﻿@page
+@model Research_Software_Dev.Pages.Data.SessionCategoryScoreModel
+@{
+    ViewData["Title"] = "Category Scores for a Participant";
+}
+
+<h1>Category Scores for a Participant</h1>
+
+<form method="get" id="filterForm">
+    <!-- Step 1: Select Participant -->
+    <label for="participant">Select Participant:</label>
+    <select id="participant" name="participantId" class="form-control">
+        <option value="">-- Select Participant --</option>
+        @if (Model.AvailableParticipants != null && Model.AvailableParticipants.Any())
+        {
+            foreach (var participant in Model.AvailableParticipants)
+            {
+                <option value="@participant.ParticipantId" selected="@(Model.SelectedParticipantId == participant.ParticipantId ? "selected" : null)">
+                    @participant.ParticipantFirstName @participant.ParticipantLastName
+                </option>
+            }
+        }
+        else
+        {
+            <option disabled>No participants available</option>
+        }
+    </select>
+
+    <!-- Step 2: Select Session -->
+    <label for="session">Select Session:</label>
+    <select id="session" name="sessionId" class="form-control">
+        <option value="">-- Select Session --</option>
+        @if (Model.AvailableSessions != null && Model.AvailableSessions.Any())
+        {
+            foreach (var session in Model.AvailableSessions)
+            {
+                <option value="@session.SessionId" selected="@(Model.SelectedSessionId == session.SessionId ? "selected" : null)">
+                    @session.Date.ToShortDateString()
+                </option>
+            }
+        }
+        else
+        {
+            <option disabled>No sessions available</option>
+        }
+    </select>
+
+    <button type="submit" class="btn btn-primary mt-2">Generate Chart</button>
+</form>
+
+<!-- Graph Container -->
+<canvas id="categoryScoresChart" class="mt-4"></canvas>
+
+<!-- Save as PDF Button -->
+<button id="savePdfButton" class="btn btn-secondary mt-4">Save as PDF</button>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script>
+    const chartData = @Html.Raw(Model.ChartDataJson ?? "{}");
+
+    if (chartData && chartData.labels) {
+        const ctx = document.getElementById('categoryScoresChart').getContext('2d');
+        const datasets = [{
+            label: 'Category Scores',
+            data: chartData.scores,
+            backgroundColor: chartData.colors,
+            borderColor: chartData.colors,
+            borderWidth: 1
+        }];
+
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: chartData.labels, // Categories
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { title: { display: true, text: "Categories" } },
+                    y: { title: { display: true, text: "Scores" }, beginAtZero: true }
+                }
+            }
+        });
+
+        // Save as PDF functionality
+        document.getElementById('savePdfButton').addEventListener('click', function () {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: 'landscape',
+                unit: 'px',
+                format: [1024, 768],
+            });
+
+            const canvas = document.getElementById('categoryScoresChart');
+            const imgData = canvas.toDataURL('image/jpeg', 0.7);
+
+            // Add chart to PDF
+            pdf.text("Category Scores for a Participant", 20, 20);
+            pdf.addImage(imgData, 'JPEG', 20, 40, 960, 540);
+
+            // Save PDF
+            pdf.save('Category_Scores_Chart.pdf');
+        });
+    }
+</script>

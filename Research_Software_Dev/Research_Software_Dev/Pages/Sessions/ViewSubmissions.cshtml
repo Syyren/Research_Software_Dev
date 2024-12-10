@@ -1,0 +1,49 @@
+﻿@page
+@model Research_Software_Dev.Pages.Sessions.ViewSubmissionsModel
+
+@{
+    ViewData["Title"] = "View Submissions";
+}
+
+<h1>View Submissions</h1>
+
+<form method="get" id="participantForm">
+    <input type="hidden" name="SessionId" value="@Model.SessionId" />
+
+    <label for="participant">Select Participant:</label>
+    <select id="participant" name="ParticipantId" class="form-control" asp-items="Model.ParticipantOptions" onchange="this.form.submit()">
+        <option value="">-- Select Participant --</option>
+    </select>
+</form>
+
+@if (Model.FormAnswers != null && Model.FormAnswers.Any())
+{
+    <h2>Answers for Participant</h2>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Question Number</th>
+                <th>Question Description</th>
+                <th>Category</th>
+                <th>Answer</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var answer in Model.FormAnswers)
+            {
+                <tr>
+                    <td>@answer.TimeStamp</td>
+                    <td>@answer.FormQuestion.QuestionNumber</td>
+                    <td>@answer.FormQuestion.QuestionDescription</td>
+                    <td>@answer.FormQuestion.Category</td>
+                    <td>@answer.TextAnswer</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (!string.IsNullOrEmpty(Model.ParticipantId))
+{
+    <p>No answers found for the selected participant in this session.</p>
+}

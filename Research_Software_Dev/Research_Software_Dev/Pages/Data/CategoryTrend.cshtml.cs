@@ -108,7 +108,7 @@ namespace Research_Software_Dev.Pages.Data
                     {
                         g.Key.Category,
                         g.Key.SessionId,
-                        AverageScore = g.Average(a => int.Parse(a.TextAnswer))
+                        AverageScore = g.Sum(a => int.Parse(a.TextAnswer)) / (double)participants.Count
                     })
                     .ToList();
 
