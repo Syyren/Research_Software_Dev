@@ -29,27 +29,34 @@ namespace Research_Software_Dev.Pages.Data
         public List<string> SelectedParticipants { get; set; }
 
         [BindProperty]
-        public string StartSession { get; set; }
+        public DateTime? StartDate { get; set; }
 
         [BindProperty]
-        public string EndSession { get; set; }
+        public DateTime? EndDate { get; set; }
 
         public SelectList Studies { get; set; } = new SelectList(new List<SelectListItem>());
-        public List<Participant> AvailableParticipants { get; set; } = new();
-        public List<Session> AvailableSessions { get; set; } = new();
+        public List<Participant> AvailableParticipants { get; set; } = new List<Participant>();
+        public List<Session> AvailableSessions { get; set; } = new List<Session>();
         public string ChartDataJson { get; private set; }
 
-        public async Task OnGetAsync(string studyId, string startSession, string endSession, List<string> participants)
+        public async Task OnGetAsync(string studyId, DateTime? startDate, DateTime? endDate, List<string> participants)
         {
+            Console.WriteLine("Fetching data for Category Trends...");
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Console.WriteLine($"Logged-in UserId: {userId}");
+
             var userStudyIds = await _context.ResearcherStudies
                 .Where(rs => rs.ResearcherId == userId)
                 .Select(rs => rs.StudyId)
                 .ToListAsync();
 
+            Console.WriteLine($"User Study IDs: {string.Join(", ", userStudyIds)}");
+
             var studies = await _context.Studies
                 .Where(s => userStudyIds.Contains(s.StudyId))
                 .ToListAsync();
+
             Studies = new SelectList(studies, "StudyId", "StudyName");
 
             var participantIds = await _context.ParticipantStudies
@@ -67,27 +74,33 @@ namespace Research_Software_Dev.Pages.Data
                 .OrderBy(s => s.Date)
                 .ToListAsync();
 
-            if (!string.IsNullOrEmpty(startSession) && !string.IsNullOrEmpty(endSession) && participants.Any())
+            if (startDate.HasValue && endDate.HasValue && participants.Any())
             {
-                var sessionDatesInRange = AvailableSessions
-                    .Where(s => s.Date >= AvailableSessions.First(a => a.SessionId == startSession).Date &&
-                                s.Date <= AvailableSessions.First(a => a.SessionId == endSession).Date)
+                Console.WriteLine($"Filtering sessions from {startDate} to {endDate} for participants: {string.Join(", ", participants)}");
+
+                var filteredSessions = AvailableSessions
+                    .Where(s => s.Date >= DateOnly.FromDateTime(startDate.Value) && s.Date <= DateOnly.FromDateTime(endDate.Value))
                     .ToList();
 
-                var sessionDatesMap = sessionDatesInRange
-                    .ToDictionary(s => s.SessionId, s => s.Date);
-
-                var orderedSessions = sessionDatesInRange.OrderBy(s => s.Date).ToList();
-                var sessionIdsInRangeOrdered = orderedSessions.Select(s => s.SessionId).ToList();
-                var sessionDates = orderedSessions.Select(s => s.Date.ToString("yyyy-MM-dd")).ToList();
+                Console.WriteLine("Filtered Sessions:");
+                foreach (var session in filteredSessions)
+                {
+                    Console.WriteLine($"- SessionId: {session.SessionId}, Date: {session.Date}");
+                }
 
                 var filteredAnswers = (await _context.FormAnswers
-                    .Where(a => sessionIdsInRangeOrdered.Contains(a.SessionId) &&
+                    .Where(a => filteredSessions.Select(s => s.SessionId).Contains(a.SessionId) &&
                                 participants.Contains(a.ParticipantId))
                     .Include(a => a.FormQuestion)
                     .ToListAsync())
                     .Where(a => int.TryParse(a.TextAnswer, out _))
                     .ToList();
+
+                Console.WriteLine($"FilteredAnswers Count: {filteredAnswers.Count}");
+                foreach (var answer in filteredAnswers)
+                {
+                    Console.WriteLine($"Answer: ParticipantId={answer.ParticipantId}, SessionId={answer.SessionId}, QuestionId={answer.FormQuestionId}, TextAnswer={answer.TextAnswer}");
+                }
 
                 var groupedData = filteredAnswers
                     .GroupBy(a => new { a.FormQuestion.Category, a.SessionId })
@@ -95,37 +108,42 @@ namespace Research_Software_Dev.Pages.Data
                     {
                         g.Key.Category,
                         g.Key.SessionId,
-                        TotalScore = g.Sum(a => int.Parse(a.TextAnswer))
+                        AverageScore = g.Average(a => int.Parse(a.TextAnswer))
                     })
                     .ToList();
 
+                Console.WriteLine($"GroupedData Count: {groupedData.Count}");
+                foreach (var group in groupedData)
+                {
+                    Console.WriteLine($"Category: {group.Category}, SessionId: {group.SessionId}, AverageScore: {group.AverageScore}");
+                }
+
+                var sessions = filteredSessions.OrderBy(s => s.Date).ToList();
+                var sessionDates = sessions.Select(s => s.Date.ToString("yyyy-MM-dd")).ToList();
                 var categories = groupedData.Select(g => g.Category).Distinct().ToList();
 
                 var scoresByCategory = categories.Select(category =>
-                    sessionIdsInRangeOrdered.Select(sessionId =>
-                    {
-                        var matchingGroups = groupedData
-                            .Where(g => g.Category == category && g.SessionId == sessionId)
-                            .ToList();
-
-                        if (matchingGroups.Any())
-                        {
-                            var totalScore = matchingGroups.Sum(g => g.TotalScore);
-                            var average = (double)totalScore / participants.Count;
-                            return average;
-                        }
-
-                        return 0.0;
-                    }).ToList()
+                    sessions.Select(session =>
+                        groupedData
+                            .Where(g => g.Category == category && g.SessionId == session.SessionId)
+                            .Select(g => g.AverageScore)
+                            .FirstOrDefault()
+                    ).ToList()
                 ).ToList();
 
                 ChartDataJson = JsonConvert.SerializeObject(new
                 {
-                    labels = sessionDates, // Use ordered session dates
+                    labels = sessionDates,
                     categories,
                     scores = scoresByCategory,
                     colors = categories.Select(_ => GetRandomColor()).ToList()
                 });
+
+                Console.WriteLine($"ChartDataJson: {ChartDataJson}");
+            }
+            else
+            {
+                Console.WriteLine("Insufficient data to generate chart.");
             }
         }
 

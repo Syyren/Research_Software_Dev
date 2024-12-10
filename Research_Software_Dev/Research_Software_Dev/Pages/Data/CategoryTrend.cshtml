@@ -29,38 +29,12 @@
         }
     </select>
 
-    <!-- Step 3: Select Session Range -->
-    <label for="startSession">Select Starting Session:</label>
-    <select id="startSession" name="StartSession" class="form-control">
-        <option value="">-- Select Starting Session --</option>
-        @if (Model.AvailableSessions != null && Model.AvailableSessions.Any())
-        {
-            @foreach (var session in Model.AvailableSessions)
-            {
-                <option value="@session.SessionId">@session.Date.ToShortDateString()</option>
-            }
-        }
-        else
-        {
-            <option disabled>No sessions available</option>
-        }
-    </select>
+    <!-- Step 3: Select Date Range -->
+    <label for="startDate">Select Start Date:</label>
+    <input id="startDate" type="date" name="StartDate" class="form-control" asp-for="StartDate" />
 
-    <label for="endSession">Select Ending Session:</label>
-    <select id="endSession" name="EndSession" class="form-control">
-        <option value="">-- Select Ending Session --</option>
-        @if (Model.AvailableSessions != null && Model.AvailableSessions.Any())
-        {
-            @foreach (var session in Model.AvailableSessions)
-            {
-                <option value="@session.SessionId">@session.Date.ToShortDateString()</option>
-            }
-        }
-        else
-        {
-            <option disabled>No sessions available</option>
-        }
-    </select>
+    <label for="endDate">Select End Date:</label>
+    <input id="endDate" type="date" name="EndDate" class="form-control" asp-for="EndDate" />
 
     <button type="submit" class="btn btn-primary mt-2">Generate Chart</button>
 </form>
@@ -90,7 +64,7 @@
             options: {
                 responsive: true,
                 scales: {
-                    x: { title: { display: true, text: "Sessions" } },
+                    x: { title: { display: true, text: "Session Dates" } },
                     y: { title: { display: true, text: "Average Scores" }, beginAtZero: true }
                 }
             }
