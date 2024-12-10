@@ -60,6 +60,7 @@ namespace Research_Software_Dev.Pages.Studies
                 .ToList();
             Participants = _context.Participants
                 .Where(p => participantIds.Contains(p.ParticipantId))
+                .OrderBy(p => p.ParticipantFirstName)
                 .ToList();
 
             return Page();
