@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Research_Software_Dev.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialSetup : Migration
+    public partial class nknpv : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

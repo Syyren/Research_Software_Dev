@@ -12,8 +12,8 @@ using Research_Software_Dev.Data;
 namespace Research_Software_Dev.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241201041644_InitialSetup")]
-    partial class InitialSetup
+    [Migration("20241210093132_nknpv")]
+    partial class nknpv
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
