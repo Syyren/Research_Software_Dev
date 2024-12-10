@@ -24,8 +24,11 @@ builder.Services.AddHttpClient("ApiClient", client =>
 });
 
 //Setting Email configs from appsettings.json and registering into app
-builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.Configure<EmailServiceSettings>(builder.Configuration.GetSection("EmailConfig"));
 builder.Services.AddTransient<IEmail, Email>();
+//Injecting AzureSettings
+builder.Services.Configure<AzureServiceSettings>(builder.Configuration.GetSection("AzureConfig"));
+
 
 var app = builder.Build();
 
