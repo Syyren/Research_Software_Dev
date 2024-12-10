@@ -9,7 +9,6 @@ using Research_Software_Dev.Models.Sessions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Forms
@@ -37,7 +36,6 @@ namespace Research_Software_Dev.Pages.Forms
         public string ParticipantName { get; set; }
         public string FormName { get; set; }
         public List<FormQuestion> Questions { get; set; }
-        public ParticipantSession ParticipantSession { get; set; }
 
         [BindProperty]
         public List<FormAnswer> Answers { get; set; }
@@ -46,15 +44,6 @@ namespace Research_Software_Dev.Pages.Forms
         {
             if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(participantId) || string.IsNullOrEmpty(sessionId))
                 return BadRequest("FormId, ParticipantId, and SessionId are required.");
-
-            var roles = User.Claims
-                .Where(c => c.Type == ClaimTypes.Role)
-                .Select(c => c.Value)
-                .ToList();
-
-            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth") && !roles.Contains("Mid-Auth") &&
-                !roles.Contains("Low-Auth") && !roles.Contains("Researcher"))
-                return Forbid();
 
             FormId = formId;
             ParticipantId = participantId;
@@ -78,19 +67,12 @@ namespace Research_Software_Dev.Pages.Forms
 
             Questions = await _context.FormQuestions
                 .Where(q => q.FormId == formId)
+                .Include(q => q.Options)
                 .OrderBy(q => q.QuestionNumber)
                 .ToListAsync();
 
             if (Questions == null || !Questions.Any())
                 return NotFound("No questions found for this form.");
-
-            ParticipantSession = await _context.ParticipantSessions
-                .Include(ps => ps.Participant)
-                .Include(ps => ps.Session)
-                .FirstOrDefaultAsync(ps => ps.ParticipantId == participantId && ps.SessionId == sessionId);
-
-            if (ParticipantSession == null)
-                return NotFound("Participant and session relationship not found.");
 
             return Page();
         }
@@ -103,17 +85,16 @@ namespace Research_Software_Dev.Pages.Forms
                 return Page();
             }
 
-            Questions = await _context.FormQuestions
-                .Where(q => q.FormId == FormId)
-                .OrderBy(q => q.QuestionNumber)
-                .ToListAsync();
-
-            foreach (var question in Questions)
+            foreach (var answer in Answers)
             {
-                var answer = Answers.FirstOrDefault(a => a.FormQuestionId == question.FormQuestionId);
-                if (answer == null) continue;
+                var question = Questions.FirstOrDefault(q => q.FormQuestionId == answer.FormQuestionId);
+                if (question != null)
+                {
+                    var option = question.Options.FirstOrDefault(o => o.OptionText == answer.TextAnswer);
+                    answer.ChoiceValue = option?.OptionValue;
+                    answer.TimeStamp = DateTime.UtcNow;
+                }
 
-                answer.TimeStamp = DateTime.UtcNow;
                 _context.FormAnswers.Add(answer);
             }
 

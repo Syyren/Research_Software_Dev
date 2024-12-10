@@ -123,7 +123,7 @@ namespace Research_Software_Dev.Migrations
                     QuestionNumber = table.Column<int>(type: "int", nullable: false),
                     QuestionDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
-                    OptionsJson = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FormId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -292,6 +292,26 @@ namespace Research_Software_Dev.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "QuestionOption",
+                columns: table => new
+                {
+                    OptionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    OptionText = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OptionValue = table.Column<double>(type: "float", nullable: true),
+                    FormQuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuestionOption", x => x.OptionId);
+                    table.ForeignKey(
+                        name: "FK_QuestionOption_FormQuestions_FormQuestionId",
+                        column: x => x.FormQuestionId,
+                        principalTable: "FormQuestions",
+                        principalColumn: "FormQuestionId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ParticipantSessions",
                 columns: table => new
                 {
@@ -346,6 +366,7 @@ namespace Research_Software_Dev.Migrations
                     AnswerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TextAnswer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ChoiceValue = table.Column<double>(type: "float", nullable: true),
                     ParticipantId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SessionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FormQuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
@@ -420,6 +441,11 @@ namespace Research_Software_Dev.Migrations
                 column: "StudyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_QuestionOption_FormQuestionId",
+                table: "QuestionOption",
+                column: "FormQuestionId");
+
+            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "Researchers",
                 column: "NormalizedEmail");
@@ -472,6 +498,9 @@ namespace Research_Software_Dev.Migrations
                 name: "ParticipantStudies");
 
             migrationBuilder.DropTable(
+                name: "QuestionOption");
+
+            migrationBuilder.DropTable(
                 name: "ResearcherSessions");
 
             migrationBuilder.DropTable(
@@ -481,22 +510,22 @@ namespace Research_Software_Dev.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "FormQuestions");
-
-            migrationBuilder.DropTable(
                 name: "ParticipantSessions");
 
             migrationBuilder.DropTable(
-                name: "Researchers");
+                name: "FormQuestions");
 
             migrationBuilder.DropTable(
-                name: "Forms");
+                name: "Researchers");
 
             migrationBuilder.DropTable(
                 name: "Participants");
 
             migrationBuilder.DropTable(
                 name: "Sessions");
+
+            migrationBuilder.DropTable(
+                name: "Forms");
 
             migrationBuilder.DropTable(
                 name: "Studies");

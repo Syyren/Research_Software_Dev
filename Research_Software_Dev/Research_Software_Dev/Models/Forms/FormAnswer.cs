@@ -2,7 +2,6 @@
 using Research_Software_Dev.Models.Sessions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json;
 
 namespace Research_Software_Dev.Models.Forms
 {
@@ -13,11 +12,14 @@ namespace Research_Software_Dev.Models.Forms
         public string AnswerId { get; set; }
 
         [Required]
-        public string TextAnswer { get; set; }
+        public string TextAnswer { get; set; } // Stores the textual response or selected option text
 
-        [Required]
         [DataType(DataType.DateTime)]
+        [Required]
         public DateTime TimeStamp { get; set; }
+
+        // Optional numeric value for the selected choice
+        public double? ChoiceValue { get; set; } // Nullable to support free text or unanswered options
 
         // ParticipantSession composite FK
         [Required]
@@ -34,10 +36,10 @@ namespace Research_Software_Dev.Models.Forms
         [ForeignKey("FormQuestionId")]
         public FormQuestion? FormQuestion { get; set; }
 
+        // Constructors
         public FormAnswer() { }
 
-        public FormAnswer(string answerId, string? textAnswer, string? selectedOptionsJson, DateTime timeStamp,
-                          string participantId, string sessionId, string formQuestionId)
+        public FormAnswer(string answerId, string textAnswer, DateTime timeStamp, string participantId, string sessionId, string formQuestionId, double? choiceValue = null)
         {
             AnswerId = answerId;
             TextAnswer = textAnswer;
@@ -45,6 +47,7 @@ namespace Research_Software_Dev.Models.Forms
             ParticipantId = participantId;
             SessionId = sessionId;
             FormQuestionId = formQuestionId;
+            ChoiceValue = choiceValue;
         }
     }
 }

@@ -28,62 +28,54 @@ namespace Research_Software_Dev.Pages.Forms
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
-            // Fetch form with related questions
-            Form = await _context.Forms.Include(f => f.Questions).FirstOrDefaultAsync(f => f.FormId == id);
+            Form = await _context.Forms
+                .Include(f => f.Questions)
+                .ThenInclude(q => q.Options)
+                .FirstOrDefaultAsync(f => f.FormId == id);
 
             if (Form == null)
             {
                 return RedirectToPage("/NotFound");
             }
 
-            // Order questions by number and populate Questions property
             Questions = Form.Questions.OrderBy(q => q.QuestionNumber).ToList();
-
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            // Validate the model
-            if (!ModelState.IsValid)
-                return Page();
+            if (!ModelState.IsValid) return Page();
 
-            // Fetch the existing form
-            var existingForm = await _context.Forms.Include(f => f.Questions).FirstOrDefaultAsync(f => f.FormId == Form.FormId);
+            var existingForm = await _context.Forms
+                .Include(f => f.Questions)
+                .ThenInclude(q => q.Options)
+                .FirstOrDefaultAsync(f => f.FormId == Form.FormId);
 
-            if (existingForm == null)
-            {
-                return RedirectToPage("/NotFound");
-            }
+            if (existingForm == null) return RedirectToPage("/NotFound");
 
-            // Update form name
             existingForm.FormName = Form.FormName;
 
-            // Update or add questions
             foreach (var question in Questions)
             {
-                var existingQuestion = existingForm.Questions.FirstOrDefault(q => q.FormQuestionId == question.FormQuestionId);
+                var existingQuestion = existingForm.Questions
+                    .FirstOrDefault(q => q.FormQuestionId == question.FormQuestionId);
 
                 if (existingQuestion != null)
                 {
-                    // Update existing question
                     existingQuestion.QuestionDescription = question.QuestionDescription;
                     existingQuestion.Type = question.Type;
-                    existingQuestion.OptionsJson = question.OptionsJson;
                     existingQuestion.QuestionNumber = question.QuestionNumber;
                     existingQuestion.Category = question.Category;
+                    existingQuestion.Options = question.Options ?? new List<QuestionOption>();
                 }
                 else
                 {
-                    // Add new question
                     question.FormId = existingForm.FormId;
                     _context.FormQuestions.Add(question);
                 }
             }
 
-            // Save changes to the database
             await _context.SaveChangesAsync();
-
             return RedirectToPage("./Index");
         }
     }

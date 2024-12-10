@@ -4,11 +4,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Forms;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Forms
@@ -30,7 +28,7 @@ namespace Research_Software_Dev.Pages.Forms
         public string FormId { get; set; }
 
         [BindProperty]
-        public List<string> Choices { get; set; } = new();
+        public List<QuestionOption> Choices { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(string formId)
         {
@@ -76,7 +74,7 @@ namespace Research_Software_Dev.Pages.Forms
             {
                 Question.FormId = FormId;
 
-                // Process Choices or Scale for SingleChoice or LikertScale
+                // Add options for SingleChoice or LikertScale
                 if (Question.Type == QuestionType.SingleChoice || Question.Type == QuestionType.LikertScale)
                 {
                     if (Choices == null || Choices.Count == 0)
@@ -85,20 +83,15 @@ namespace Research_Software_Dev.Pages.Forms
                         return Page();
                     }
 
-                    // Remove empty or duplicate choices and serialize
-                    var formattedChoices = Choices
-                        .Where(choice => !string.IsNullOrWhiteSpace(choice))
-                        .Select(choice => choice.Trim())
-                        .Distinct()
+                    Question.Options = Choices
+                        .Where(choice => !string.IsNullOrWhiteSpace(choice.OptionText))
                         .ToList();
 
-                    if (formattedChoices.Count == 0)
+                    if (Question.Options.Count == 0)
                     {
-                        ModelState.AddModelError("Choices", "At least one valid choice or scale value is required.");
+                        ModelState.AddModelError("Choices", "At least one valid choice is required.");
                         return Page();
                     }
-
-                    Question.OptionsJson = JsonSerializer.Serialize(formattedChoices);
                 }
 
                 // Auto-increment question number

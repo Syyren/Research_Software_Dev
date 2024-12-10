@@ -46,6 +46,10 @@ namespace Research_Software_Dev.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<QuestionOption>()
+            .HasOne(qo => qo.FormQuestion)
+            .WithMany(fq => fq.Options)
+            .HasForeignKey(qo => qo.FormQuestionId);
 
             base.OnModelCreating(modelBuilder);
 
