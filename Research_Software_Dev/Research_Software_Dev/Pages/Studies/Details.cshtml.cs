@@ -63,6 +63,12 @@ namespace Research_Software_Dev.Pages.Studies
                 .OrderBy(p => p.ParticipantFirstName)
                 .ToList();
 
+            //grabbing a list of sessions by their study id
+            Sessions = _context.Sessions
+                .Where(s => s.StudyId == Study.StudyId)
+                .OrderBy(s => s.Date)
+                .ToList();
+
             return Page();
         }
     }
