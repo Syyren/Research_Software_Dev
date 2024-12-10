@@ -45,9 +45,9 @@
                                 <p class="card-text" style="max-height: 30vh; max-width: 30vw; min-width: 340px; overflow-y: scroll; padding: 5px;">Desc: @Html.DisplayFor(modelItem => item.StudyDescription)</p>
                             </div>
                             <div>
-                                <a class="btn btn-outline-dark" asp-page="/Studies/Edit" asp-route-id="@item.StudyId">Edit</a> |
-                                <a class="btn btn-outline-dark" asp-page="/Studies/Details" asp-route-id="@item.StudyId">Details</a> |
-                                <a class="btn btn-outline-danger" asp-page="/Studies/Delete" asp-route-id="@item.StudyId">Delete</a>
+                                <a class="btn btn-outline-dark me-1" asp-page="/Studies/Edit" asp-route-id="@item.StudyId">Edit</a>
+                                <a class="btn btn-outline-dark me-1" asp-page="/Studies/Details" asp-route-id="@item.StudyId">Details</a>
+                                <a class="btn btn-outline-danger me-1" asp-page="/Studies/Delete" asp-route-id="@item.StudyId">Delete</a>
                             </div>
                         </div>
                     </div>
