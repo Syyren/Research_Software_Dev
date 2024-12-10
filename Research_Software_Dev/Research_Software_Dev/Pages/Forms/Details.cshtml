@@ -24,6 +24,11 @@
                             <br />
                             <small>
                                 <strong>Type:</strong> @question.Type
+                                @if (!string.IsNullOrEmpty(question.Category))
+                                {
+                                    <br />
+                                    <strong>Category:</strong> @question.Category
+                                }
                                 @if (!string.IsNullOrEmpty(question.OptionsJson))
                                 {
                                     <br />

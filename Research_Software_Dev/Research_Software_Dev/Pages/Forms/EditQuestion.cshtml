@@ -22,7 +22,7 @@
     <!-- Question Number -->
     <div class="form-group">
         <label asp-for="Question.QuestionNumber"></label>
-        <input asp-for="Question.QuestionNumber" class="form-control" readonly />
+        <input asp-for="Question.QuestionNumber" class="form-control" />
         <span asp-validation-for="Question.QuestionNumber" class="text-danger"></span>
     </div>
 
@@ -35,6 +35,13 @@
             <option value="FreeText">Free Text</option>
         </select>
         <span asp-validation-for="Question.Type" class="text-danger"></span>
+    </div>
+
+    <!-- Question Category -->
+    <div class="form-group">
+        <label asp-for="Question.Category">Category (Optional)</label>
+        <input type="text" asp-for="Question.Category" class="form-control" placeholder="Enter category (e.g., Preferences)" />
+        <span asp-validation-for="Question.Category" class="text-danger"></span>
     </div>
 
     <!-- Options for Likert Scale -->

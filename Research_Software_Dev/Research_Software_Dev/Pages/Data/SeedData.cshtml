@@ -1,0 +1,16 @@
+﻿@page
+@model SeedDataModel
+@{
+    ViewData["Title"] = "Run Seeder";
+}
+
+<h1>Run Seeder</h1>
+
+<form method="post">
+    <button type="submit" class="btn btn-primary">Run Seeder</button>
+</form>
+
+@if (Model.Message != null)
+{
+    <p>@Model.Message</p>
+}

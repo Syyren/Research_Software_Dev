@@ -30,6 +30,9 @@ namespace Research_Software_Dev.Models.Forms
         // Metadata for choices, scales, etc.
         public string? OptionsJson { get; set; }
 
+        [Display(Name = "Category")]
+        public string? Category { get; set; }
+
         // Foreign Key
         [Required]
         public string FormId { get; set; }
@@ -56,7 +59,7 @@ namespace Research_Software_Dev.Models.Forms
             // Constructors
         public FormQuestion() { }
 
-        public FormQuestion(string questionId, int questionNumber, string questionDescription, QuestionType type, string formId, string? optionsJson = null)
+        public FormQuestion(string questionId, int questionNumber, string questionDescription, QuestionType type, string formId, string? optionsJson = null, string? category = null)
         {
             FormQuestionId = questionId;
             QuestionNumber = questionNumber;
@@ -64,6 +67,7 @@ namespace Research_Software_Dev.Models.Forms
             Type = type;
             FormId = formId;
             OptionsJson = optionsJson;
+            Category = category;
         }
     }
 }

@@ -29,6 +29,13 @@
         <span asp-validation-for="Question.Type" class="text-danger"></span>
     </div>
 
+    <!-- Category -->
+    <div class="form-group">
+        <label asp-for="Question.Category">Category (Optional)</label>
+        <input type="text" asp-for="Question.Category" class="form-control" placeholder="Enter category (e.g., Depression)" />
+        <span asp-validation-for="Question.Category" class="text-danger"></span>
+    </div>
+
     <!-- Choices or Scale Section -->
     <div class="form-group" id="choices-section" style="display: none;">
         <label>Choices / Scale Values</label>

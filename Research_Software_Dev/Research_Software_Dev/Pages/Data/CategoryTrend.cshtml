@@ -1,0 +1,99 @@
+﻿@page
+@model Research_Software_Dev.Pages.Data.CategoryTrendModel
+@{
+    ViewData["Title"] = "Category Trends Over Sessions";
+}
+
+<h1>Category Trends Over Sessions</h1>
+
+<form method="get" id="filterForm">
+    <!-- Step 1: Select Study -->
+    <label for="study">Select Study:</label>
+    <select id="study" name="StudyId" class="form-control" asp-for="StudyId" asp-items="Model.Studies">
+        <option value="">-- Select Study --</option>
+    </select>
+
+    <!-- Step 2: Select Participants -->
+    <label for="participants">Select Participants:</label>
+    <select id="participants" name="Participants" multiple class="form-control">
+        @if (Model.AvailableParticipants != null && Model.AvailableParticipants.Any())
+        {
+            @foreach (var participant in Model.AvailableParticipants)
+            {
+                <option value="@participant.ParticipantId">@participant.ParticipantFirstName</option>
+            }
+        }
+        else
+        {
+            <option disabled>No participants available</option>
+        }
+    </select>
+
+    <!-- Step 3: Select Session Range -->
+    <label for="startSession">Select Starting Session:</label>
+    <select id="startSession" name="StartSession" class="form-control">
+        <option value="">-- Select Starting Session --</option>
+        @if (Model.AvailableSessions != null && Model.AvailableSessions.Any())
+        {
+            @foreach (var session in Model.AvailableSessions)
+            {
+                <option value="@session.SessionId">@session.Date.ToShortDateString()</option>
+            }
+        }
+        else
+        {
+            <option disabled>No sessions available</option>
+        }
+    </select>
+
+    <label for="endSession">Select Ending Session:</label>
+    <select id="endSession" name="EndSession" class="form-control">
+        <option value="">-- Select Ending Session --</option>
+        @if (Model.AvailableSessions != null && Model.AvailableSessions.Any())
+        {
+            @foreach (var session in Model.AvailableSessions)
+            {
+                <option value="@session.SessionId">@session.Date.ToShortDateString()</option>
+            }
+        }
+        else
+        {
+            <option disabled>No sessions available</option>
+        }
+    </select>
+
+    <button type="submit" class="btn btn-primary mt-2">Generate Chart</button>
+</form>
+
+<canvas id="categoryTrendsChart" class="mt-4"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const chartData = @Html.Raw(Model.ChartDataJson ?? "{}");
+
+    if (chartData && chartData.labels) {
+        const ctx = document.getElementById('categoryTrendsChart').getContext('2d');
+        const datasets = chartData.categories.map((category, index) => ({
+            label: category,
+            data: chartData.scores[index],
+            borderColor: chartData.colors[index],
+            backgroundColor: chartData.colors[index] + '33',
+            fill: false
+        }));
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: chartData.labels, // Session dates
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { title: { display: true, text: "Sessions" } },
+                    y: { title: { display: true, text: "Average Scores" }, beginAtZero: true }
+                }
+            }
+        });
+    }
+</script>

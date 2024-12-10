@@ -66,9 +66,11 @@ namespace Research_Software_Dev.Pages.Forms
                 return RedirectToPage("/NotFound");
             }
 
+            // Update fields
             existingQuestion.QuestionDescription = Question.QuestionDescription;
             existingQuestion.Type = Question.Type;
             existingQuestion.OptionsJson = Question.OptionsJson;
+            existingQuestion.Category = Question.Category;
 
             try
             {
