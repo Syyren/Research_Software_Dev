@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Researchers;
 using Research_Software_Dev.Models.Researchers.Endpoints;
+using Research_Software_Dev.Services.EmailService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,10 @@ builder.Services.AddHttpClient("ApiClient", client =>
 {
     client.BaseAddress = new Uri("https://localhost:7018");
 });
+
+//Setting Email configs from appsettings.json and registering into app
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddTransient<IEmail, Email>();
 
 var app = builder.Build();
 
