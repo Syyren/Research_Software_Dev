@@ -49,7 +49,7 @@
                 <label for="StudyId">Select Study</label>
                 <select asp-for="SelectedStudyId" class="form-control">
                     <option value="">-- Select a Study --</option>
-                    @foreach (var study in Model.Studies)
+                    @foreach (var study in Model.Studies.OrderBy(s => s.StudyName))
                     {
                         <option value="@study.StudyId">@study.StudyName</option>
                     }
