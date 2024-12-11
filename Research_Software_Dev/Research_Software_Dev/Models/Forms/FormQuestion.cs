@@ -27,11 +27,10 @@ namespace Research_Software_Dev.Models.Forms
         [Display(Name = "Question Type")]
         public QuestionType Type { get; set; }
 
-        // Metadata for choices, scales, etc.
-        public string? OptionsJson { get; set; }
-
         [Display(Name = "Category")]
         public string? Category { get; set; }
+
+        public List<FormQuestionOption> Options { get; set; } = new();
 
         // Foreign Key
         [Required]
@@ -39,35 +38,18 @@ namespace Research_Software_Dev.Models.Forms
         [ForeignKey("FormId")]
         public Form? Form { get; set; }
 
-        public List<string> GetOptions()
-        {
-            if (string.IsNullOrWhiteSpace(OptionsJson))
-            {
-                return new List<string>();
-            }
-
-            try
-            {
-                return JsonSerializer.Deserialize<List<string>>(OptionsJson) ?? new List<string>();
-            }
-            catch
-            {
-                return new List<string>(); // Return empty list if deserialization fails
-            }
-        }
-
-            // Constructors
+        // Constructors
         public FormQuestion() { }
 
-        public FormQuestion(string questionId, int questionNumber, string questionDescription, QuestionType type, string formId, string? optionsJson = null, string? category = null)
+        public FormQuestion(string questionId, int questionNumber, string questionDescription, QuestionType type, string formId, List<FormQuestionOption> options, string? category = null)
         {
             FormQuestionId = questionId;
             QuestionNumber = questionNumber;
             QuestionDescription = questionDescription;
             Type = type;
             FormId = formId;
-            OptionsJson = optionsJson;
             Category = category;
+            Options = options;
         }
     }
 }

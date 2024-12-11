@@ -5,11 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Forms;
 using Research_Software_Dev.Models.Participants;
-using Research_Software_Dev.Models.Sessions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Forms
@@ -22,7 +20,6 @@ namespace Research_Software_Dev.Pages.Forms
         public SubmitAnswersModel(ApplicationDbContext context)
         {
             _context = context;
-            Questions = new List<FormQuestion>();
         }
 
         [BindProperty]
@@ -47,15 +44,6 @@ namespace Research_Software_Dev.Pages.Forms
             if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(participantId) || string.IsNullOrEmpty(sessionId))
                 return BadRequest("FormId, ParticipantId, and SessionId are required.");
 
-            var roles = User.Claims
-                .Where(c => c.Type == ClaimTypes.Role)
-                .Select(c => c.Value)
-                .ToList();
-
-            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth") && !roles.Contains("Mid-Auth") &&
-                !roles.Contains("Low-Auth") && !roles.Contains("Researcher"))
-                return Forbid();
-
             FormId = formId;
             ParticipantId = participantId;
             SessionId = sessionId;
@@ -77,16 +65,15 @@ namespace Research_Software_Dev.Pages.Forms
                 return NotFound("Participant not found.");
 
             Questions = await _context.FormQuestions
+                .Include(q => q.Options)
                 .Where(q => q.FormId == formId)
                 .OrderBy(q => q.QuestionNumber)
                 .ToListAsync();
 
-            if (Questions == null || !Questions.Any())
+            if (!Questions.Any())
                 return NotFound("No questions found for this form.");
 
             ParticipantSession = await _context.ParticipantSessions
-                .Include(ps => ps.Participant)
-                .Include(ps => ps.Session)
                 .FirstOrDefaultAsync(ps => ps.ParticipantId == participantId && ps.SessionId == sessionId);
 
             if (ParticipantSession == null)
@@ -96,22 +83,45 @@ namespace Research_Software_Dev.Pages.Forms
         }
 
         public async Task<IActionResult> OnPostAsync()
-        {
+        { 
+
+            Console.WriteLine("POST: Logging submitted answers...");
+            foreach (var answer in Answers)
+            {
+                Console.WriteLine($"AnswerId: {answer.AnswerId}");
+                Console.WriteLine($"FormQuestionId: {answer.FormQuestionId}");
+                Console.WriteLine($"ParticipantId: {answer.ParticipantId}");
+                Console.WriteLine($"SessionId: {answer.SessionId}");
+                Console.WriteLine($"TextAnswer: {answer.TextAnswer}");
+                Console.WriteLine($"SelectedOption: {answer.SelectedOption}");
+                Console.WriteLine($"TimeStamp: {answer.TimeStamp}");
+            }
+
             if (!ModelState.IsValid || Answers == null || !Answers.Any())
             {
-                ModelState.AddModelError(string.Empty, "You must answer all questions.");
+                Console.WriteLine("POST: ModelState is invalid or no answers received.");
+                foreach (var error in ModelState)
+                {
+                    if (error.Value.Errors.Any())
+                    {
+                        Console.WriteLine($"ModelState Error for {error.Key}: {error.Value.Errors.First().ErrorMessage}");
+                    }
+                }
                 return Page();
             }
 
-            Questions = await _context.FormQuestions
-                .Where(q => q.FormId == FormId)
-                .OrderBy(q => q.QuestionNumber)
-                .ToListAsync();
-
-            foreach (var question in Questions)
+            foreach (var answer in Answers)
             {
-                var answer = Answers.FirstOrDefault(a => a.FormQuestionId == question.FormQuestionId);
-                if (answer == null) continue;
+                if (!string.IsNullOrEmpty(answer.SelectedOption))
+                {
+                    var selectedOption = await _context.FormQuestionOptions
+                        .FirstOrDefaultAsync(o => o.OptionId == answer.SelectedOption);
+
+                    if (selectedOption != null)
+                    {
+                        answer.TextAnswer = selectedOption.OptionText;
+                    }
+                }
 
                 answer.TimeStamp = DateTime.UtcNow;
                 _context.FormAnswers.Add(answer);
@@ -119,12 +129,13 @@ namespace Research_Software_Dev.Pages.Forms
 
             try
             {
-                await _context.SaveChangesAsync();
+                var rowsAffected = await _context.SaveChangesAsync();
+                Console.WriteLine($"POST: SaveChangesAsync completed. Rows affected: {rowsAffected}");
             }
-            catch
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "There was an error saving your answers. Please try again.");
-                return Page();
+                Console.WriteLine($"POST: Exception during SaveChangesAsync: {ex.Message}");
+                throw;
             }
 
             return RedirectToPage("./Index");

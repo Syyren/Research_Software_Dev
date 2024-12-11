@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Forms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,19 +25,23 @@ namespace Research_Software_Dev.Pages.Forms
         public Form Form { get; set; }
 
         [BindProperty]
-        public List<FormQuestion> Questions { get; set; } = new();
+        public string FormId { get; set; }
+
+        [BindProperty]
+        public List<FormQuestion> Questions { get; set; }
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
-            // Fetch form with related questions
-            Form = await _context.Forms.Include(f => f.Questions).FirstOrDefaultAsync(f => f.FormId == id);
+            Form = await _context.Forms
+                .Include(f => f.Questions)
+                .ThenInclude(q => q.Options)
+                .FirstOrDefaultAsync(f => f.FormId == id);
 
             if (Form == null)
             {
-                return RedirectToPage("/NotFound");
+                return NotFound("Form not found.");
             }
 
-            // Order questions by number and populate Questions property
             Questions = Form.Questions.OrderBy(q => q.QuestionNumber).ToList();
 
             return Page();
@@ -44,47 +49,79 @@ namespace Research_Software_Dev.Pages.Forms
 
         public async Task<IActionResult> OnPostAsync()
         {
-            // Validate the model
-            if (!ModelState.IsValid)
-                return Page();
+            Console.WriteLine($"POST: Editing Form - FormId: {Form.FormId}");
 
-            // Fetch the existing form
-            var existingForm = await _context.Forms.Include(f => f.Questions).FirstOrDefaultAsync(f => f.FormId == Form.FormId);
+            if (!ModelState.IsValid)
+            {
+                foreach (var error in ModelState)
+                {
+                    if (error.Value.Errors.Count > 0)
+                    {
+                        Console.WriteLine($"ModelState Error for {error.Key}: {error.Value.Errors.First().ErrorMessage}");
+                    }
+                }
+                return Page();
+            }
+
+            var existingForm = await _context.Forms
+                .Include(f => f.Questions)
+                .FirstOrDefaultAsync(f => f.FormId == Form.FormId);
 
             if (existingForm == null)
             {
-                return RedirectToPage("/NotFound");
+                return NotFound("Form not found.");
             }
 
             // Update form name
             existingForm.FormName = Form.FormName;
 
-            // Update or add questions
+            Console.WriteLine($"POST: Processing Questions for FormId: {Form.FormId}");
+            var existingQuestions = existingForm.Questions.ToDictionary(q => q.FormQuestionId, q => q);
+            var submittedQuestionIds = Questions.Select(q => q.FormQuestionId).ToHashSet();
+
+            // Add or update questions
             foreach (var question in Questions)
             {
-                var existingQuestion = existingForm.Questions.FirstOrDefault(q => q.FormQuestionId == question.FormQuestionId);
-
-                if (existingQuestion != null)
+                if (existingQuestions.TryGetValue(question.FormQuestionId, out var existingQuestion))
                 {
                     // Update existing question
                     existingQuestion.QuestionDescription = question.QuestionDescription;
-                    existingQuestion.Type = question.Type;
-                    existingQuestion.OptionsJson = question.OptionsJson;
                     existingQuestion.QuestionNumber = question.QuestionNumber;
+                    existingQuestion.Type = question.Type;
                     existingQuestion.Category = question.Category;
+                    Console.WriteLine($"Updated Question: {existingQuestion.FormQuestionId} - {existingQuestion.QuestionDescription}");
                 }
                 else
                 {
                     // Add new question
-                    question.FormId = existingForm.FormId;
+                    question.FormId = Form.FormId;
                     _context.FormQuestions.Add(question);
+                    Console.WriteLine($"Added New Question: {question.FormQuestionId} - {question.QuestionDescription}");
                 }
             }
 
-            // Save changes to the database
-            await _context.SaveChangesAsync();
+            // Remove questions not submitted
+            foreach (var questionId in existingQuestions.Keys.Except(submittedQuestionIds))
+            {
+                var questionToRemove = existingQuestions[questionId];
+                _context.FormQuestions.Remove(questionToRemove);
+                Console.WriteLine($"Removed Question: {questionToRemove.FormQuestionId} - {questionToRemove.QuestionDescription}");
+            }
+
+            Console.WriteLine("POST: Saving changes...");
+            try
+            {
+                var rowsAffected = await _context.SaveChangesAsync();
+                Console.WriteLine($"POST: SaveChangesAsync completed. Rows affected: {rowsAffected}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"POST: Exception during SaveChangesAsync: {ex.Message}");
+                throw;
+            }
 
             return RedirectToPage("./Index");
         }
+
     }
 }

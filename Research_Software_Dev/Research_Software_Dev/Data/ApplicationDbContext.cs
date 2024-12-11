@@ -20,6 +20,7 @@ namespace Research_Software_Dev.Data
         public DbSet<Form> Forms { get; set; }
         public DbSet<FormAnswer> FormAnswers { get; set; }
         public DbSet<FormQuestion> FormQuestions { get; set; }
+        public DbSet<FormQuestionOption> FormQuestionOptions { get; set; }
 
         // Participants
         public DbSet<Participant> Participants { get; set; }
@@ -46,29 +47,35 @@ namespace Research_Software_Dev.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             base.OnModelCreating(modelBuilder);
 
-            // Forms and Questions Relationship
+            // FormQuestion and FormQuestionOption Relationship
+            modelBuilder.Entity<FormQuestion>()
+                .HasMany(q => q.Options)
+                .WithOne(o => o.FormQuestion)
+                .HasForeignKey(o => o.FormQuestionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // FormQuestion and Form Relationship
             modelBuilder.Entity<FormQuestion>()
                 .HasOne(fq => fq.Form)
                 .WithMany(f => f.Questions)
                 .HasForeignKey(fq => fq.FormId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Answers and Questions Relationship
+            // FormAnswer and FormQuestion Relationship
             modelBuilder.Entity<FormAnswer>()
                 .HasOne(fa => fa.FormQuestion)
                 .WithMany()
                 .HasForeignKey(fa => fa.FormQuestionId)
-                .OnDelete(DeleteBehavior.Restrict); // Prevents multiple cascade paths from FormQuestion.
+                .OnDelete(DeleteBehavior.Restrict);
 
-            // Answers and ParticipantSessions Relationship
+            // FormAnswer and ParticipantSession Relationship
             modelBuilder.Entity<FormAnswer>()
                 .HasOne(fa => fa.ParticipantSession)
                 .WithMany()
                 .HasForeignKey(fa => new { fa.ParticipantId, fa.SessionId })
-                .OnDelete(DeleteBehavior.Restrict); // Restricted to avoid cascade path conflicts.
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Composite Keys
             modelBuilder.Entity<ParticipantSession>()

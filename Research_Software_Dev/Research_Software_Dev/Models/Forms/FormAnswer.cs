@@ -2,7 +2,6 @@
 using Research_Software_Dev.Models.Sessions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json;
 
 namespace Research_Software_Dev.Models.Forms
 {
@@ -13,7 +12,9 @@ namespace Research_Software_Dev.Models.Forms
         public string AnswerId { get; set; }
 
         [Required]
-        public string TextAnswer { get; set; }
+        public string? TextAnswer { get; set; }
+
+        public string? SelectedOption { get; set; } // Field for storing the selected option ID
 
         [Required]
         [DataType(DataType.DateTime)]
@@ -36,11 +37,12 @@ namespace Research_Software_Dev.Models.Forms
 
         public FormAnswer() { }
 
-        public FormAnswer(string answerId, string? textAnswer, string? selectedOptionsJson, DateTime timeStamp,
+        public FormAnswer(string answerId, string? textAnswer, string? selectedOption, DateTime timeStamp,
                           string participantId, string sessionId, string formQuestionId)
         {
             AnswerId = answerId;
             TextAnswer = textAnswer;
+            SelectedOption = selectedOption;
             TimeStamp = timeStamp;
             ParticipantId = participantId;
             SessionId = sessionId;

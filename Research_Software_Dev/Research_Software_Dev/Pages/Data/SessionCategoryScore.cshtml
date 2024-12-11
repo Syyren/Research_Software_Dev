@@ -4,56 +4,50 @@
     ViewData["Title"] = "Category Scores for a Participant";
 }
 
-<h1>Category Scores for a Participant</h1>
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Category Scores for a Participant</h1>
 
-<form method="get" id="filterForm">
-    <!-- Step 1: Select Participant -->
-    <label for="participant">Select Participant:</label>
-    <select id="participant" name="participantId" class="form-control">
-        <option value="">-- Select Participant --</option>
-        @if (Model.AvailableParticipants != null && Model.AvailableParticipants.Any())
-        {
-            foreach (var participant in Model.AvailableParticipants)
-            {
-                <option value="@participant.ParticipantId" selected="@(Model.SelectedParticipantId == participant.ParticipantId ? "selected" : null)">
-                    @participant.ParticipantFirstName @participant.ParticipantLastName
-                </option>
-            }
-        }
-        else
-        {
-            <option disabled>No participants available</option>
-        }
-    </select>
+    <!-- Form for Participant and Session Selection -->
+    <form method="get" id="filterForm" class="needs-validation" novalidate>
+        <div class="form-group mb-3">
+            <label for="participant">Select Participant:</label>
+            <select id="participant" name="participantId" class="form-control" required>
+                <option value="">-- Select Participant --</option>
+                @foreach (var participant in Model.AvailableParticipants)
+                {
+                    <option value="@participant.ParticipantId"
+                            selected="@(Model.SelectedParticipantId == participant.ParticipantId ? "selected" : null)">
+                        @participant.ParticipantFirstName @participant.ParticipantLastName
+                    </option>
+                }
+            </select>
+        </div>
 
-    <!-- Step 2: Select Session -->
-    <label for="session">Select Session:</label>
-    <select id="session" name="sessionId" class="form-control">
-        <option value="">-- Select Session --</option>
-        @if (Model.AvailableSessions != null && Model.AvailableSessions.Any())
-        {
-            foreach (var session in Model.AvailableSessions)
-            {
-                <option value="@session.SessionId" selected="@(Model.SelectedSessionId == session.SessionId ? "selected" : null)">
-                    @session.Date.ToShortDateString()
-                </option>
-            }
-        }
-        else
-        {
-            <option disabled>No sessions available</option>
-        }
-    </select>
+        <div class="form-group mb-3">
+            <label for="session">Select Session:</label>
+            <select id="session" name="sessionId" class="form-control" required>
+                <option value="">-- Select Session --</option>
+                @foreach (var session in Model.AvailableSessions)
+                {
+                    <option value="@session.SessionId"
+                            selected="@(Model.SelectedSessionId == session.SessionId ? "selected" : null)">
+                        @session.Date.ToShortDateString()
+                    </option>
+                }
+            </select>
+        </div>
 
-    <button type="submit" class="btn btn-primary mt-2">Generate Chart</button>
-</form>
+        <button type="submit" class="btn btn-primary w-100">Generate Chart</button>
+    </form>
 
-<!-- Graph Container -->
-<canvas id="categoryScoresChart" class="mt-4"></canvas>
+    <!-- Chart Container -->
+    <canvas id="categoryScoresChart" class="mt-4" aria-label="Category Scores Chart" role="img"></canvas>
 
-<!-- Save as PDF Button -->
-<button id="savePdfButton" class="btn btn-secondary mt-4">Save as PDF</button>
+    <!-- Save as PDF Button -->
+    <button id="savePdfButton" class="btn btn-secondary mt-4">Save as PDF</button>
+</div>
 
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script>
@@ -77,6 +71,15 @@
             },
             options: {
                 responsive: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return `${tooltipItem.label}: ${tooltipItem.raw}`;
+                            }
+                        }
+                    }
+                },
                 scales: {
                     x: { title: { display: true, text: "Categories" } },
                     y: { title: { display: true, text: "Scores" }, beginAtZero: true }
@@ -96,11 +99,8 @@
             const canvas = document.getElementById('categoryScoresChart');
             const imgData = canvas.toDataURL('image/jpeg', 0.7);
 
-            // Add chart to PDF
             pdf.text("Category Scores for a Participant", 20, 20);
             pdf.addImage(imgData, 'JPEG', 20, 40, 960, 540);
-
-            // Save PDF
             pdf.save('Category_Scores_Chart.pdf');
         });
     }

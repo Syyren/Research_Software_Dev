@@ -1,15 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Research_Software_Dev.Data;
+using Research_Software_Dev.Models.Forms;
+using Research_Software_Dev.Models.Participants;
+using Research_Software_Dev.Models.Sessions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Research_Software_Dev.Models.Participants;
-using Research_Software_Dev.Models.Sessions;
 
 namespace Research_Software_Dev.Pages.Data
 {
@@ -88,27 +90,35 @@ namespace Research_Software_Dev.Pages.Data
                     Console.WriteLine($"- SessionId: {session.SessionId}, Date: {session.Date}");
                 }
 
-                var filteredAnswers = (await _context.FormAnswers
+                var filteredAnswers = await _context.FormAnswers
                     .Where(a => filteredSessions.Select(s => s.SessionId).Contains(a.SessionId) &&
                                 participants.Contains(a.ParticipantId))
                     .Include(a => a.FormQuestion)
-                    .ToListAsync())
-                    .Where(a => int.TryParse(a.TextAnswer, out _))
-                    .ToList();
+                    .ToListAsync();
 
                 Console.WriteLine($"FilteredAnswers Count: {filteredAnswers.Count}");
+
+                // Load option values for answers with selected options
+                var optionValues = await _context.FormQuestionOptions
+                    .Where(o => filteredAnswers.Select(a => a.SelectedOption).Contains(o.OptionId))
+                    .ToDictionaryAsync(o => o.OptionId, o => o.OptionValue);
+
                 foreach (var answer in filteredAnswers)
                 {
-                    Console.WriteLine($"Answer: ParticipantId={answer.ParticipantId}, SessionId={answer.SessionId}, QuestionId={answer.FormQuestionId}, TextAnswer={answer.TextAnswer}");
+                    if (answer.SelectedOption != null && optionValues.TryGetValue(answer.SelectedOption, out var value))
+                    {
+                        Console.WriteLine($"Answer: ParticipantId={answer.ParticipantId}, SessionId={answer.SessionId}, Category={answer.FormQuestion.Category}, OptionValue={value}");
+                    }
                 }
 
                 var groupedData = filteredAnswers
+                    .Where(a => a.SelectedOption != null && optionValues.ContainsKey(a.SelectedOption))
                     .GroupBy(a => new { a.FormQuestion.Category, a.SessionId })
                     .Select(g => new
                     {
                         g.Key.Category,
                         g.Key.SessionId,
-                        AverageScore = g.Sum(a => int.Parse(a.TextAnswer)) / (double)participants.Count
+                        AverageScore = g.Sum(a => optionValues[a.SelectedOption]) / (double)participants.Count
                     })
                     .ToList();
 

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Participants;
+using Research_Software_Dev.Models.Forms;
 using Research_Software_Dev.Models.Sessions;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ namespace Research_Software_Dev.Pages.Data
 
                 Console.WriteLine($"Generating chart for SessionId: {sessionId}");
 
-                // Fetch answers for the session grouped by category and participant
+                // Fetch answers for the session and their associated options
                 var filteredAnswers = await _context.FormAnswers
                     .Where(a => a.SessionId == sessionId)
                     .Include(a => a.FormQuestion)
@@ -57,8 +58,13 @@ namespace Research_Software_Dev.Pages.Data
                 Console.WriteLine($"FilteredAnswers Count: {filteredAnswers.Count}");
                 foreach (var answer in filteredAnswers)
                 {
-                    Console.WriteLine($"Answer: ParticipantId={answer.ParticipantId}, Category={answer.FormQuestion.Category}, TextAnswer={answer.TextAnswer}");
+                    Console.WriteLine($"Answer: ParticipantId={answer.ParticipantId}, Category={answer.FormQuestion.Category}, SelectedOption={answer.SelectedOption}");
                 }
+
+                // Load option values for answers with selected options
+                var optionValues = await _context.FormQuestionOptions
+                    .Where(o => filteredAnswers.Select(a => a.SelectedOption).Contains(o.OptionId))
+                    .ToDictionaryAsync(o => o.OptionId, o => o.OptionValue);
 
                 // Retrieve participant names
                 var participantIds = filteredAnswers.Select(a => a.ParticipantId).Distinct().ToList();
@@ -66,14 +72,15 @@ namespace Research_Software_Dev.Pages.Data
                     .Where(p => participantIds.Contains(p.ParticipantId))
                     .ToDictionaryAsync(p => p.ParticipantId, p => p.ParticipantFirstName + " " + p.ParticipantLastName);
 
+                // Group data by category and participant
                 var groupedData = filteredAnswers
-                    .Where(a => int.TryParse(a.TextAnswer, out _)) // Only numeric answers
+                    .Where(a => !string.IsNullOrEmpty(a.SelectedOption) && optionValues.ContainsKey(a.SelectedOption))
                     .GroupBy(a => new { a.FormQuestion.Category, a.ParticipantId })
                     .Select(g => new
                     {
                         g.Key.Category,
                         ParticipantName = participantDetails[g.Key.ParticipantId], // Map ParticipantId to Name
-                        TotalScore = g.Sum(a => int.Parse(a.TextAnswer))
+                        TotalScore = g.Sum(a => optionValues[a.SelectedOption]) // Use OptionValue
                     })
                     .ToList();
 
