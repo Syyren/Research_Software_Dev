@@ -47,6 +47,14 @@ namespace Research_Software_Dev.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+<<<<<<< Updated upstream
+=======
+            modelBuilder.Entity<QuestionOption>()
+            .HasOne(qo => qo.FormQuestion)
+            .WithMany(fq => fq.Options)
+            .HasForeignKey(qo => qo.FormQuestionId);
+
+>>>>>>> Stashed changes
             base.OnModelCreating(modelBuilder);
 
             // FormQuestion and FormQuestionOption Relationship

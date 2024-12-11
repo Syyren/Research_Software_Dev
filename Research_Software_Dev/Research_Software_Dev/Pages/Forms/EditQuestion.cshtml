@@ -35,13 +35,62 @@
         <button type="button" id="add-option" class="btn btn-outline-primary mt-2">Add Option</button>
     </div>
 
+<<<<<<< Updated upstream
     <!-- Action Buttons -->
     <button type="submit" class="btn btn-primary">Save</button>
     <a asp-page="./Edit" asp-route-id="@Model.FormId" class="btn btn-secondary">Cancel</a>
+=======
+    <!-- Question Type -->
+    <div class="form-group">
+        <label asp-for="Question.Type"></label>
+        <select asp-for="Question.Type" class="form-control" id="question-type-selector">
+            <option value="SingleChoice">Single Choice</option>
+            <option value="LikertScale">Likert Scale</option>
+            <option value="FreeText">Free Text</option>
+        </select>
+        <span asp-validation-for="Question.Type" class="text-danger"></span>
+    </div>
+
+    <!-- Question Category -->
+    <div class="form-group">
+        <label asp-for="Question.Category">Category (Optional)</label>
+        <input type="text" asp-for="Question.Category" class="form-control" placeholder="Enter category (e.g., Preferences)" />
+        <span asp-validation-for="Question.Category" class="text-danger"></span>
+    </div>
+
+    <!-- Options Section -->
+    <div class="form-group" id="options-group" style="display: @(Model.Question.Type == QuestionType.SingleChoice || Model.Question.Type == QuestionType.LikertScale ? "block" : "none")">
+        <label>Options</label>
+        <div id="options-container">
+            @{
+                var options = Model.Question.Options ?? new List<QuestionOption>();
+                for (int i = 0; i < options.Count; i++)
+                {
+                    <div class="row mb-2">
+                        <div class="col-8">
+                            <input type="text" name="Options[@i].OptionText" value="@options[i].OptionText" class="form-control" placeholder="Option Text" />
+                        </div>
+                        <div class="col-4">
+                            <input type="number" name="Options[@i].OptionValue" value="@(options[i].OptionValue ?? 0)" class="form-control" placeholder="Option Value" step="0.01" />
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <button type="button" class="btn btn-outline-primary" id="add-option">Add Option</button>
+    </div>
+
+    <!-- Submit and Cancel Buttons -->
+    <div>
+        <button type="submit" class="btn btn-primary">Save</button> |
+        <a asp-page="./Edit" asp-route-id="@Model.Question.FormId" class="btn btn-secondary">Cancel</a>
+    </div>
+>>>>>>> Stashed changes
 </form>
 
 @section Scripts {
     <script>
+<<<<<<< Updated upstream
                 const optionsContainer = document.getElementById('options-container');
         const addOptionButton = document.getElementById('add-option');
 
@@ -55,13 +104,46 @@
                 <input type="hidden" name="Options[${optionIndex}].FormQuestionId" value="${document.getElementById('FormQuestionId').value}" />
                 <div class="col-8">
                     <input type="text" name="Options[${optionIndex}].OptionText" class="form-control" placeholder="Option Text" required />
+=======
+        const questionTypeSelector = document.getElementById('question-type-selector');
+        const optionsGroup = document.getElementById('options-group');
+        const optionsContainer = document.getElementById('options-container');
+        const addOptionButton = document.getElementById('add-option');
+
+        function toggleOptionsGroup() {
+            if (questionTypeSelector.value === 'SingleChoice' || questionTypeSelector.value === 'LikertScale') {
+                optionsGroup.style.display = 'block';
+            } else {
+                optionsGroup.style.display = 'none';
+                optionsContainer.innerHTML = '';
+            }
+        }
+
+        function addOption() {
+            const optionIndex = optionsContainer.childElementCount;
+            const optionRow = document.createElement('div');
+            optionRow.classList.add('row', 'mb-2');
+            optionRow.innerHTML = `
+                <div class="col-8">
+                    <input type="text" name="Options[${optionIndex}].OptionText" class="form-control" placeholder="Option Text" />
+>>>>>>> Stashed changes
                 </div>
                 <div class="col-4">
                     <input type="number" name="Options[${optionIndex}].OptionValue" class="form-control" placeholder="Option Value" step="0.01" />
                 </div>
             `;
+<<<<<<< Updated upstream
             optionsContainer.appendChild(row);
         });
 
+=======
+            optionsContainer.appendChild(optionRow);
+        }
+
+        questionTypeSelector.addEventListener('change', toggleOptionsGroup);
+        addOptionButton.addEventListener('click', addOption);
+
+        toggleOptionsGroup();
+>>>>>>> Stashed changes
     </script>
 }

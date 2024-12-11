@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Forms;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+<<<<<<< Updated upstream
+=======
+using System.Security.Claims;
+>>>>>>> Stashed changes
 using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Forms
@@ -28,7 +31,11 @@ namespace Research_Software_Dev.Pages.Forms
         public string FormId { get; set; }
 
         [BindProperty]
+<<<<<<< Updated upstream
         public List<FormQuestionOption> Choices { get; set; } = new();
+=======
+        public List<QuestionOption> Choices { get; set; } = new();
+>>>>>>> Stashed changes
 
         public async Task<IActionResult> OnGetAsync(string formId)
         {
@@ -64,6 +71,29 @@ namespace Research_Software_Dev.Pages.Forms
             {
                 Question.FormId = FormId;
 
+<<<<<<< Updated upstream
+=======
+                // Add options for SingleChoice or LikertScale
+                if (Question.Type == QuestionType.SingleChoice || Question.Type == QuestionType.LikertScale)
+                {
+                    if (Choices == null || Choices.Count == 0)
+                    {
+                        ModelState.AddModelError("Choices", "Choices or scale values are required for this question type.");
+                        return Page();
+                    }
+
+                    Question.Options = Choices
+                        .Where(choice => !string.IsNullOrWhiteSpace(choice.OptionText))
+                        .ToList();
+
+                    if (Question.Options.Count == 0)
+                    {
+                        ModelState.AddModelError("Choices", "At least one valid choice is required.");
+                        return Page();
+                    }
+                }
+
+>>>>>>> Stashed changes
                 // Auto-increment question number
                 var lastQuestionNumber = await _context.FormQuestions
                     .Where(q => q.FormId == FormId)
