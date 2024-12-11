@@ -43,12 +43,34 @@
     <hr />
     @if (Model.Participants.Any())
     {
-        <ul>
-            @foreach (var participant in Model.Participants)
-            {
-                <li>@participant.ParticipantFirstName @participant.ParticipantLastName Email:(@participant.ParticipantEmail)</li>
-            }
-        </ul>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var participant in Model.Participants)
+                {
+                    <tr>
+                        <td>@participant.ParticipantFirstName</td>
+                        <td>@participant.ParticipantLastName</td>
+                        <td>
+                            @if (string.IsNullOrEmpty(participant.ParticipantEmail))
+                            {
+                                <span>None provided</span>
+                            }
+                            else
+                            {
+                                @participant.ParticipantEmail
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     }
     else
     {
