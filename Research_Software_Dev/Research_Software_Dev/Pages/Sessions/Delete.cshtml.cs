@@ -23,7 +23,6 @@ namespace Research_Software_Dev.Pages.Sessions
 
         [BindProperty]
         public Session Session { get; set; } = default!;
-
         public async Task<IActionResult> OnGetAsync(string id)
         {
             // Verify permissions
