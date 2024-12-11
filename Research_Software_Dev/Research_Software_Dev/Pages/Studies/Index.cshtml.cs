@@ -40,6 +40,7 @@ namespace Research_Software_Dev.Pages.Studies
                 .Where(rs => rs.ResearcherId == researcherId)
                 .Include(rs => rs.Study)
                 .Select(rs => rs.Study)
+                .OrderBy(rs => rs.StudyName)
                 .ToListAsync();
             return Page();
         }
