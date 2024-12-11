@@ -11,6 +11,7 @@ using Research_Software_Dev.Data;
 using Research_Software_Dev.Models.Participants;
 using Research_Software_Dev.Models.Researchers;
 using Research_Software_Dev.Models.Studies;
+using Research_Software_Dev.Services;
 
 namespace Research_Software_Dev.Pages.Participants
 {
@@ -18,6 +19,7 @@ namespace Research_Software_Dev.Pages.Participants
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Researcher> _userManager;
+        private readonly string[] permissions = { "Study Admin", "High-Auth" };
 
         public EditModel(ApplicationDbContext context, UserManager<Researcher> userManager)
         {
@@ -33,6 +35,10 @@ namespace Research_Software_Dev.Pages.Participants
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
+            //Security Check 1
+            if (!Helper.IsLoggedIn(_userManager, User)) return RedirectToPage("/NotFound");
+            if (!Helper.IsAuthorized(User, permissions)) return Forbid();
+
             if (id == null)
             {
                 return RedirectToPage("/NotFound");
@@ -44,17 +50,6 @@ namespace Research_Software_Dev.Pages.Participants
             if (string.IsNullOrEmpty(researcherId))
             {
                 return Unauthorized();
-            }
-
-            // Fetch roles and verify permissions
-            var roles = User.Claims
-                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
-                .Select(c => c.Value)
-                .ToList();
-
-            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
-            {
-                return Forbid();
             }
 
             //fetch participant and verify the logged-in researcher is associated with the study
@@ -78,6 +73,10 @@ namespace Research_Software_Dev.Pages.Participants
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+            //Security Check 1
+            if (!Helper.IsLoggedIn(_userManager, User)) return RedirectToPage("/NotFound");
+            if (!Helper.IsAuthorized(User, permissions)) return Forbid();
+
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -85,21 +84,6 @@ namespace Research_Software_Dev.Pages.Participants
 
             //gets the logged-in user's ID
             var researcherId = _userManager.GetUserId(User);
-            if (string.IsNullOrEmpty(researcherId))
-            {
-                return RedirectToPage("/NotFound");
-            }
-
-            // Fetch roles and verify permissions
-            var roles = User.Claims
-                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
-                .Select(c => c.Value)
-                .ToList();
-
-            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth"))
-            {
-                return Forbid();
-            }
 
             //verifies ownership before updating
             var participantStudy = await _context.ParticipantStudies
@@ -109,6 +93,18 @@ namespace Research_Software_Dev.Pages.Participants
             if (participantStudy == null)
             {
                 return RedirectToPage("/NotFound");
+            }
+            //check participant doubles in study
+            var isParticipantInStudy = await Helper.IsParticipantInStudyByName(
+                _context,
+                Participant.ParticipantFirstName,
+                Participant.ParticipantLastName, participantStudy.StudyId,
+                Participant.ParticipantId
+            );
+            if (isParticipantInStudy)
+            {
+                ModelState.AddModelError(string.Empty, "A participant with the same first and last name already exists in this study. Please add an identifier to the name if this is a separate person.");
+                return Page();
             }
 
             //attaches and modifies the study

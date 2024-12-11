@@ -50,13 +50,16 @@ namespace Research_Software_Dev.Services
         }
 
         //check particpant is in study by name
-        public static async Task<bool> IsParticipantInStudyByName(ApplicationDbContext context, string firstName, string lastName, string studyId)
+        public static async Task<bool> IsParticipantInStudyByName(ApplicationDbContext context, string firstName, string lastName, string studyId, string excludeParticipantId = null)
         {
             return await context.Participants
                 .Where(p => p.ParticipantFirstName == firstName && p.ParticipantLastName == lastName)
                 .Join(context.ParticipantStudies, p => p.ParticipantId, ps => ps.ParticipantId, (p, ps) => new { p, ps })
-                .AnyAsync(joined => joined.ps.StudyId == studyId);
+                .Where(joined => joined.ps.StudyId == studyId)
+                .Where(joined => excludeParticipantId == null || joined.p.ParticipantId != excludeParticipantId) //excludes the current participant if doing duplicate check
+                .AnyAsync();
         }
+
 
         //check particpant is in study by Id
         public static async Task<bool> IsParticipantInStudyById(ApplicationDbContext context, string participantId, string studyId)
@@ -64,6 +67,8 @@ namespace Research_Software_Dev.Services
             return await context.ParticipantStudies
                 .AnyAsync(ps => ps.ParticipantId == participantId && ps.StudyId == studyId);
         }
+
+        
 
         //get participant by Id
         public static async Task<Participant> GetParticipantById(ApplicationDbContext context, string participantId)
