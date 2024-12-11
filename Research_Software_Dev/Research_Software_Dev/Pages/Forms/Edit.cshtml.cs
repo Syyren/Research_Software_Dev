@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Forms
 {
-    [Authorize]
+    [Authorize(Roles = "High-Auth,Study Admin")]
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _context;

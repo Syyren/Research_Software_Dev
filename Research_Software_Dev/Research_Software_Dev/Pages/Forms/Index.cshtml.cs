@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Forms
 {
-    [Authorize]
+    [Authorize(Roles = "Low-Auth,Mid-Auth,High-Auth,Study Admin")]
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;

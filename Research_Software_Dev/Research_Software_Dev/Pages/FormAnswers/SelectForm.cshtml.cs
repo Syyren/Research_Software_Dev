@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Forms
 {
-    [Authorize]
     public class SelectFormModel : PageModel
     {
         private readonly ApplicationDbContext _context;

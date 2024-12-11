@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Data
 {
+    [Authorize(Roles = "Mid-Auth,High-Auth,Study Admin")]
     public class SessionCategoryScoreModel : PageModel
     {
         private readonly ApplicationDbContext _context;

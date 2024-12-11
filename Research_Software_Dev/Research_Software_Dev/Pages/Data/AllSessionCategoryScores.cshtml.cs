@@ -11,9 +11,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Research_Software_Dev.Pages.Data
 {
+    [Authorize(Roles = "Mid-Auth,High-Auth,Study Admin")]
     public class AllSessionCategoryScoresModel : PageModel
     {
         private readonly ApplicationDbContext _context;
