@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -9,12 +8,10 @@ using Research_Software_Dev.Models.Sessions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Data
 {
-    [Authorize(Roles = "Mid-Auth,High-Auth,Study Admin")]
     public class BubbleChartModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -24,9 +21,6 @@ namespace Research_Software_Dev.Pages.Data
             _context = context;
         }
 
-        [BindProperty]
-        public string StudyId { get; set; }
-
         public List<Session> AvailableSessions { get; set; } = new List<Session>();
         public string ChartDataJson { get; private set; }
 
@@ -34,61 +28,23 @@ namespace Research_Software_Dev.Pages.Data
         {
             Console.WriteLine("Fetching data for Bubble Chart...");
 
-            // Get the current user's ID
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
-            {
-                Console.WriteLine("ERROR: User ID is null.");
-                return;
-            }
-
-            // Fetch studies linked to the current user
-            var userStudyIds = await _context.ResearcherStudies
-                .Where(rs => rs.ResearcherId == userId)
-                .Select(rs => rs.StudyId)
-                .ToListAsync();
-
-            Console.WriteLine($"User Study IDs: {string.Join(", ", userStudyIds)}");
-
-            // Fetch participants linked to the user's studies
-            var userParticipantIds = await _context.ParticipantStudies
-                .Where(ps => userStudyIds.Contains(ps.StudyId))
-                .Select(ps => ps.ParticipantId)
-                .Distinct()
-                .ToListAsync();
-
-            Console.WriteLine($"User Participant IDs: {string.Join(", ", userParticipantIds)}");
-
-            // Fetch sessions linked to the participants through a linking table
-            var userSessionIds = await _context.ParticipantSessions
-                .Where(ps => userParticipantIds.Contains(ps.ParticipantId))
-                .Select(ps => ps.SessionId)
-                .Distinct()
-                .ToListAsync();
-
-            Console.WriteLine($"User Session IDs: {string.Join(", ", userSessionIds)}");
-
-            // Fetch sessions based on the session IDs
+            // Load all available sessions
             AvailableSessions = await _context.Sessions
-                .Where(s => userSessionIds.Contains(s.SessionId))
                 .OrderBy(s => s.Date)
                 .ToListAsync();
 
-            Console.WriteLine("Filtered Available Sessions:");
+            Console.WriteLine("Available Sessions:");
             foreach (var session in AvailableSessions)
             {
                 Console.WriteLine($"- SessionId: {session.SessionId}, Date: {session.Date}");
             }
 
-            // Fetch attendance and FormAnswer data for filtered sessions
+            // Fetch attendance and FormAnswer data
             var answers = await _context.FormAnswers
-                .Where(a => userSessionIds.Contains(a.SessionId))
                 .Include(a => a.FormQuestion)
                 .ToListAsync();
 
-            var participants = await _context.Participants
-                .Where(p => userParticipantIds.Contains(p.ParticipantId))
-                .ToListAsync();
+            var participants = await _context.Participants.ToListAsync();
 
             // Calculate average FormAnswers per participant per session
             var data = answers
@@ -117,6 +73,5 @@ namespace Research_Software_Dev.Pages.Data
 
             Console.WriteLine($"ChartDataJson: {ChartDataJson}");
         }
-
     }
 }
