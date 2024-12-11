@@ -9,6 +9,7 @@ using Research_Software_Dev.Models.Sessions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Data
@@ -32,12 +33,36 @@ namespace Research_Software_Dev.Pages.Data
         {
             Console.WriteLine("Fetching data for All Session Category Scores...");
 
-            // Load available sessions
+            // Get the current researcher's ID
+            var researcherId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (researcherId == null)
+            {
+                Console.WriteLine("ERROR: Researcher ID is null.");
+                return;
+            }
+
+            // Fetch studies associated with the researcher
+            var researcherStudyIds = await _context.ResearcherStudies
+                .Where(rs => rs.ResearcherId == researcherId)
+                .Select(rs => rs.StudyId)
+                .ToListAsync();
+
+            Console.WriteLine($"Researcher Study IDs: {string.Join(", ", researcherStudyIds)}");
+
+            // Fetch session IDs linked to these studies
+            var sessionIdsInStudies = await _context.Sessions
+                .Where(s => researcherStudyIds.Contains(s.StudyId))
+                .Select(s => s.SessionId)
+                .Distinct()
+                .ToListAsync();
+
+            // Load available sessions scoped to the researcher
             AvailableSessions = await _context.Sessions
+                .Where(s => sessionIdsInStudies.Contains(s.SessionId))
                 .OrderBy(s => s.Date)
                 .ToListAsync();
 
-            Console.WriteLine("Available Sessions:");
+            Console.WriteLine("Filtered Available Sessions:");
             foreach (var session in AvailableSessions)
             {
                 Console.WriteLine($"- SessionId: {session.SessionId}, Date: {session.Date}");
@@ -49,7 +74,7 @@ namespace Research_Software_Dev.Pages.Data
 
                 Console.WriteLine($"Generating chart for SessionId: {sessionId}");
 
-                // Fetch answers for the session and their associated options
+                // Fetch answers for the selected session
                 var filteredAnswers = await _context.FormAnswers
                     .Where(a => a.SessionId == sessionId)
                     .Include(a => a.FormQuestion)

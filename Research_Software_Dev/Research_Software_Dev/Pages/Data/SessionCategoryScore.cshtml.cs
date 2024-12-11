@@ -9,6 +9,7 @@ using Research_Software_Dev.Models.Sessions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Data
@@ -32,21 +33,60 @@ namespace Research_Software_Dev.Pages.Data
         public List<Session> AvailableSessions { get; set; } = new List<Session>();
         public string ChartDataJson { get; private set; }
 
-        public async Task OnGetAsync(string participantId, string sessionId)
+        public async Task OnGetAsync(string studyId, string participantId, string sessionId)
         {
-            Console.WriteLine("Fetching data for Session Category Chart...");
+            if (string.IsNullOrEmpty(studyId))
+            {
+                Console.WriteLine("Study ID is required.");
+                return;
+            }
 
-            // Populate participants
-            AvailableParticipants = await _context.Participants.ToListAsync();
+            Console.WriteLine($"Fetching data for Study ID: {studyId}");
+
+            // Get the current researcher's ID
+            var researcherId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(researcherId))
+            {
+                Console.WriteLine("Researcher ID is required.");
+                return;
+            }
+
+            // Fetch participant IDs for the specified study
+            var participantIdsInStudy = await _context.ParticipantStudies
+                .Where(ps => ps.StudyId == studyId)
+                .Select(ps => ps.ParticipantId)
+                .Distinct()
+                .ToListAsync();
+
+            // Fetch participants linked to the study
+            AvailableParticipants = await _context.Participants
+                .Where(p => participantIdsInStudy.Contains(p.ParticipantId))
+                .OrderBy(p => p.ParticipantFirstName)
+                .ToListAsync();
+
             Console.WriteLine($"Available Participants: {AvailableParticipants.Count}");
 
-            // Populate sessions
-            AvailableSessions = await _context.Sessions.OrderBy(s => s.Date).ToListAsync();
+            // Fetch session IDs linked to these participants
+            var sessionIdsForParticipants = await _context.ParticipantSessions
+                .Where(ps => participantIdsInStudy.Contains(ps.ParticipantId))
+                .Select(ps => ps.SessionId)
+                .Distinct()
+                .ToListAsync();
+
+            // Fetch sessions linked to the study and participants
+            AvailableSessions = await _context.Sessions
+                .Where(s => s.StudyId == studyId && sessionIdsForParticipants.Contains(s.SessionId))
+                .OrderBy(s => s.Date)
+                .ToListAsync();
+
             Console.WriteLine($"Available Sessions: {AvailableSessions.Count}");
 
-            // Check if participant and session are selected
+            // Process the chart generation if participant and session are selected
             if (!string.IsNullOrEmpty(participantId) && !string.IsNullOrEmpty(sessionId))
             {
+                SelectedParticipantId = participantId;
+                SelectedSessionId = sessionId;
+
                 Console.WriteLine($"Generating chart for Participant: {participantId}, Session: {sessionId}");
 
                 var answers = await _context.FormAnswers
