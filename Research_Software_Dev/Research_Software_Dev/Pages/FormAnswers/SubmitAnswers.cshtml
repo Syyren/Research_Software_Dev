@@ -25,7 +25,6 @@
         }
         else
         {
-<<<<<<< Updated upstream
             <div id="questions-container">
                 @for (int i = 0; i < Model.Questions.Count; i++)
                 {
@@ -66,47 +65,6 @@
                     </div>
                 }
             </div>
-=======
-            @for (int i = 0; i < Model.Questions.Count; i++)
-            {
-                <div class="form-group mb-4">
-                    <label>@Model.Questions[i].QuestionNumber. @Model.Questions[i].QuestionDescription</label>
-
-                    <input type="hidden" name="Answers[@i].FormQuestionId" value="@Model.Questions[i].FormQuestionId" />
-                    <input type="hidden" name="Answers[@i].ParticipantId" value="@Model.ParticipantId" />
-                    <input type="hidden" name="Answers[@i].SessionId" value="@Model.SessionId" />
-
-                    @if (Model.Questions[i].Type == Research_Software_Dev.Models.Forms.QuestionType.SingleChoice)
-                    {
-                        <select name="Answers[@i].TextAnswer" class="form-control" required>
-                            <option value="">-- Select an Option --</option>
-                            @foreach (var option in Model.Questions[i].Options)
-                            {
-                                <option value="@option.OptionText" data-value="@option.OptionValue">
-                                    @option.OptionText (@option.OptionValue)
-                                </option>
-                            }
-                        </select>
-                    }
-                    else if (Model.Questions[i].Type == Research_Software_Dev.Models.Forms.QuestionType.LikertScale)
-                    {
-                        <div>
-                            @foreach (var option in Model.Questions[i].Options)
-                            {
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Answers[@i].TextAnswer" value="@option.OptionText" data-value="@option.OptionValue" required />
-                                    <label class="form-check-label">@option.OptionText (@option.OptionValue)</label>
-                                </div>
-                            }
-                        </div>
-                    }
-                    else if (Model.Questions[i].Type == Research_Software_Dev.Models.Forms.QuestionType.FreeText)
-                    {
-                        <input type="text" name="Answers[@i].TextAnswer" class="form-control" required />
-                    }
-                </div>
-            }
->>>>>>> Stashed changes
         }
     </div>
 

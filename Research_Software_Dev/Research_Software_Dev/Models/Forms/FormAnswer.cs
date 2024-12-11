@@ -12,20 +12,13 @@ namespace Research_Software_Dev.Models.Forms
         public string AnswerId { get; set; }
 
         [Required]
-<<<<<<< Updated upstream
         public string? TextAnswer { get; set; }
 
         public string? SelectedOption { get; set; } // Field for storing the selected option ID
-=======
-        public string TextAnswer { get; set; } // Stores the textual response or selected option text
->>>>>>> Stashed changes
 
-        [DataType(DataType.DateTime)]
         [Required]
+        [DataType(DataType.DateTime)]
         public DateTime TimeStamp { get; set; }
-
-        // Optional numeric value for the selected choice
-        public double? ChoiceValue { get; set; } // Nullable to support free text or unanswered options
 
         // ParticipantSession composite FK
         [Required]
@@ -42,15 +35,10 @@ namespace Research_Software_Dev.Models.Forms
         [ForeignKey("FormQuestionId")]
         public FormQuestion? FormQuestion { get; set; }
 
-        // Constructors
         public FormAnswer() { }
 
-<<<<<<< Updated upstream
         public FormAnswer(string answerId, string? textAnswer, string? selectedOption, DateTime timeStamp,
                           string participantId, string sessionId, string formQuestionId)
-=======
-        public FormAnswer(string answerId, string textAnswer, DateTime timeStamp, string participantId, string sessionId, string formQuestionId, double? choiceValue = null)
->>>>>>> Stashed changes
         {
             AnswerId = answerId;
             TextAnswer = textAnswer;
@@ -59,7 +47,6 @@ namespace Research_Software_Dev.Models.Forms
             ParticipantId = participantId;
             SessionId = sessionId;
             FormQuestionId = formQuestionId;
-            ChoiceValue = choiceValue;
         }
     }
 }

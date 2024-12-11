@@ -47,7 +47,6 @@ namespace Research_Software_Dev.Pages.Forms
             Questions = await _context.FormQuestions
                 .Include(q => q.Options)
                 .Where(q => q.FormId == id)
-                .Include(q => q.Options)
                 .OrderBy(q => q.QuestionNumber)
                 .ToListAsync();
 

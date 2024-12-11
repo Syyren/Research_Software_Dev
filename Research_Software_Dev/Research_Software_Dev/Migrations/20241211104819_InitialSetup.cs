@@ -292,11 +292,7 @@ namespace Research_Software_Dev.Migrations
                 });
 
             migrationBuilder.CreateTable(
-<<<<<<<< Updated upstream:Research_Software_Dev/Research_Software_Dev/Migrations/20241211104819_InitialSetup.cs
                 name: "FormQuestionOptions",
-========
-                name: "QuestionOption",
->>>>>>>> Stashed changes:Research_Software_Dev/Research_Software_Dev/Migrations/20241210223600_InitialSetup.cs
                 columns: table => new
                 {
                     OptionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -306,15 +302,9 @@ namespace Research_Software_Dev.Migrations
                 },
                 constraints: table =>
                 {
-<<<<<<<< Updated upstream:Research_Software_Dev/Research_Software_Dev/Migrations/20241211104819_InitialSetup.cs
                     table.PrimaryKey("PK_FormQuestionOptions", x => x.OptionId);
                     table.ForeignKey(
                         name: "FK_FormQuestionOptions_FormQuestions_FormQuestionId",
-========
-                    table.PrimaryKey("PK_QuestionOption", x => x.OptionId);
-                    table.ForeignKey(
-                        name: "FK_QuestionOption_FormQuestions_FormQuestionId",
->>>>>>>> Stashed changes:Research_Software_Dev/Research_Software_Dev/Migrations/20241210223600_InitialSetup.cs
                         column: x => x.FormQuestionId,
                         principalTable: "FormQuestions",
                         principalColumn: "FormQuestionId",
@@ -377,7 +367,6 @@ namespace Research_Software_Dev.Migrations
                     TextAnswer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SelectedOption = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ChoiceValue = table.Column<double>(type: "float", nullable: true),
                     ParticipantId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SessionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FormQuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
@@ -457,11 +446,6 @@ namespace Research_Software_Dev.Migrations
                 column: "StudyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuestionOption_FormQuestionId",
-                table: "QuestionOption",
-                column: "FormQuestionId");
-
-            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "Researchers",
                 column: "NormalizedEmail");
@@ -515,9 +499,6 @@ namespace Research_Software_Dev.Migrations
 
             migrationBuilder.DropTable(
                 name: "ParticipantStudies");
-
-            migrationBuilder.DropTable(
-                name: "QuestionOption");
 
             migrationBuilder.DropTable(
                 name: "ResearcherSessions");

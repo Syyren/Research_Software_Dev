@@ -30,11 +30,7 @@ namespace Research_Software_Dev.Pages.Forms
         public FormQuestion Question { get; set; }
 
         [BindProperty]
-<<<<<<< Updated upstream
         public List<FormQuestionOption> Options { get; set; }
-=======
-        public List<QuestionOption> Options { get; set; } = new();
->>>>>>> Stashed changes
 
         public async Task<IActionResult> OnGetAsync(string formId, string questionId)
         {
@@ -44,18 +40,12 @@ namespace Research_Software_Dev.Pages.Forms
                 return NotFound("FormId or QuestionId is missing.");
             }
 
-<<<<<<< Updated upstream
             FormId = formId;
             FormQuestionId = questionId;
 
             Question = await _context.FormQuestions
                 .Include(q => q.Options)
                 .FirstOrDefaultAsync(q => q.FormQuestionId == questionId);
-=======
-            Question = await _context.FormQuestions
-                .Include(q => q.Options)
-                .FirstOrDefaultAsync(q => q.FormId == formId && q.FormQuestionId == questionId);
->>>>>>> Stashed changes
 
             if (Question == null)
             {
@@ -63,14 +53,9 @@ namespace Research_Software_Dev.Pages.Forms
                 return NotFound("Question not found.");
             }
 
-<<<<<<< Updated upstream
             Options = Question.Options.OrderBy(o => o.OptionText).ToList();
 
             Console.WriteLine($"GET: Loaded Question: {Question.QuestionDescription}");
-=======
-            Options = Question.Options;
-
->>>>>>> Stashed changes
             return Page();
         }
 
@@ -93,11 +78,7 @@ namespace Research_Software_Dev.Pages.Forms
 
             var existingQuestion = await _context.FormQuestions
                 .Include(q => q.Options)
-<<<<<<< Updated upstream
                 .FirstOrDefaultAsync(q => q.FormQuestionId == FormQuestionId);
-=======
-                .FirstOrDefaultAsync(q => q.FormQuestionId == Question.FormQuestionId);
->>>>>>> Stashed changes
 
             if (existingQuestion == null)
             {
@@ -105,7 +86,6 @@ namespace Research_Software_Dev.Pages.Forms
                 return NotFound("Question not found.");
             }
 
-<<<<<<< Updated upstream
             var existingOptions = existingQuestion.Options.ToDictionary(o => o.OptionId);
             var submittedOptionIds = Options.Select(o => o.OptionId).ToHashSet();
 
@@ -132,18 +112,6 @@ namespace Research_Software_Dev.Pages.Forms
                     Console.WriteLine($"Added new option: {option.OptionText}, Value: {option.OptionValue}");
                 }
             }
-=======
-            // Update fields
-            existingQuestion.QuestionDescription = Question.QuestionDescription;
-            existingQuestion.Type = Question.Type;
-            existingQuestion.Category = Question.Category;
-
-            // Update options
-            existingQuestion.Options.Clear();
-            existingQuestion.Options.AddRange(Options);
-
-            await _context.SaveChangesAsync();
->>>>>>> Stashed changes
 
 
             Console.WriteLine("POST: Saving changes...");

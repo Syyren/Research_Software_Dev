@@ -34,6 +34,7 @@ namespace Research_Software_Dev.Pages.Forms
         public string ParticipantName { get; set; }
         public string FormName { get; set; }
         public List<FormQuestion> Questions { get; set; }
+        public ParticipantSession ParticipantSession { get; set; }
 
         [BindProperty]
         public List<FormAnswer> Answers { get; set; }
@@ -66,22 +67,18 @@ namespace Research_Software_Dev.Pages.Forms
             Questions = await _context.FormQuestions
                 .Include(q => q.Options)
                 .Where(q => q.FormId == formId)
-                .Include(q => q.Options)
                 .OrderBy(q => q.QuestionNumber)
                 .ToListAsync();
 
             if (!Questions.Any())
                 return NotFound("No questions found for this form.");
 
-<<<<<<< Updated upstream
             ParticipantSession = await _context.ParticipantSessions
                 .FirstOrDefaultAsync(ps => ps.ParticipantId == participantId && ps.SessionId == sessionId);
 
             if (ParticipantSession == null)
                 return NotFound("Participant and session relationship not found.");
 
-=======
->>>>>>> Stashed changes
             return Page();
         }
 
@@ -115,7 +112,6 @@ namespace Research_Software_Dev.Pages.Forms
 
             foreach (var answer in Answers)
             {
-<<<<<<< Updated upstream
                 if (!string.IsNullOrEmpty(answer.SelectedOption))
                 {
                     var selectedOption = await _context.FormQuestionOptions
@@ -125,16 +121,9 @@ namespace Research_Software_Dev.Pages.Forms
                     {
                         answer.TextAnswer = selectedOption.OptionText;
                     }
-=======
-                var question = Questions.FirstOrDefault(q => q.FormQuestionId == answer.FormQuestionId);
-                if (question != null)
-                {
-                    var option = question.Options.FirstOrDefault(o => o.OptionText == answer.TextAnswer);
-                    answer.ChoiceValue = option?.OptionValue;
-                    answer.TimeStamp = DateTime.UtcNow;
->>>>>>> Stashed changes
                 }
 
+                answer.TimeStamp = DateTime.UtcNow;
                 _context.FormAnswers.Add(answer);
             }
 

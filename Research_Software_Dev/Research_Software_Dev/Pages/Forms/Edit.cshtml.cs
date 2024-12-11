@@ -43,12 +43,12 @@ namespace Research_Software_Dev.Pages.Forms
             }
 
             Questions = Form.Questions.OrderBy(q => q.QuestionNumber).ToList();
+
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-<<<<<<< Updated upstream
             Console.WriteLine($"POST: Editing Form - FormId: {Form.FormId}");
 
             if (!ModelState.IsValid)
@@ -71,20 +71,10 @@ namespace Research_Software_Dev.Pages.Forms
             {
                 return NotFound("Form not found.");
             }
-=======
-            if (!ModelState.IsValid) return Page();
 
-            var existingForm = await _context.Forms
-                .Include(f => f.Questions)
-                .ThenInclude(q => q.Options)
-                .FirstOrDefaultAsync(f => f.FormId == Form.FormId);
-
-            if (existingForm == null) return RedirectToPage("/NotFound");
->>>>>>> Stashed changes
-
+            // Update form name
             existingForm.FormName = Form.FormName;
 
-<<<<<<< Updated upstream
             Console.WriteLine($"POST: Processing Questions for FormId: {Form.FormId}");
             var existingQuestions = existingForm.Questions.ToDictionary(q => q.FormQuestionId, q => q);
             var submittedQuestionIds = Questions.Select(q => q.FormQuestionId).ToHashSet();
@@ -93,43 +83,23 @@ namespace Research_Software_Dev.Pages.Forms
             foreach (var question in Questions)
             {
                 if (existingQuestions.TryGetValue(question.FormQuestionId, out var existingQuestion))
-=======
-            foreach (var question in Questions)
-            {
-                var existingQuestion = existingForm.Questions
-                    .FirstOrDefault(q => q.FormQuestionId == question.FormQuestionId);
-
-                if (existingQuestion != null)
->>>>>>> Stashed changes
                 {
+                    // Update existing question
                     existingQuestion.QuestionDescription = question.QuestionDescription;
-<<<<<<< Updated upstream
-=======
-                    existingQuestion.Type = question.Type;
->>>>>>> Stashed changes
                     existingQuestion.QuestionNumber = question.QuestionNumber;
                     existingQuestion.Type = question.Type;
                     existingQuestion.Category = question.Category;
-<<<<<<< Updated upstream
                     Console.WriteLine($"Updated Question: {existingQuestion.FormQuestionId} - {existingQuestion.QuestionDescription}");
                 }
                 else
                 {
                     // Add new question
                     question.FormId = Form.FormId;
-=======
-                    existingQuestion.Options = question.Options ?? new List<QuestionOption>();
-                }
-                else
-                {
-                    question.FormId = existingForm.FormId;
->>>>>>> Stashed changes
                     _context.FormQuestions.Add(question);
                     Console.WriteLine($"Added New Question: {question.FormQuestionId} - {question.QuestionDescription}");
                 }
             }
 
-<<<<<<< Updated upstream
             // Remove questions not submitted
             foreach (var questionId in existingQuestions.Keys.Except(submittedQuestionIds))
             {
@@ -150,9 +120,6 @@ namespace Research_Software_Dev.Pages.Forms
                 throw;
             }
 
-=======
-            await _context.SaveChangesAsync();
->>>>>>> Stashed changes
             return RedirectToPage("./Index");
         }
 

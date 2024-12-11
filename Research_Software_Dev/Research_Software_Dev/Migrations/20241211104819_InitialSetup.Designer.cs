@@ -12,11 +12,7 @@ using Research_Software_Dev.Data;
 namespace Research_Software_Dev.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< Updated upstream:Research_Software_Dev/Research_Software_Dev/Migrations/20241211104819_InitialSetup.Designer.cs
     [Migration("20241211104819_InitialSetup")]
-========
-    [Migration("20241210223600_InitialSetup")]
->>>>>>>> Stashed changes:Research_Software_Dev/Research_Software_Dev/Migrations/20241210223600_InitialSetup.Designer.cs
     partial class InitialSetup
     {
         /// <inheritdoc />
@@ -189,29 +185,6 @@ namespace Research_Software_Dev.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("QuestionOption", b =>
-                {
-                    b.Property<string>("OptionId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FormQuestionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("OptionText")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("OptionValue")
-                        .HasColumnType("float");
-
-                    b.HasKey("OptionId");
-
-                    b.HasIndex("FormQuestionId");
-
-                    b.ToTable("QuestionOption");
-                });
-
             modelBuilder.Entity("Research_Software_Dev.Models.Forms.Form", b =>
                 {
                     b.Property<string>("FormId")
@@ -231,9 +204,6 @@ namespace Research_Software_Dev.Migrations
                     b.Property<string>("AnswerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<double?>("ChoiceValue")
-                        .HasColumnType("float");
 
                     b.Property<string>("FormQuestionId")
                         .IsRequired()
@@ -569,17 +539,6 @@ namespace Research_Software_Dev.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("QuestionOption", b =>
-                {
-                    b.HasOne("Research_Software_Dev.Models.Forms.FormQuestion", "FormQuestion")
-                        .WithMany("Options")
-                        .HasForeignKey("FormQuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FormQuestion");
                 });
 
             modelBuilder.Entity("Research_Software_Dev.Models.Forms.FormAnswer", b =>

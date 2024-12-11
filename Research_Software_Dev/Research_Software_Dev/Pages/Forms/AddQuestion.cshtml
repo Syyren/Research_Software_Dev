@@ -56,28 +56,6 @@
             for (const [key, value] of formData.entries()) {
                 console.log(`${key}: ${value}`);
             }
-<<<<<<< Updated upstream
         });
-=======
-        }
-
-        function addChoice() {
-            const choiceIndex = choicesContainer.childElementCount;
-            const choiceInput = document.createElement('div');
-            choiceInput.classList.add('form-group');
-            choiceInput.innerHTML = `
-                <div class="d-flex">
-                    <input type="text" name="Choices[${choiceIndex}].Option" class="form-control mb-2 mr-2" placeholder="Enter choice or scale value" required />
-                    <input type="number" step="0.01" name="Choices[${choiceIndex}].Value" class="form-control mb-2" placeholder="Enter numeric value (optional)" />
-                </div>
-            `;
-            choicesContainer.appendChild(choiceInput);
-        }
-
-        questionTypeSelector.addEventListener('change', toggleSections);
-        addChoiceButton.addEventListener('click', addChoice);
-
-        toggleSections();
->>>>>>> Stashed changes
     </script>
 }
