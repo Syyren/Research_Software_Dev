@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Research_Software_Dev.Data;
-using Research_Software_Dev.Models.Forms;
+using Research_Software_Dev.Models.Participants;
+using Research_Software_Dev.Models.Sessions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -12,38 +13,28 @@ using System.Threading.Tasks;
 namespace Research_Software_Dev.Pages.Forms
 {
     [Authorize]
-    public class SelectFormModel : PageModel
+    public class SelectSessionModel : PageModel
     {
         private readonly ApplicationDbContext _context;
 
-        public SelectFormModel(ApplicationDbContext context)
+        public SelectSessionModel(ApplicationDbContext context)
         {
             _context = context;
         }
-
-        [BindProperty]
-        public string FormId { get; set; }
 
         [BindProperty]
         public string ParticipantId { get; set; }
 
         [BindProperty]
         public string SessionId { get; set; }
+        public string ParticipantName { get; set; }
 
-        public List<Form> Forms { get; set; } = new();
+        public List<Session> Sessions { get; set; } = new List<Session>();
 
-        public async Task<IActionResult> OnGetAsync(string participantId, string sessionId)
+        public async Task<IActionResult> OnGetAsync(string participantId)
         {
-            // Validate participant and session IDs
-            if (string.IsNullOrEmpty(participantId) || string.IsNullOrEmpty(sessionId))
-            {
-                return BadRequest("Participant ID and Session ID are required.");
-            }
-
             ParticipantId = participantId;
-            SessionId = sessionId;
 
-            // Authorization roles
             var roles = User.Claims
                 .Where(c => c.Type == ClaimTypes.Role)
                 .Select(c => c.Value)
@@ -51,8 +42,17 @@ namespace Research_Software_Dev.Pages.Forms
 
             if (roles.Contains("Study Admin") || roles.Contains("High-Auth") || roles.Contains("Mid-Auth") || roles.Contains("Researcher") || roles.Contains("Low-Auth"))
             {
-                // Load forms sorted by name
-                Forms = await _context.Forms.OrderBy(f => f.FormName).ToListAsync();
+                Sessions = await _context.ParticipantSessions
+                    .Where(ps => ps.ParticipantId == participantId)
+                    .Include(ps => ps.Session)
+                    .Select(ps => ps.Session)
+                    .ToListAsync();
+
+                if (!Sessions.Any())
+                {
+                    ModelState.AddModelError(string.Empty, "No sessions found for the selected participant.");
+                    return Page();
+                }
             }
             else
             {
@@ -64,15 +64,13 @@ namespace Research_Software_Dev.Pages.Forms
 
         public IActionResult OnPost()
         {
-            // Validate form selection
-            if (string.IsNullOrEmpty(FormId))
+            if (string.IsNullOrEmpty(SessionId))
             {
-                ModelState.AddModelError(string.Empty, "Please select a form.");
+                ModelState.AddModelError(string.Empty, "Please select a session.");
                 return Page();
             }
 
-            // Redirect to the answer submission page
-            return RedirectToPage("./SubmitAnswers", new { formId = FormId, participantId = ParticipantId, sessionId = SessionId });
+            return RedirectToPage("./SelectForm", new { participantId = ParticipantId, sessionId = SessionId });
         }
     }
 }

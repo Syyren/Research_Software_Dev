@@ -1,4 +1,4 @@
-﻿@page "{studyId}"
+﻿@page
 @model Research_Software_Dev.Pages.Data.CategoryTrendModel
 @{
     ViewData["Title"] = "Category Trends Over Sessions";
@@ -7,12 +7,17 @@
 <h1>Category Trends Over Sessions</h1>
 
 <form method="get" id="filterForm">
-    <input type="hidden" asp-for="StudyId" />
+    <!-- Step 1: Select Study -->
+    <label for="study">Select Study:</label>
+    <select id="study" name="StudyId" class="form-control" asp-for="StudyId" asp-items="Model.Studies">
+        <option value="">-- Select Study --</option>
+    </select>
+
     <!-- Step 2: Select Participants -->
-    @if (Model.AvailableParticipants != null && Model.AvailableParticipants.Any())
-    {
-        <label>Select Participants:</label>
-        <div class="form-group">
+    <label>Select Participants:</label>
+    <div class="form-group">
+        @if (Model.AvailableParticipants != null && Model.AvailableParticipants.Any())
+        {
             @foreach (var participant in Model.AvailableParticipants)
             {
                 <div class="form-check">
@@ -22,12 +27,12 @@
                     </label>
                 </div>
             }
-        </div>
-    }
-    else
-    {
-        <p>No participants available for the selected study.</p>
-    }
+        }
+        else
+        {
+            <p>No participants available</p>
+        }
+    </div>
 
     <!-- Step 3: Select Date Range -->
     <label for="startDate">Select Start Date:</label>
@@ -60,7 +65,7 @@
             fill: false
         }));
 
-        new Chart(ctx, {
+        const chart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: chartData.labels.map(label => new Date(label).toLocaleDateString()),

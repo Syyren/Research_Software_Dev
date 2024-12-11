@@ -1,4 +1,4 @@
-﻿@page "{sessionId}"
+﻿@page "{participantId}/{sessionId}"
 @model Research_Software_Dev.Pages.Forms.SelectFormModel
 @{
     ViewData["Title"] = "Select Form";
@@ -7,28 +7,14 @@
 <h1>Select Form</h1>
 
 <form method="post">
-    <!-- Hidden field for SessionId -->
+    <!-- Hidden fields to carry participant and session data -->
+    <input type="hidden" asp-for="ParticipantId" />
     <input type="hidden" asp-for="SessionId" />
 
-    <!-- Participant Selection -->
-    <div class="form-group">
-        <label for="participant">Select Participant:</label>
-        <select id="participant" name="ParticipantId" class="form-control" asp-for="ParticipantId" required>
-            <option value="">-- Select Participant --</option>
-            @foreach (var participant in Model.FilteredParticipants)
-            {
-                <option value="@participant.ParticipantId">
-                    @participant.ParticipantFirstName @participant.ParticipantLastName
-                </option>
-            }
-        </select>
-        <span asp-validation-for="ParticipantId" class="text-danger"></span>
-    </div>
-
     <!-- Form Selection -->
-    <div class="form-group">
-        <label for="form">Select Form:</label>
-        <select id="form" asp-for="FormId" class="form-control" required>
+    <div class="form-group mb-2">
+        <label asp-for="FormId">Form</label>
+        <select asp-for="FormId" class="form-control" required>
             <option value="">-- Select a Form --</option>
             @foreach (var form in Model.Forms)
             {
@@ -39,5 +25,5 @@
     </div>
 
     <!-- Submit Button -->
-    <button type="submit" class="btn btn-primary mt-3">Next</button>
+    <button type="submit" class="btn btn-outline-primary">Next</button>
 </form>
