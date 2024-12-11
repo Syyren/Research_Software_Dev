@@ -31,7 +31,9 @@ namespace Research_Software_Dev.Pages.Forms
 
             if (roles.Contains("Study Admin") || roles.Contains("High-Auth") || roles.Contains("Mid-Auth") || roles.Contains("Low-Auth") || roles.Contains("Researcher"))
             {
-                Forms = await _context.Forms.ToListAsync();
+                Forms = await _context.Forms
+                    .OrderBy(f => f.FormName) // Sort forms alphabetically by FormName
+                    .ToListAsync();
             }
             else
             {
