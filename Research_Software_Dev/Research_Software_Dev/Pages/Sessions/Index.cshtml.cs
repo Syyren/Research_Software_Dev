@@ -55,6 +55,7 @@ namespace Research_Software_Dev.Pages.Sessions
             Sessions = await _context.Sessions
                 .Where(s => sessionIds.Contains(s.SessionId))
                 .Include(s => s.Study)
+                .OrderBy(s => s.Date)
                 .ToListAsync();
 
             return Page();

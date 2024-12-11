@@ -83,6 +83,7 @@ namespace Research_Software_Dev.Pages.Participants
                     ParticipantPhoneNumber = ps.Participant.ParticipantPhoneNumber,
                     StudyName = ps.Study.StudyName
                 })
+                .OrderBy(ps => ps.ParticipantFirstName)
                 .ToListAsync();
 
             return Page();

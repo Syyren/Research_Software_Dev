@@ -49,7 +49,7 @@ namespace Research_Software_Dev.Pages.Sessions
                 return RedirectToPage("/NotFound");
             }
             Session = session;
-            ViewData["StudyId"] = new SelectList(_context.Studies, "StudyId", "StudyId");
+            ViewData["StudyId"] = new SelectList(_context.Studies.OrderBy(s => s.StudyName), "StudyId", "StudyName");
             return Page();
         }
 

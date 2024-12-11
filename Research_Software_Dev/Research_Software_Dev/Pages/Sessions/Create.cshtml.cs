@@ -76,7 +76,7 @@ namespace Research_Software_Dev.Pages.Sessions
             }
 
             // Populate the dropdown with the filtered studies
-            ViewData["StudyId"] = new SelectList(studies, "StudyId", "StudyName");
+            ViewData["StudyId"] = new SelectList(studies.OrderBy(s => s.StudyName), "StudyId", "StudyName");
 
             // Initialize the session object
             Session = new Session
