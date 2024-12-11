@@ -4,78 +4,84 @@
     ViewData["Title"] = "Submit Answers";
 }
 
-<h1>Submit Answers</h1>
+<h1 class="text-center mt-4">Submit Answers</h1>
 
-<form method="post">
-    <input type="hidden" asp-for="FormId" />
-    <input type="hidden" asp-for="ParticipantId" />
-    <input type="hidden" asp-for="SessionId" />
+<div class="container mt-5">
+    <form method="post" class="shadow p-4 rounded bg-light">
+        <!-- Hidden Fields -->
+        <input type="hidden" asp-for="FormId" />
+        <input type="hidden" asp-for="ParticipantId" />
+        <input type="hidden" asp-for="SessionId" />
 
-    <div class="form-group">
-        <h2>Form: @Model.FormName</h2>
-        <p>Participant: @Model.ParticipantName</p>
-        <p>Session ID: @Model.SessionId</p>
-    </div>
+        <!-- Form and Participant Details -->
+        <div class="form-group mb-4">
+            <h2 class="text-primary">Form: @Model.FormName</h2>
+            <p class="text-muted">Participant: <strong>@Model.ParticipantName</strong></p>
+        </div>
 
-    <div class="form-group">
-        <h3>Questions</h3>
-        @if (!Model.Questions.Any())
-        {
-            <p>No questions found.</p>
-        }
-        else
-        {
-            <div id="questions-container">
-                @for (int i = 0; i < Model.Questions.Count; i++)
-                {
-                    <div class="form-group mb-4" id="question-@i">
-                        <label>@Model.Questions[i].QuestionNumber. @Model.Questions[i].QuestionDescription</label>
+        <!-- Questions Section -->
+        <div class="form-group">
+            <h3 class="text-secondary mb-3">Questions</h3>
+            @if (!Model.Questions.Any())
+            {
+                <p class="text-danger">No questions found for this form.</p>
+            }
+            else
+            {
+                <div id="questions-container">
+                    @for (int i = 0; i < Model.Questions.Count; i++)
+                    {
+                        <div class="form-group mb-4 p-3 border rounded" id="question-@i">
+                            <label class="form-label d-block"><strong>@Model.Questions[i].QuestionNumber.</strong> @Model.Questions[i].QuestionDescription</label>
 
-                        <input type="hidden" name="Answers[@i].FormQuestionId" value="@Model.Questions[i].FormQuestionId" />
-                        <input type="hidden" name="Answers[@i].ParticipantId" value="@Model.ParticipantId" />
-                        <input type="hidden" name="Answers[@i].SessionId" value="@Model.SessionId" />
-                        <input type="hidden" id="answer-id-@i" name="Answers[@i].AnswerId" />
+                            <input type="hidden" name="Answers[@i].FormQuestionId" value="@Model.Questions[i].FormQuestionId" />
+                            <input type="hidden" name="Answers[@i].ParticipantId" value="@Model.ParticipantId" />
+                            <input type="hidden" name="Answers[@i].SessionId" value="@Model.SessionId" />
+                            <input type="hidden" id="answer-id-@i" name="Answers[@i].AnswerId" />
 
-                        @if (Model.Questions[i].Type == Research_Software_Dev.Models.Forms.QuestionType.SingleChoice)
-                        {
-                            <select name="Answers[@i].SelectedOption" class="form-control" required>
-                                <option value="">-- Select an Option --</option>
-                                @foreach (var option in Model.Questions[i].Options)
-                                {
-                                    <option value="@option.OptionId">@option.OptionText (@option.OptionValue)</option>
-                                    <input type="hidden" name="Answers[@i].TextAnswer" class="form-control" value="N/A" required />
-                                }
-                            </select>
-                        }
-                        else if (Model.Questions[i].Type == Research_Software_Dev.Models.Forms.QuestionType.LikertScale)
-                        {
-                            @foreach (var option in Model.Questions[i].Options)
+                            @if (Model.Questions[i].Type == Research_Software_Dev.Models.Forms.QuestionType.SingleChoice)
                             {
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Answers[@i].SelectedOption" value="@option.OptionId" required />
-                                    <input type="hidden" name="Answers[@i].TextAnswer" class="form-control" value="N/A" required />
-                                    <label class="form-check-label">@option.OptionText (@option.OptionValue)</label>
-                                </div>
+                                @foreach (var option in Model.Questions[i].Options.OrderBy(o => o.OptionValue).ThenBy(o => o.OptionText))
+                                {
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="Answers[@i].SelectedOption" value="@option.OptionId" required />
+                                        <input type="hidden" name="Answers[@i].TextAnswer" value="N/A" />
+                                        <label class="form-check-label">@option.OptionText (@option.OptionValue)</label>
+                                    </div>
+                                }
                             }
-                        }
-                        else if (Model.Questions[i].Type == Research_Software_Dev.Models.Forms.QuestionType.FreeText)
-                        {
-                            <input type="text" name="Answers[@i].TextAnswer" class="form-control" required />
-                        }
-                    </div>
-                }
-            </div>
-        }
-    </div>
+                            else if (Model.Questions[i].Type == Research_Software_Dev.Models.Forms.QuestionType.LikertScale)
+                            {
+                                @foreach (var option in Model.Questions[i].Options.OrderBy(o => o.OptionValue).ThenBy(o => o.OptionText))
+                                {
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="Answers[@i].SelectedOption" value="@option.OptionId" required />
+                                        <input type="hidden" name="Answers[@i].TextAnswer" value="N/A" />
+                                        <label class="form-check-label">@option.OptionText (@option.OptionValue)</label>
+                                    </div>
+                                }
+                            }
+                            else if (Model.Questions[i].Type == Research_Software_Dev.Models.Forms.QuestionType.FreeText)
+                            {
+                                <textarea name="Answers[@i].TextAnswer" class="form-control" rows="3" required></textarea>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
 
-    <button type="submit" class="btn btn-primary" id="submit-button">Submit</button>
-    <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
-</form>
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-between mt-4">
+            <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary" id="submit-button">Submit</button>
+        </div>
+    </form>
+</div>
 
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Generate unique AnswerId for each question
             const questionsContainer = document.getElementById('questions-container');
             if (questionsContainer) {
                 const questionGroups = questionsContainer.querySelectorAll('.form-group');
@@ -88,7 +94,7 @@
             }
         });
 
-        document.getElementById('submit-button').addEventListener('click', (e) => {
+        document.getElementById('submit-button').addEventListener('click', () => {
             console.log('Form submitted. Answer IDs:');
             const answerIds = Array.from(document.querySelectorAll('[id^="answer-id-"]'))
                 .map(input => input.value);
@@ -96,3 +102,61 @@
         });
     </script>
 }
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        max-width: 800px;
+    }
+
+    .form-label {
+        font-weight: bold;
+    }
+
+    .form-group {
+        background-color: #ffffff;
+    }
+
+        .form-group label {
+            font-size: 1.1em;
+        }
+
+        .form-group select,
+        .form-group textarea {
+            font-size: 1em;
+            padding: 0.5em;
+        }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+    .border {
+        border: 1px solid #dee2e6 !important;
+    }
+
+    .rounded {
+        border-radius: 0.25rem;
+    }
+
+    h1, h2, h3 {
+        font-family: 'Arial', sans-serif;
+    }
+</style>
