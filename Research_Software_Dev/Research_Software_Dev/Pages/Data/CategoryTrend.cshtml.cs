@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Data
 {
+    [Authorize(Roles = "Mid-Auth,High-Auth,Study Admin")]
     public class CategoryTrendModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -43,38 +45,38 @@ namespace Research_Software_Dev.Pages.Data
 
         public async Task OnGetAsync(string studyId, DateTime? startDate, DateTime? endDate, List<string> participants)
         {
-            Console.WriteLine("Fetching data for Category Trends...");
+            if (studyId == null)
+            {
+                Console.WriteLine("ERROR: Study is null---------------------------------");
+            }
+            Console.WriteLine($"STUDYID: { studyId}----------------");
+
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Console.WriteLine($"Logged-in UserId: {userId}");
 
             var userStudyIds = await _context.ResearcherStudies
                 .Where(rs => rs.ResearcherId == userId)
                 .Select(rs => rs.StudyId)
                 .ToListAsync();
 
-            Console.WriteLine($"User Study IDs: {string.Join(", ", userStudyIds)}");
-
-            var studies = await _context.Studies
-                .Where(s => userStudyIds.Contains(s.StudyId))
-                .ToListAsync();
-
-            Studies = new SelectList(studies, "StudyId", "StudyName");
-
+            // Fetch participants for the given study ID
             var participantIds = await _context.ParticipantStudies
-                .Where(ps => userStudyIds.Contains(ps.StudyId))
+                .Where(ps => ps.StudyId == studyId)
                 .Select(ps => ps.ParticipantId)
                 .Distinct()
                 .ToListAsync();
 
             AvailableParticipants = await _context.Participants
                 .Where(p => participantIds.Contains(p.ParticipantId))
+                .OrderBy(p => p.ParticipantFirstName)
+                .ThenBy(p => p.ParticipantLastName)
                 .ToListAsync();
 
             AvailableSessions = await _context.Sessions
                 .Where(s => userStudyIds.Contains(s.StudyId))
                 .OrderBy(s => s.Date)
                 .ToListAsync();
+
 
             if (startDate.HasValue && endDate.HasValue && participants.Any())
             {

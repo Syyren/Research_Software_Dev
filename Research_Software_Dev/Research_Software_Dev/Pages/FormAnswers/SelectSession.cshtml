@@ -1,29 +1,29 @@
-﻿@page "{participantId}"
+﻿@page
 @model Research_Software_Dev.Pages.Forms.SelectSessionModel
 @{
-    ViewData["Title"] = "Select Session";
+    ViewData["Title"] = "Select Session and Participant";
 }
 
-<h1>Select Session</h1>
-
-<p>Participant: @Model.ParticipantName</p>
+<h1>Select Session and Participant</h1>
 
 <form method="post">
-    <input type="hidden" asp-for="ParticipantId" />
+    <!-- Step 1: Select Session -->
+    <label for="session">Select Session:</label>
+    <select id="session" name="SessionId" class="form-control" asp-for="SessionId" asp-items="Model.SessionOptions" onchange="this.form.submit()">
+        <option value="">-- Select Session --</option>
+    </select>
 
-    <div class="form-group mb-2">
-        <label for="SessionId">Session</label>
-        <select asp-for="SessionId" class="form-control">
-            <option value="">-- Select a Session --</option>
-            @foreach (var session in Model.Sessions)
-            {
-                <option value="@session.SessionId">
-                    @($"{session.Date:yyyy-MM-dd} from {session.TimeStart} to {session.TimeEnd}")
-                </option>
-            }
-        </select>
-        <span asp-validation-for="SessionId" class="text-danger"></span>
-    </div>
+    <!-- Step 2: Select Participant -->
+    <label for="participant">Select Participant:</label>
+    <select id="participant" name="ParticipantId" class="form-control" asp-for="ParticipantId">
+        <option value="">-- Select Participant --</option>
+        @foreach (var participant in Model.FilteredParticipants)
+        {
+            <option value="@participant.ParticipantId">
+                @participant.ParticipantFirstName @participant.ParticipantLastName
+            </option>
+        }
+    </select>
 
-    <button type="submit" class="btn btn-outline-primary">Next</button>
+    <button type="submit" class="btn btn-primary mt-2">Continue</button>
 </form>

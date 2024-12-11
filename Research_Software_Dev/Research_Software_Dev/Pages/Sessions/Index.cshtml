@@ -70,6 +70,7 @@
                         </a>
                         <a class="btn btn-outline-dark me-1" asp-page="./Edit" asp-route-id="@item.SessionId">Edit</a>
                         <a class="btn btn-outline-dark me-1" asp-page="./Details" asp-route-id="@item.SessionId">Details</a>
+                        <a class="btn btn-outline-dark me-1" asp-page="../FormAnswers/SelectForm" asp-route-sessionid="@item.SessionId">Submit Form</a>
                         <a class="btn btn-outline-danger me-1" asp-page="./Delete" asp-route-id="@item.SessionId">Delete</a>
                     </td>
                 </tr>
