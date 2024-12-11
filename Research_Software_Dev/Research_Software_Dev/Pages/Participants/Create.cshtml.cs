@@ -37,6 +37,8 @@ namespace Research_Software_Dev.Pages.Participants
         [Required(ErrorMessage = "A Study is Required")]
         public string SelectedStudyId { get; set; }
 
+
+        //GET
         public async Task<IActionResult> OnGetAsync()
         {
             //Security Check 1
@@ -50,6 +52,8 @@ namespace Research_Software_Dev.Pages.Participants
             return Page();
         }
 
+
+        //POST
         public async Task<IActionResult> OnPostAsync()
         {
             //Security Check 1
@@ -74,7 +78,7 @@ namespace Research_Software_Dev.Pages.Participants
 
 
             //check participant doubles in study
-            var isParticipantInStudy = await Helper.IsParticipantInStudy(
+            var isParticipantInStudy = await Helper.IsParticipantInStudyByName(
                 _context,
                 Participant.ParticipantFirstName,
                 Participant.ParticipantLastName, SelectedStudyId
@@ -89,12 +93,8 @@ namespace Research_Software_Dev.Pages.Participants
             //get a GUID for Participant
             Participant.ParticipantId = Helper.GetGUID();
 
-            //creates a ResearcherStudy entry to associate the study with the researcher
-            var participantStudy = new ParticipantStudy
-            {
-                ParticipantId = Participant.ParticipantId,
-                StudyId = SelectedStudyId,
-            };
+            //creates a ParticipantStudy entry to associate the study with the participant
+            var participantStudy = new ParticipantStudy(Participant.ParticipantId, SelectedStudyId);
 
             //add participant and participantstudy to db
             _context.Participants.Add(Participant);

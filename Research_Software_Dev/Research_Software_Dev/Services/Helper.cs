@@ -35,9 +35,6 @@ namespace Research_Software_Dev.Services
                 .ToListAsync();
         }
 
-
-
-
         //check if logged in
         public static bool IsLoggedIn(UserManager<Researcher> userManager, ClaimsPrincipal user)
         {
@@ -52,13 +49,41 @@ namespace Research_Software_Dev.Services
                 .AnyAsync(rs => rs.ResearcherId == researcherId && rs.StudyId == studyId);
         }
 
-        //check particpant is in study
-        public static async Task<bool> IsParticipantInStudy(ApplicationDbContext context, string firstName, string lastName, string studyId)
+        //check particpant is in study by name
+        public static async Task<bool> IsParticipantInStudyByName(ApplicationDbContext context, string firstName, string lastName, string studyId)
         {
             return await context.Participants
                 .Where(p => p.ParticipantFirstName == firstName && p.ParticipantLastName == lastName)
                 .Join(context.ParticipantStudies, p => p.ParticipantId, ps => ps.ParticipantId, (p, ps) => new { p, ps })
                 .AnyAsync(joined => joined.ps.StudyId == studyId);
+        }
+
+        //check particpant is in study by Id
+        public static async Task<bool> IsParticipantInStudyById(ApplicationDbContext context, string participantId, string studyId)
+        {
+            return await context.ParticipantStudies
+                .AnyAsync(ps => ps.ParticipantId == participantId && ps.StudyId == studyId);
+        }
+
+        //get participant by Id
+        public static async Task<Participant> GetParticipantById(ApplicationDbContext context, string participantId)
+        {
+            return await context.Participants
+                .FirstOrDefaultAsync(p => p.ParticipantId == participantId);
+        }
+
+        //get study by id
+        public static async Task<Study> GetStudyById(ApplicationDbContext context, string studyId)
+        {
+            return await context.Studies
+                .FirstOrDefaultAsync(s => s.StudyId == studyId);
+        }
+        //get ParticipantStudy from participant studies table
+        public static async Task<ParticipantStudy> GetParticipantStudy(ApplicationDbContext context, string participantId, string studyId)
+        {
+            var participantStudy = await context.ParticipantStudies
+                .FirstOrDefaultAsync(ps => ps.ParticipantId == participantId && ps.StudyId == studyId);
+            return participantStudy;
         }
 
         //get a GUID
