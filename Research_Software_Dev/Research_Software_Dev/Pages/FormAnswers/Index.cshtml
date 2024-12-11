@@ -7,7 +7,7 @@
 <h1>Select Participant</h1>
 
 <form method="post">
-    <div class="form-group">
+    <div class="form-group mb-2">
         <label asp-for="ParticipantId">Participant</label>
         <select asp-for="ParticipantId" class="form-control" required>
             <option value="">-- Select a Participant --</option>
@@ -21,5 +21,5 @@
         <span asp-validation-for="ParticipantId" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Next</button>
+    <button type="submit" class="btn btn-outline-primary">Next</button>
 </form>
