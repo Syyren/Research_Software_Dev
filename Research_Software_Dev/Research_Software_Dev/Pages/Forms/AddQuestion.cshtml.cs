@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Forms
 {
-    [Authorize]
+    [Authorize(Roles = "Mid-Auth,High-Auth,Study Admin")]
     public class AddQuestionModel : PageModel
     {
         private readonly ApplicationDbContext _context;

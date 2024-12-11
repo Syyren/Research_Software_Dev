@@ -7,51 +7,82 @@
 <h1 class="text-center mt-4">Data Analysis Dashboard</h1>
 
 <div class="container mt-5">
-    <div class="row">
-        <!-- Card 1 -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Category Trends Over Sessions</h5>
-                    <p class="card-text">Visualize trends in participant scores categorized over session dates.</p>
-                    <a href="/Data/CategoryTrend" class="btn btn-primary">View</a>
-                </div>
-            </div>
-        </div>
+    <!-- Study Selection -->
+    <form method="get" id="studySelectionForm" class="mb-4">
+        <label for="study" class="form-label">Select Study:</label>
+        <select id="study" name="SelectedStudyId" class="form-control" onchange="document.getElementById('studySelectionForm').submit()">
+            <option value="">-- Select a Study --</option>
+            @foreach (var study in Model.AvailableStudies)
+            {
+                <option value="@study.StudyId"
+                        selected="@(Model.SelectedStudyId == study.StudyId ? "selected" : null)">
+                    @study.StudyName
+                </option>
+            }
+        </select>
+    </form>
 
-        <!-- Card 2 -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Participant Category Scores for a Session</h5>
-                    <p class="card-text">View a participants category scores for a specific session.</p>
-                    <a href="/Data/SessionCategoryScore" class="btn btn-primary">View</a>
-                </div>
+    <!-- Cards -->
+    @if (!string.IsNullOrEmpty(Model.SelectedStudyId))
+    {
+        <div class="row">
+            <!-- Card 1 -->
+            <div class="col-md-6 mb-4">
+                <a href="/Data/CategoryTrend/@Model.SelectedStudyId" class="text-decoration-none">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Category Trends Over Sessions</h5>
+                            <p class="card-text">Visualize trends in participant scores categorized over session dates.</p>
+                            <button class="btn btn-primary">View</button>
+                        </div>
+                    </div>
+                </a>
             </div>
-        </div>
 
-        <!-- Card 3 -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h5 class="card-title">All Category Scores for a Session</h5>
-                    <p class="card-text">View all participants category scores for a chosen session.</p>
-                    <a href="/Data/AllSessionCategoryScores" class="btn btn-primary">View</a>
-                </div>
+            <!-- Card 2 -->
+            <div class="col-md-6 mb-4">
+                <a href="/Data/SessionCategoryScore/@Model.SelectedStudyId" class="text-decoration-none">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Participant Category Scores for a Session</h5>
+                            <p class="card-text">View a participant's category scores for a specific session.</p>
+                            <button class="btn btn-primary">View</button>
+                        </div>
+                    </div>
+                </a>
             </div>
-        </div>
 
-        <!-- Card 4 -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Session Attendance Bubble Chart</h5>
-                    <p class="card-text">Attendance & frequency of form answers for participants in sessions.</p>
-                    <a href="/Data/BubbleChart" class="btn btn-primary">View</a>
-                </div>
+            <!-- Card 3 -->
+            <div class="col-md-6 mb-4">
+                <a href="/Data/AllSessionCategoryScores/@Model.SelectedStudyId" class="text-decoration-none">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">All Category Scores for a Session</h5>
+                            <p class="card-text">View all participants' category scores for a chosen session.</p>
+                            <button class="btn btn-primary">View</button>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="col-md-6 mb-4">
+                <a href="/Data/BubbleChart/@Model.SelectedStudyId" class="text-decoration-none">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Session Attendance Bubble Chart</h5>
+                            <p class="card-text">A bubble chart showing the attendance and frequency of form answers of all participants per session.</p>
+                            <button class="btn btn-primary">View</button>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <p class="text-center mt-4 text-muted">Please select a study to proceed.</p>
+    }
 </div>
 
 <style>
