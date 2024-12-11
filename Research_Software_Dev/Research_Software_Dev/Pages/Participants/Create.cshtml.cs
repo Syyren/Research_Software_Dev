@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Research_Software_Dev.Data;
+using Research_Software_Dev.Services;
 using Research_Software_Dev.Models.Participants;
 using Research_Software_Dev.Models.Researchers;
 using Research_Software_Dev.Models.Studies;
@@ -35,77 +34,60 @@ namespace Research_Software_Dev.Pages.Participants
 
         //Bind StudyId from the dropdown
         [BindProperty]
-        [Required(ErrorMessage="A Study is Required")]
+        [Required(ErrorMessage = "A Study is Required")]
         public string SelectedStudyId { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            //gets the logged-in user's ID (ResearcherId)
-            var researcherId = _userManager.GetUserId(User);
-            if (string.IsNullOrEmpty(researcherId))
-            {
-                return RedirectToPage("/NotFound");
-            }
+            //Security Check 1
+            if (!Helper.IsLoggedIn(_userManager, User)) return RedirectToPage("/NotFound");
+            if (!Helper.IsAuthorized(User, permissions)) return Forbid();
 
-            // Fetch studies associated with the researcher
-            Studies = await _context.ResearcherStudies
-                .Where(rs => rs.ResearcherId == researcherId)
-                .Include(rs => rs.Study)
-                .Select(rs => rs.Study)
-                .ToListAsync();
+            //fetch studies associated with the researcher
+            var researcherId = _userManager.GetUserId(User);
+            Studies = await Helper.GetStudiesForResearcher(_context, researcherId);
 
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            //gets the logged-in user's ID (ResearcherId)
+            //Security Check 1
+            if (!Helper.IsLoggedIn(_userManager, User)) return RedirectToPage("/NotFound");
+            if (!Helper.IsAuthorized(User, permissions)) return Forbid();
+
             var researcherId = _userManager.GetUserId(User);
-            if (string.IsNullOrEmpty(researcherId))
-            {
-                return RedirectToPage("/NotFound");
-            }
-
-            // Check authorization - only Study Admins or High-Auth users can create participants
-            var roles = User.Claims
-                .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
-                .Select(c => c.Value)
-                .ToList();
-
-            if (!roles.Any(role => permissions.Contains(role)))
-            {
-                return Forbid();
-            }
-
+            //model validation
             if (!ModelState.IsValid)
             {
-                //reload dropdown list in event of a validation error
-                Studies = await _context.ResearcherStudies
-                    .Where(rs => rs.ResearcherId == researcherId)
-                    .Include(rs => rs.Study)
-                    .Select(rs => rs.Study)
-                    .ToListAsync();
+                Studies = await Helper.GetStudiesForResearcher(_context, researcherId);
                 return Page();
             }
 
-            //researcher must have selected study matching in researcher studies
-            var researcherStudy = await _context.ResearcherStudies
-                .FirstOrDefaultAsync(rs => rs.ResearcherId == researcherId && rs.StudyId == SelectedStudyId);
-
-            if (researcherStudy == null)
+            //Security Check 2
+            //is researcher in study
+            if (!await Helper.IsResearcherInStudy(_context, researcherId, SelectedStudyId))
             {
-                //if researcher not associated with selected study, error
-                ModelState.AddModelError("SelectedStudyId", "You are not associated with this study.");
-                Studies = await _context.ResearcherStudies
-                    .Where(rs => rs.ResearcherId == researcherId)
-                    .Include(rs => rs.Study)
-                    .Select(rs => rs.Study)
-                    .ToListAsync();
+                Studies = await Helper.GetStudiesForResearcher(_context, researcherId);
                 return Page();
             }
 
-            //generates a unique ParticipantId using GUID
-            Participant.ParticipantId = Guid.NewGuid().ToString();
+
+            //check participant doubles in study
+            var isParticipantInStudy = await Helper.IsParticipantInStudy(
+                _context,
+                Participant.ParticipantFirstName,
+                Participant.ParticipantLastName, SelectedStudyId
+            );
+            if (isParticipantInStudy)
+            {
+                ModelState.AddModelError(string.Empty, "A participant with the same first and last name already exists in this study. Please add an identifier to the name if this is a separate person.");
+                Studies = await Helper.GetStudiesForResearcher(_context, researcherId);
+                return Page();
+            }
+
+            //get a GUID for Participant
+            Participant.ParticipantId = Helper.GetGUID();
 
             //creates a ResearcherStudy entry to associate the study with the researcher
             var participantStudy = new ParticipantStudy
@@ -114,10 +96,10 @@ namespace Research_Software_Dev.Pages.Participants
                 StudyId = SelectedStudyId,
             };
 
-            //adds the new participant and participant-study link to the database
-            _context.Participants.Add(Participant); // Add the Participant
-            _context.ParticipantStudies.Add(participantStudy); // Add the ParticipantStudy link
-            await _context.SaveChangesAsync(); // Save to the database
+            //add participant and participantstudy to db
+            _context.Participants.Add(Participant);
+            _context.ParticipantStudies.Add(participantStudy);
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }
