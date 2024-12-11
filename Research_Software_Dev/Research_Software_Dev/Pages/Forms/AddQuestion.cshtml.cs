@@ -7,8 +7,6 @@ using Research_Software_Dev.Models.Forms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Research_Software_Dev.Pages.Forms
@@ -24,29 +22,19 @@ namespace Research_Software_Dev.Pages.Forms
         }
 
         [BindProperty]
-        public FormQuestion Question { get; set; }
+        public FormQuestion Question { get; set; } = new();
 
         [BindProperty]
         public string FormId { get; set; }
 
         [BindProperty]
-        public List<string> Choices { get; set; } = new();
+        public List<FormQuestionOption> Choices { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(string formId)
         {
             if (string.IsNullOrEmpty(formId))
             {
                 return NotFound("FormId is missing.");
-            }
-
-            var roles = User.Claims
-                .Where(c => c.Type == ClaimTypes.Role)
-                .Select(c => c.Value)
-                .ToList();
-
-            if (!roles.Contains("Study Admin") && !roles.Contains("High-Auth") && !roles.Contains("Mid-Auth") && !roles.Contains("Researcher"))
-            {
-                return Forbid();
             }
 
             var form = await _context.Forms.FindAsync(formId);
@@ -76,31 +64,6 @@ namespace Research_Software_Dev.Pages.Forms
             {
                 Question.FormId = FormId;
 
-                // Process Choices or Scale for SingleChoice or LikertScale
-                if (Question.Type == QuestionType.SingleChoice || Question.Type == QuestionType.LikertScale)
-                {
-                    if (Choices == null || Choices.Count == 0)
-                    {
-                        ModelState.AddModelError("Choices", "Choices or scale values are required for this question type.");
-                        return Page();
-                    }
-
-                    // Remove empty or duplicate choices and serialize
-                    var formattedChoices = Choices
-                        .Where(choice => !string.IsNullOrWhiteSpace(choice))
-                        .Select(choice => choice.Trim())
-                        .Distinct()
-                        .ToList();
-
-                    if (formattedChoices.Count == 0)
-                    {
-                        ModelState.AddModelError("Choices", "At least one valid choice or scale value is required.");
-                        return Page();
-                    }
-
-                    Question.OptionsJson = JsonSerializer.Serialize(formattedChoices);
-                }
-
                 // Auto-increment question number
                 var lastQuestionNumber = await _context.FormQuestions
                     .Where(q => q.FormId == FormId)
@@ -110,6 +73,7 @@ namespace Research_Software_Dev.Pages.Forms
 
                 Question.QuestionNumber = lastQuestionNumber + 1;
 
+                // Add question to the database
                 _context.FormQuestions.Add(Question);
                 await _context.SaveChangesAsync();
             }

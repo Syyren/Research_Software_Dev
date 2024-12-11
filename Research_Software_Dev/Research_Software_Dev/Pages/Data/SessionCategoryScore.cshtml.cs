@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Research_Software_Dev.Data;
+using Research_Software_Dev.Models.Forms;
 using Research_Software_Dev.Models.Participants;
 using Research_Software_Dev.Models.Sessions;
 using System;
@@ -55,12 +56,26 @@ namespace Research_Software_Dev.Pages.Data
 
                 Console.WriteLine($"Fetched {answers.Count} answers");
 
+                // Load option values for answers with selected options
+                var optionValues = await _context.FormQuestionOptions
+                    .Where(o => answers.Select(a => a.SelectedOption).Contains(o.OptionId))
+                    .ToDictionaryAsync(o => o.OptionId, o => o.OptionValue);
+
+                foreach (var answer in answers)
+                {
+                    if (answer.SelectedOption != null && optionValues.TryGetValue(answer.SelectedOption, out var value))
+                    {
+                        Console.WriteLine($"Answer: ParticipantId={answer.ParticipantId}, SessionId={answer.SessionId}, Category={answer.FormQuestion.Category}, OptionValue={value}");
+                    }
+                }
+
                 var groupedData = answers
+                    .Where(a => a.SelectedOption != null && optionValues.ContainsKey(a.SelectedOption))
                     .GroupBy(a => a.FormQuestion.Category)
                     .Select(g => new
                     {
                         Category = g.Key,
-                        Score = g.Sum(a => int.Parse(a.TextAnswer))
+                        Score = g.Sum(a => optionValues[a.SelectedOption])
                     })
                     .ToList();
 

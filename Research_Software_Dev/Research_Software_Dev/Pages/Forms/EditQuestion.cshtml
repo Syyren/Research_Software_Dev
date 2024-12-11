@@ -1,71 +1,67 @@
 ﻿@page "{formId}/{questionId}"
-@using Research_Software_Dev.Models.Forms
 @model Research_Software_Dev.Pages.Forms.EditQuestionModel
 @{
-    ViewData["Title"] = "Edit Question";
+    ViewData["Title"] = "Edit Options";
 }
 
-<h1>Edit Question</h1>
+<h1>Edit Options for Question</h1>
 
 <form method="post">
-    <!-- Hidden fields for binding the composite key -->
-    <input type="hidden" asp-for="Question.FormId" />
-    <input type="hidden" asp-for="Question.FormQuestionId" />
+    <!-- Hidden fields for composite keys -->
+    <input type="hidden" asp-for="FormId" />
+    <input type="hidden" asp-for="FormQuestionId" />
 
-    <!-- Question Description -->
     <div class="form-group">
-        <label asp-for="Question.QuestionDescription"></label>
-        <textarea asp-for="Question.QuestionDescription" class="form-control"></textarea>
-        <span asp-validation-for="Question.QuestionDescription" class="text-danger"></span>
+        <h3>@Model.Question.QuestionDescription</h3>
     </div>
 
-    <!-- Question Number -->
     <div class="form-group">
-        <label asp-for="Question.QuestionNumber"></label>
-        <input asp-for="Question.QuestionNumber" class="form-control" />
-        <span asp-validation-for="Question.QuestionNumber" class="text-danger"></span>
+        <label>Options</label>
+        <div id="options-container">
+            @for (var i = 0; i < Model.Options.Count; i++)
+            {
+                <div class="row mb-2">
+                    <input type="hidden" name="Options[@i].OptionId" value="@Model.Options[i].OptionId" />
+                    <input type="hidden" name="Options[@i].FormQuestionId" value="@Model.FormQuestionId" />
+                    <div class="col-8">
+                        <input type="text" name="Options[@i].OptionText" value="@Model.Options[i].OptionText" class="form-control" placeholder="Option Text" required />
+                    </div>
+                    <div class="col-4">
+                        <input type="number" name="Options[@i].OptionValue" value="@Model.Options[i].OptionValue" class="form-control" placeholder="Option Value" step="0.01" />
+                    </div>
+                </div>
+            }
+        </div>
+        <button type="button" id="add-option" class="btn btn-outline-primary mt-2">Add Option</button>
     </div>
 
-    <!-- Question Type -->
-    <div class="form-group">
-        <label asp-for="Question.Type"></label>
-        <select asp-for="Question.Type" class="form-control">
-            <option value="SingleChoice">Single Choice</option>
-            <option value="LikertScale">Likert Scale</option>
-            <option value="FreeText">Free Text</option>
-        </select>
-        <span asp-validation-for="Question.Type" class="text-danger"></span>
-    </div>
-
-    <!-- Question Category -->
-    <div class="form-group">
-        <label asp-for="Question.Category">Category (Optional)</label>
-        <input type="text" asp-for="Question.Category" class="form-control" placeholder="Enter category (e.g., Preferences)" />
-        <span asp-validation-for="Question.Category" class="text-danger"></span>
-    </div>
-
-    <!-- Options for Likert Scale -->
-    <div class="form-group" id="options-group" style="display: @(Model.Question.Type == QuestionType.LikertScale ? "block" : "none")">
-        <label asp-for="Question.OptionsJson">Options (Comma-Separated)</label>
-        <textarea asp-for="Question.OptionsJson" class="form-control"></textarea>
-        <span asp-validation-for="Question.OptionsJson" class="text-danger"></span>
-    </div>
-
-    <div>
-        <button type="submit" class="btn btn-primary">Save</button> |
-        <a asp-page="./Edit" asp-route-id="@Model.Question.FormId" class="btn btn-secondary">Cancel</a>
-    </div>
+    <!-- Action Buttons -->
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-page="./Edit" asp-route-id="@Model.FormId" class="btn btn-secondary">Cancel</a>
 </form>
 
 @section Scripts {
     <script>
-        document.querySelector('[asp-for="Question.Type"]').addEventListener('change', function () {
-            const optionsGroup = document.getElementById('options-group');
-            if (this.value === 'LikertScale') {
-                optionsGroup.style.display = 'block';
-            } else {
-                optionsGroup.style.display = 'none';
-            }
+                const optionsContainer = document.getElementById('options-container');
+        const addOptionButton = document.getElementById('add-option');
+
+        addOptionButton.addEventListener('click', function () {
+            const optionIndex = optionsContainer.childElementCount;
+            const optionId = `new-${Date.now()}`;
+            const row = document.createElement('div');
+            row.classList.add('row', 'mb-2');
+            row.innerHTML = `
+                <input type="hidden" name="Options[${optionIndex}].OptionId" value="${optionId}" />
+                <input type="hidden" name="Options[${optionIndex}].FormQuestionId" value="${document.getElementById('FormQuestionId').value}" />
+                <div class="col-8">
+                    <input type="text" name="Options[${optionIndex}].OptionText" class="form-control" placeholder="Option Text" required />
+                </div>
+                <div class="col-4">
+                    <input type="number" name="Options[${optionIndex}].OptionValue" class="form-control" placeholder="Option Value" step="0.01" />
+                </div>
+            `;
+            optionsContainer.appendChild(row);
         });
+
     </script>
 }

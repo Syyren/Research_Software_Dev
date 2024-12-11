@@ -22,6 +22,29 @@ namespace Research_Software_Dev.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("FormQuestionOption", b =>
+                {
+                    b.Property<string>("OptionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FormQuestionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("OptionText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("OptionValue")
+                        .HasColumnType("float");
+
+                    b.HasKey("OptionId");
+
+                    b.HasIndex("FormQuestionId");
+
+                    b.ToTable("FormQuestionOptions");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -187,6 +210,9 @@ namespace Research_Software_Dev.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("SelectedOption")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SessionId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -218,9 +244,6 @@ namespace Research_Software_Dev.Migrations
                     b.Property<string>("FormId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("OptionsJson")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("QuestionDescription")
                         .IsRequired()
@@ -453,6 +476,17 @@ namespace Research_Software_Dev.Migrations
                     b.ToTable("Studies");
                 });
 
+            modelBuilder.Entity("FormQuestionOption", b =>
+                {
+                    b.HasOne("Research_Software_Dev.Models.Forms.FormQuestion", "FormQuestion")
+                        .WithMany("Options")
+                        .HasForeignKey("FormQuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FormQuestion");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -624,6 +658,11 @@ namespace Research_Software_Dev.Migrations
             modelBuilder.Entity("Research_Software_Dev.Models.Forms.Form", b =>
                 {
                     b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("Research_Software_Dev.Models.Forms.FormQuestion", b =>
+                {
+                    b.Navigation("Options");
                 });
 #pragma warning restore 612, 618
         }

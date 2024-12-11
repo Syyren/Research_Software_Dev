@@ -7,21 +7,28 @@
 <h1>Add Question</h1>
 
 <form method="post">
-    <!-- Hidden inputs -->
+    <!-- Hidden input for FormId -->
     <input type="hidden" asp-for="FormId" />
     <input type="hidden" asp-for="Question.FormId" value="@Model.FormId" />
 
     <!-- Question Description -->
     <div class="form-group">
-        <label asp-for="Question.QuestionDescription">Question Description</label>
-        <input type="text" asp-for="Question.QuestionDescription" class="form-control" required />
+        <label asp-for="Question.QuestionDescription"></label>
+        <textarea asp-for="Question.QuestionDescription" class="form-control"></textarea>
         <span asp-validation-for="Question.QuestionDescription" class="text-danger"></span>
+    </div>
+
+    <!-- Question Number -->
+    <div class="form-group">
+        <label asp-for="Question.QuestionNumber"></label>
+        <input asp-for="Question.QuestionNumber" class="form-control" />
+        <span asp-validation-for="Question.QuestionNumber" class="text-danger"></span>
     </div>
 
     <!-- Question Type -->
     <div class="form-group">
-        <label asp-for="Question.Type">Question Type</label>
-        <select asp-for="Question.Type" class="form-control" id="question-type-selector">
+        <label asp-for="Question.Type"></label>
+        <select asp-for="Question.Type" class="form-control">
             <option value="SingleChoice">Single Choice</option>
             <option value="LikertScale">Likert Scale</option>
             <option value="FreeText">Free Text</option>
@@ -29,58 +36,26 @@
         <span asp-validation-for="Question.Type" class="text-danger"></span>
     </div>
 
-    <!-- Category -->
+    <!-- Question Category -->
     <div class="form-group">
         <label asp-for="Question.Category">Category (Optional)</label>
-        <input type="text" asp-for="Question.Category" class="form-control" placeholder="Enter category (e.g., Depression)" />
+        <input type="text" asp-for="Question.Category" class="form-control" placeholder="Enter category (e.g., Preferences)" />
         <span asp-validation-for="Question.Category" class="text-danger"></span>
     </div>
 
-    <!-- Choices or Scale Section -->
-    <div class="form-group" id="choices-section" style="display: none;">
-        <label>Choices / Scale Values</label>
-        <div id="choices-container">
-        </div>
-        <button type="button" id="add-choice" class="btn btn-outline-primary">Add Value</button>
-    </div>
-
-    <!-- Buttons -->
-    <div class="mt-2">
-        <button type="submit" class="btn btn-outline-primary">Save</button>
-        <a asp-page="./Edit" asp-route-id="@Model.FormId" class="btn btn-outline-dark">Cancel</a>
-    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-page="./Edit" asp-route-id="@Model.FormId" class="btn btn-secondary">Cancel</a>
 </form>
+
 
 @section Scripts {
     <script>
-        const questionTypeSelector = document.getElementById('question-type-selector');
-        const choicesSection = document.getElementById('choices-section');
-        const choicesContainer = document.getElementById('choices-container');
-        const addChoiceButton = document.getElementById('add-choice');
-
-        function toggleSections() {
-            const selectedType = questionTypeSelector.value;
-            if (selectedType === 'SingleChoice' || selectedType === 'LikertScale') {
-                choicesSection.style.display = 'block';
-            } else {
-                choicesSection.style.display = 'none';
-                choicesContainer.innerHTML = ''; // Clears choices when not needed
+        document.getElementById('add-question-form').addEventListener('submit', function (event) {
+            console.log('Form submitted. Checking form data...');
+            const formData = new FormData(this);
+            for (const [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
             }
-        }
-
-        function addChoice() {
-            const choiceIndex = choicesContainer.childElementCount;
-            const choiceInput = document.createElement('div');
-            choiceInput.classList.add('form-group');
-            choiceInput.innerHTML = `
-                <input type="text" name="Choices[${choiceIndex}]" class="form-control mb-2" placeholder="Enter choice or scale value" required />
-            `;
-            choicesContainer.appendChild(choiceInput);
-        }
-
-        questionTypeSelector.addEventListener('change', toggleSections);
-        addChoiceButton.addEventListener('click', addChoice);
-
-        toggleSections();
+        });
     </script>
 }

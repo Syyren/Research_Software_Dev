@@ -27,11 +27,61 @@ public class DataSeeder
         await _context.Database.MigrateAsync();
         Console.WriteLine("Database migration completed.");
 
-        // Form ID to target
-        var formId = "ea063fac-9d32-4d3b-9e6a-30d13db6b894";
+        // DASS21 Form
+        var formId = "dass21-0001";
+        var formName = "DASS21";
+
+        if (!await _context.Forms.AnyAsync(f => f.FormId == formId))
+        {
+            var dassQuestions = new List<FormQuestion>
+            {
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 1, QuestionDescription = "I found it hard to wind down", Type = QuestionType.LikertScale, Category = "Stress" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 2, QuestionDescription = "I was aware of dryness of my mouth", Type = QuestionType.LikertScale, Category = "Anxiety" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 3, QuestionDescription = "I couldn’t seem to experience any positive feeling at all", Type = QuestionType.LikertScale, Category = "Depression" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 4, QuestionDescription = "I experienced breathing difficulty (e.g., excessively rapid breathing, breathlessness in the absence of physical exertion)", Type = QuestionType.LikertScale, Category = "Anxiety" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 5, QuestionDescription = "I found it difficult to work up the initiative to do things", Type = QuestionType.LikertScale, Category = "Depression" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 6, QuestionDescription = "I tended to over-react to situations", Type = QuestionType.LikertScale, Category = "Stress" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 7, QuestionDescription = "I experienced trembling (e.g., in the hands)", Type = QuestionType.LikertScale, Category = "Anxiety" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 8, QuestionDescription = "I felt that I was using a lot of nervous energy", Type = QuestionType.LikertScale, Category = "Stress" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 9, QuestionDescription = "I was worried about situations in which I might panic and make a fool of myself", Type = QuestionType.LikertScale, Category = "Anxiety" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 10, QuestionDescription = "I felt that I had nothing to look forward to", Type = QuestionType.LikertScale, Category = "Depression" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 11, QuestionDescription = "I found myself getting agitated", Type = QuestionType.LikertScale, Category = "Stress" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 12, QuestionDescription = "I found it difficult to relax", Type = QuestionType.LikertScale, Category = "Stress" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 13, QuestionDescription = "I felt down-hearted and blue", Type = QuestionType.LikertScale, Category = "Depression" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 14, QuestionDescription = "I was intolerant of anything that kept me from getting on with what I was doing", Type = QuestionType.LikertScale, Category = "Stress" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 15, QuestionDescription = "I felt I was close to panic", Type = QuestionType.LikertScale, Category = "Anxiety" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 16, QuestionDescription = "I was unable to become enthusiastic about anything", Type = QuestionType.LikertScale, Category = "Depression" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 17, QuestionDescription = "I felt I wasn’t worth much as a person", Type = QuestionType.LikertScale, Category = "Depression" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 18, QuestionDescription = "I felt that I was rather touchy", Type = QuestionType.LikertScale, Category = "Stress" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 19, QuestionDescription = "I was aware of the action of my heart in the absence of physical exertion (e.g., sense of heart rate increase, heart missing a beat)", Type = QuestionType.LikertScale, Category = "Anxiety" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 20, QuestionDescription = "I felt scared without any good reason", Type = QuestionType.LikertScale, Category = "Anxiety" },
+                new FormQuestion { FormQuestionId = Guid.NewGuid().ToString(), FormId = formId, QuestionNumber = 21, QuestionDescription = "I felt that life was meaningless", Type = QuestionType.LikertScale, Category = "Depression" }
+            };
+
+            foreach (var question in dassQuestions)
+            {
+                question.Options = new List<FormQuestionOption>
+                {
+                    new FormQuestionOption { OptionId = Guid.NewGuid().ToString(), FormQuestionId = question.FormQuestionId, OptionText = "Did not apply to me at all", OptionValue = 0 },
+                    new FormQuestionOption { OptionId = Guid.NewGuid().ToString(), FormQuestionId = question.FormQuestionId, OptionText = "Applied to me to some degree", OptionValue = 1 },
+                    new FormQuestionOption { OptionId = Guid.NewGuid().ToString(), FormQuestionId = question.FormQuestionId, OptionText = "Applied to me to a considerable degree", OptionValue = 2 },
+                    new FormQuestionOption { OptionId = Guid.NewGuid().ToString(), FormQuestionId = question.FormQuestionId, OptionText = "Applied to me very much", OptionValue = 3 }
+                };
+            }
+
+            var dass21Form = new Form
+            {
+                FormId = formId,
+                FormName = formName,
+                Questions = dassQuestions
+            };
+
+            _context.Forms.Add(dass21Form);
+            Console.WriteLine($"DASS21 form with {dassQuestions.Count} questions seeded.");
+        }
 
         // Seed study
-        var studyId = "d3d36e03-a11e-4ec4-9ee6-d0fce5a2d630";
+        var studyId = "1b718117-50fe-4216-bd18-29971220fee5";
 
         // Seed participants
         var participants = new List<Participant>();
@@ -93,6 +143,8 @@ public class DataSeeder
 
         await _context.SaveChangesAsync();
 
+
+
         // Link participants to sessions
         foreach (var session in sessions)
         {
@@ -115,22 +167,36 @@ public class DataSeeder
         {
             _context.ResearcherSessions.Add(new ResearcherSession
             {
-                ResearcherId = "c786e62d-d396-45e6-be89-207e528ab857",
+                ResearcherId = "1aa84535-0570-4504-b39f-99b1ecea1d2c",
                 SessionId = session.SessionId
             });
         }
 
         await _context.SaveChangesAsync();
 
-        // Get FormQuestions associated with the specified FormId
-        var formQuestions = await _context.FormQuestions.Where(q => q.FormId == formId).ToListAsync();
-        Console.WriteLine($"Found {formQuestions.Count} FormQuestions associated with FormId {formId}.");
+        // Seed answers for DASS21
+        var dass21Questions = await _context.FormQuestions.Where(q => q.FormId == formId).ToListAsync();
+
+        if (!dass21Questions.Any())
+        {
+            Console.WriteLine("No questions found for DASS21 form. Seeding aborted.");
+            return;
+        }
+
+        // Seed answers
+        // Dynamically fetch FormQuestions from the database for the specific form
+        var formQuestions = await _context.FormQuestions
+            .Where(q => q.FormId == "dass21-0001") // Replace with the actual Form ID for DASS21
+            .Include(q => q.Options) // Include related options
+            .ToListAsync();
 
         if (!formQuestions.Any())
         {
-            Console.WriteLine("No FormQuestions found. Seeding aborted.");
+            Console.WriteLine($"No FormQuestions found for Form ID {"dass21-0001"}. Seeding aborted.");
             return;
         }
+
+        Console.WriteLine($"Found {formQuestions.Count} FormQuestions for Form ID {"dass21-0001"}.");
 
         // Seed answers
         var answers = new List<FormAnswer>();
@@ -141,39 +207,42 @@ public class DataSeeder
             {
                 foreach (var question in formQuestions)
                 {
-                    var randomAnswer = random.Next(0, 4).ToString(); // Randomly pick from "0", "1", "2", "3"
-                    answers.Add(new FormAnswer
+                    // Query all options associated with the question
+                    var options = question.Options.ToList(); // Use preloaded options to minimize database calls
+
+                    if (options.Any())
                     {
-                        AnswerId = Guid.NewGuid().ToString(),
-                        TextAnswer = randomAnswer,
-                        TimeStamp = DateTime.Now,
-                        ParticipantId = participant.ParticipantId,
-                        SessionId = session.SessionId,
-                        FormQuestionId = question.FormQuestionId
-                    });
-                    Console.WriteLine($"Prepared FormAnswer for Participant {participant.ParticipantId}, Session {session.SessionId}, Question {question.FormQuestionId} with Answer {randomAnswer}");
+                        // Pick a random option from the available options
+                        var randomOption = options[random.Next(options.Count)];
+
+                        answers.Add(new FormAnswer
+                        {
+                            AnswerId = Guid.NewGuid().ToString(),
+                            TextAnswer = randomOption.OptionText, // Set the answer text to the option's text
+                            SelectedOption = randomOption.OptionId, // Store the selected option ID
+                            TimeStamp = DateTime.UtcNow,
+                            ParticipantId = participant.ParticipantId,
+                            SessionId = session.SessionId,
+                            FormQuestionId = question.FormQuestionId
+                        });
+
+                        Console.WriteLine($"Prepared FormAnswer for Participant {participant.ParticipantId}, Session {session.SessionId}, Question {question.FormQuestionId} with Option {randomOption.OptionId}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"No options available for Question {question.FormQuestionId}. Skipping.");
+                    }
                 }
             }
         }
 
-        Console.WriteLine($"Prepared {answers.Count} FormAnswers for seeding.");
+
 
         if (answers.Any())
         {
-            try
-            {
-                await _context.FormAnswers.AddRangeAsync(answers);
-                await _context.SaveChangesAsync();
-                Console.WriteLine("FormAnswers seeded successfully.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error saving FormAnswers: {ex.Message}");
-            }
-        }
-        else
-        {
-            Console.WriteLine("No FormAnswers to seed.");
+            await _context.FormAnswers.AddRangeAsync(answers);
+            await _context.SaveChangesAsync();
+            Console.WriteLine($"Seeded {answers.Count} DASS21 answers successfully.");
         }
 
         Console.WriteLine("Data seeding process completed.");

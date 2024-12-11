@@ -29,14 +29,14 @@
                                     <br />
                                     <strong>Category:</strong> @question.Category
                                 }
-                                @if (!string.IsNullOrEmpty(question.OptionsJson))
+                                @if (question.Options != null && question.Options.Any())
                                 {
                                     <br />
                                     <strong>Options:</strong>
                                     <ul>
-                                        @foreach (var option in System.Text.Json.JsonSerializer.Deserialize<List<string>>(question.OptionsJson))
+                                        @foreach (var option in question.Options)
                                         {
-                                            <li>@option</li>
+                                            <li>@option.OptionText (@(option.OptionValue?.ToString() ?? "0"))</li>
                                         }
                                     </ul>
                                 }
