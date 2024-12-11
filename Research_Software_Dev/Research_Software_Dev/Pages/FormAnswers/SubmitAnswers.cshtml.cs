@@ -138,7 +138,7 @@ namespace Research_Software_Dev.Pages.Forms
                 throw;
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("../Sessions/Index");
         }
     }
 }
