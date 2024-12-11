@@ -17,7 +17,7 @@
         <p>Session ID: @Model.SessionId</p>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-2">
         <h3>Questions</h3>
         @if (!Model.Questions.Any())
         {
@@ -68,8 +68,8 @@
         }
     </div>
 
-    <button type="submit" class="btn btn-primary" id="submit-button">Submit</button>
-    <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn btn-outline-primary" id="submit-button">Submit</button>
+    <a asp-page="./Index" class="btn btn-outline-secondary">Cancel</a>
 </form>
 
 @section Scripts {

@@ -11,7 +11,7 @@
 <form method="post">
     <input type="hidden" asp-for="ParticipantId" />
 
-    <div class="form-group">
+    <div class="form-group mb-2">
         <label for="SessionId">Session</label>
         <select asp-for="SessionId" class="form-control">
             <option value="">-- Select a Session --</option>
@@ -25,5 +25,5 @@
         <span asp-validation-for="SessionId" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Next</button>
+    <button type="submit" class="btn btn-outline-primary">Next</button>
 </form>
