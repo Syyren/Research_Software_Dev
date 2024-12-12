@@ -81,170 +81,180 @@ public class DataSeeder
         }
 
         // Seed study
-        var studyId = "1b718117-50fe-4216-bd18-29971220fee5";
+        List<string> studies = new();
+        studies = ["350dd99a-64b7-4b13-b018-c2828b67a02a",
+            "f9936c60-b4bc-4190-9f5d-ae6986c6afd0",
+            "054b87f8-4490-4234-8269-9422ab3d503e",
+            "4545dd77-09fd-438c-8d63-5c8a7c1e4eee",
+            "d8905006-7308-4e63-aa92-585c520e79b3",
+            "d1f2ee1f-645c-41d2-bd28-97bf154616c1",
+            "c7a2541f-8cfb-4bee-b5c3-bf5643bd0373"];
 
-        // Seed participants
-        var participants = new List<Participant>();
-        for (int i = 1; i <= 5; i++)
+        foreach (var studyId in studies)
         {
-            var participantId = Guid.NewGuid().ToString();
-            participants.Add(new Participant
+            // Seed participants
+            var participants = new List<Participant>();
+            for (int i = 1; i <= 5; i++)
             {
-                ParticipantId = participantId,
-                ParticipantFirstName = $"Participant{i}",
-                ParticipantLastName = $"LastName{i}"
-            });
-
-            if (!await _context.ParticipantStudies.AnyAsync(ps => ps.ParticipantId == participantId && ps.StudyId == studyId))
-            {
-                _context.ParticipantStudies.Add(new ParticipantStudy
+                var participantId = Guid.NewGuid().ToString();
+                participants.Add(new Participant
                 {
                     ParticipantId = participantId,
-                    StudyId = studyId
+                    ParticipantFirstName = $"Participant{i}",
+                    ParticipantLastName = $"LastName{i}"
                 });
-                Console.WriteLine($"Added ParticipantStudy for Participant {participantId}");
-            }
-        }
 
-        foreach (var participant in participants)
-        {
-            if (!await _context.Participants.AnyAsync(p => p.ParticipantId == participant.ParticipantId))
-            {
-                _context.Participants.Add(participant);
-                Console.WriteLine($"Added participant {participant.ParticipantId}");
-            }
-        }
-
-        // Seed sessions
-        var random = new Random();
-        var startDate = new DateTime(2024, 10, 1);
-        var endDate = new DateTime(2024, 11, 30);
-        var sessions = new List<Session>();
-
-        for (int i = 1; i <= 10; i++)
-        {
-            var sessionDate = startDate.AddDays(random.Next(0, (endDate - startDate).Days));
-            var session = new Session
-            {
-                SessionId = Guid.NewGuid().ToString(),
-                Date = DateOnly.FromDateTime(sessionDate),
-                TimeStart = TimeOnly.FromDateTime(sessionDate.AddHours(9)),
-                TimeEnd = TimeOnly.FromDateTime(sessionDate.AddHours(10)),
-                StudyId = studyId
-            };
-
-            sessions.Add(session);
-            if (!await _context.Sessions.AnyAsync(s => s.SessionId == session.SessionId))
-            {
-                _context.Sessions.Add(session);
-                Console.WriteLine($"Added session {session.SessionId} on {sessionDate.ToShortDateString()}");
-            }
-        }
-
-        await _context.SaveChangesAsync();
-
-
-
-        // Link participants to sessions
-        foreach (var session in sessions)
-        {
-            foreach (var participant in participants)
-            {
-                if (!await _context.ParticipantSessions.AnyAsync(ps => ps.ParticipantId == participant.ParticipantId && ps.SessionId == session.SessionId))
+                if (!await _context.ParticipantStudies.AnyAsync(ps => ps.ParticipantId == participantId && ps.StudyId == studyId))
                 {
-                    _context.ParticipantSessions.Add(new ParticipantSession
+                    _context.ParticipantStudies.Add(new ParticipantStudy
                     {
-                        ParticipantId = participant.ParticipantId,
-                        SessionId = session.SessionId
+                        ParticipantId = participantId,
+                        StudyId = studyId
                     });
-                    Console.WriteLine($"Linked Participant {participant.ParticipantId} to Session {session.SessionId}");
+                    Console.WriteLine($"Added ParticipantStudy for Participant {participantId}");
                 }
             }
-        }
 
-        // Link Amin to sessions
-        foreach (var session in sessions)
-        {
-            _context.ResearcherSessions.Add(new ResearcherSession
-            {
-                ResearcherId = "1aa84535-0570-4504-b39f-99b1ecea1d2c",
-                SessionId = session.SessionId
-            });
-        }
-
-        await _context.SaveChangesAsync();
-
-        // Seed answers for DASS21
-        var dass21Questions = await _context.FormQuestions.Where(q => q.FormId == formId).ToListAsync();
-
-        if (!dass21Questions.Any())
-        {
-            Console.WriteLine("No questions found for DASS21 form. Seeding aborted.");
-            return;
-        }
-
-        // Seed answers
-        // Dynamically fetch FormQuestions from the database for the specific form
-        var formQuestions = await _context.FormQuestions
-            .Where(q => q.FormId == "dass21-0001") // Replace with the actual Form ID for DASS21
-            .Include(q => q.Options) // Include related options
-            .ToListAsync();
-
-        if (!formQuestions.Any())
-        {
-            Console.WriteLine($"No FormQuestions found for Form ID {"dass21-0001"}. Seeding aborted.");
-            return;
-        }
-
-        Console.WriteLine($"Found {formQuestions.Count} FormQuestions for Form ID {"dass21-0001"}.");
-
-        // Seed answers
-        var answers = new List<FormAnswer>();
-
-        foreach (var session in sessions)
-        {
             foreach (var participant in participants)
             {
-                foreach (var question in formQuestions)
+                if (!await _context.Participants.AnyAsync(p => p.ParticipantId == participant.ParticipantId))
                 {
-                    // Query all options associated with the question
-                    var options = question.Options.ToList(); // Use preloaded options to minimize database calls
+                    _context.Participants.Add(participant);
+                    Console.WriteLine($"Added participant {participant.ParticipantId}");
+                }
+            }
 
-                    if (options.Any())
+            // Seed sessions
+            var random = new Random();
+            var startDate = new DateTime(2024, 10, 1);
+            var endDate = new DateTime(2024, 11, 30);
+            var sessions = new List<Session>();
+
+            for (int i = 1; i <= 10; i++)
+            {
+                var sessionDate = startDate.AddDays(random.Next(0, (endDate - startDate).Days));
+                var session = new Session
+                {
+                    SessionId = Guid.NewGuid().ToString(),
+                    Date = DateOnly.FromDateTime(sessionDate),
+                    TimeStart = TimeOnly.FromDateTime(sessionDate.AddHours(9)),
+                    TimeEnd = TimeOnly.FromDateTime(sessionDate.AddHours(10)),
+                    StudyId = studyId
+                };
+
+                sessions.Add(session);
+                if (!await _context.Sessions.AnyAsync(s => s.SessionId == session.SessionId))
+                {
+                    _context.Sessions.Add(session);
+                    Console.WriteLine($"Added session {session.SessionId} on {sessionDate.ToShortDateString()}");
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+
+
+            // Link participants to sessions
+            foreach (var session in sessions)
+            {
+                foreach (var participant in participants)
+                {
+                    if (!await _context.ParticipantSessions.AnyAsync(ps => ps.ParticipantId == participant.ParticipantId && ps.SessionId == session.SessionId))
                     {
-                        // Pick a random option from the available options
-                        var randomOption = options[random.Next(options.Count)];
-
-                        answers.Add(new FormAnswer
+                        _context.ParticipantSessions.Add(new ParticipantSession
                         {
-                            AnswerId = Guid.NewGuid().ToString(),
-                            TextAnswer = randomOption.OptionText, // Set the answer text to the option's text
-                            SelectedOption = randomOption.OptionId, // Store the selected option ID
-                            TimeStamp = DateTime.UtcNow,
                             ParticipantId = participant.ParticipantId,
-                            SessionId = session.SessionId,
-                            FormQuestionId = question.FormQuestionId
+                            SessionId = session.SessionId
                         });
-
-                        Console.WriteLine($"Prepared FormAnswer for Participant {participant.ParticipantId}, Session {session.SessionId}, Question {question.FormQuestionId} with Option {randomOption.OptionId}");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"No options available for Question {question.FormQuestionId}. Skipping.");
+                        Console.WriteLine($"Linked Participant {participant.ParticipantId} to Session {session.SessionId}");
                     }
                 }
             }
-        }
 
+            // Link Amin to sessions
+            foreach (var session in sessions)
+            {
+                _context.ResearcherSessions.Add(new ResearcherSession
+                {
+                    ResearcherId = "06c7d381-6e9b-4843-8d76-7081b6319c21",
+                    SessionId = session.SessionId
+                });
+            }
 
-
-        if (answers.Any())
-        {
-            await _context.FormAnswers.AddRangeAsync(answers);
             await _context.SaveChangesAsync();
-            Console.WriteLine($"Seeded {answers.Count} DASS21 answers successfully.");
-        }
 
-        Console.WriteLine("Data seeding process completed.");
+            // Seed answers for DASS21
+            var dass21Questions = await _context.FormQuestions.Where(q => q.FormId == formId).ToListAsync();
+
+            if (!dass21Questions.Any())
+            {
+                Console.WriteLine("No questions found for DASS21 form. Seeding aborted.");
+                return;
+            }
+
+            // Seed answers
+            // Dynamically fetch FormQuestions from the database for the specific form
+            var formQuestions = await _context.FormQuestions
+                .Where(q => q.FormId == "dass21-0001") // Replace with the actual Form ID for DASS21
+                .Include(q => q.Options) // Include related options
+                .ToListAsync();
+
+            if (!formQuestions.Any())
+            {
+                Console.WriteLine($"No FormQuestions found for Form ID {"dass21-0001"}. Seeding aborted.");
+                return;
+            }
+
+            Console.WriteLine($"Found {formQuestions.Count} FormQuestions for Form ID {"dass21-0001"}.");
+
+            // Seed answers
+            var answers = new List<FormAnswer>();
+
+            foreach (var session in sessions)
+            {
+                foreach (var participant in participants)
+                {
+                    foreach (var question in formQuestions)
+                    {
+                        // Query all options associated with the question
+                        var options = question.Options.ToList(); // Use preloaded options to minimize database calls
+
+                        if (options.Any())
+                        {
+                            // Pick a random option from the available options
+                            var randomOption = options[random.Next(options.Count)];
+
+                            answers.Add(new FormAnswer
+                            {
+                                AnswerId = Guid.NewGuid().ToString(),
+                                TextAnswer = randomOption.OptionText, // Set the answer text to the option's text
+                                SelectedOption = randomOption.OptionId, // Store the selected option ID
+                                TimeStamp = DateTime.UtcNow,
+                                ParticipantId = participant.ParticipantId,
+                                SessionId = session.SessionId,
+                                FormQuestionId = question.FormQuestionId
+                            });
+
+                            Console.WriteLine($"Prepared FormAnswer for Participant {participant.ParticipantId}, Session {session.SessionId}, Question {question.FormQuestionId} with Option {randomOption.OptionId}");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"No options available for Question {question.FormQuestionId}. Skipping.");
+                        }
+                    }
+                }
+            }
+
+
+
+            if (answers.Any())
+            {
+                await _context.FormAnswers.AddRangeAsync(answers);
+                await _context.SaveChangesAsync();
+                Console.WriteLine($"Seeded {answers.Count} DASS21 answers successfully.");
+            }
+
+            Console.WriteLine("Data seeding process completed.");
+        }
     }
 }
