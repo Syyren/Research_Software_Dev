@@ -22,8 +22,9 @@
     @{
         if (isUser)
         {
-            <h1 class="display-2 mb-3">Welcome @currentUser.ResearcherFirstName @currentUser.ResearcherLastName!</h1>
-            <p class="display-4">Your Studies:</p>
+            <h1 class="display-5 mb-3">Mental Health Research Aid Application</h1>
+            <h2 class="display-4 mb-2">Welcome @currentUser.ResearcherFirstName @currentUser.ResearcherLastName</h2>
+            <p class="display-6">Your Studies:</p>
             if (studies == null || !studies.Any())
             {
                 <p>No studies available.</p>
