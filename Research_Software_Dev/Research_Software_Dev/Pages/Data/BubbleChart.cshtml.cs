@@ -44,7 +44,7 @@ namespace Research_Software_Dev.Pages.Data
 
             // Fetch studies linked to the current user
             var userStudyIds = await _context.ResearcherStudies
-                .Where(rs => rs.ResearcherId == userId)
+                .Where(rs => rs.ResearcherId == userId && rs.StudyId == StudyId)
                 .Select(rs => rs.StudyId)
                 .ToListAsync();
 
