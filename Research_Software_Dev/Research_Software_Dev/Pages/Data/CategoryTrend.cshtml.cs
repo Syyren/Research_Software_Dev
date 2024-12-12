@@ -83,7 +83,7 @@ namespace Research_Software_Dev.Pages.Data
                 Console.WriteLine($"Filtering sessions from {startDate} to {endDate} for participants: {string.Join(", ", participants)}");
 
                 var filteredSessions = AvailableSessions
-                    .Where(s => s.Date >= DateOnly.FromDateTime(startDate.Value) && s.Date <= DateOnly.FromDateTime(endDate.Value) && s.StudyId == StudyId)
+                    .Where(s => s.Date >= DateOnly.FromDateTime(startDate.Value) && s.Date <= DateOnly.FromDateTime(endDate.Value) && s.StudyId == studyId)
                     .ToList();
 
                 Console.WriteLine("Filtered Sessions:");
