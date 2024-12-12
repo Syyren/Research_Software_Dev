@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Research_Software_Dev.Data;
 using System.Threading.Tasks;
 
+[Authorize(Roles = "Study Admin")]
 public class SeedDataModel : PageModel
 {
     private readonly ApplicationDbContext _context;
